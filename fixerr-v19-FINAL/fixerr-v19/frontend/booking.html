@@ -344,6 +344,8 @@ input[type=range]{accent-color:var(--accent);width:100%;}
         style="border:1.5px solid var(--border);border-radius:50px;padding:0.38rem 0.95rem;font-size:0.8rem;width:185px;outline:none;">
       <div id="nav-dd" class="city-dropdown" style="display:none;width:285px;left:0;position:absolute;top:100%;"></div>
     </div>
+    <input id="nav-zip" type="text" data-zip-inp placeholder="ZIP" maxlength="10" autocomplete="postal-code"
+      style="border:1.5px solid var(--border);border-radius:50px;padding:0.38rem 0.7rem;font-size:0.8rem;width:72px;outline:none;display:none;" title="Enter your ZIP / PIN code">
     <span data-cf style="font-size:0.78rem;font-weight:700;color:var(--accent);white-space:nowrap;min-width:74px;">🇮🇳 ₹ INR</span>
     <div id="nav-right" style="display:flex;align-items:center;gap:0.6rem;">
       <a href="login.html" class="btn-ghost btn-sm">Log In</a>
@@ -431,10 +433,10 @@ input[type=range]{accent-color:var(--accent);width:100%;}
     <div class="form-card">
       <h3>📍 Your address &amp; contact</h3>
       <div class="alert alert-info" style="margin-bottom:1rem;">We need your address to assign a nearby professional, and your phone so we can call to confirm.</div>
-      <div class="form-group"><label>Street address <span class="req">*</span></label><input type="text" id="f-street" placeholder="e.g. 124 MG Road, Apt 4B, Near Indiranagar Metro"><div style="font-size:0.72rem;color:var(--muted);margin-top:0.25rem;">Include house/flat number and street name — at least 10 characters.</div></div>
+      <div class="form-group"><label>Street address <span class="req">*</span></label><input type="text" id="f-street" data-street-inp placeholder="e.g. 124 MG Road, Apt 4B, Near Indiranagar Metro"><div style="font-size:0.72rem;color:var(--muted);margin-top:0.25rem;">Include house/flat number and street name — at least 10 characters.</div></div>
       <div class="form-row">
-        <div class="form-group" style="margin-bottom:0;"><label>City <span class="req">*</span></label><input type="text" id="f-city" placeholder="Bengaluru"></div>
-        <div class="form-group" style="margin-bottom:0;"><label id="lbl-zip">PIN code (optional)</label><input type="text" id="f-zip" placeholder="6-digit PIN" maxlength="6"></div>
+        <div class="form-group" style="margin-bottom:0;"><label>City <span class="req">*</span></label><input type="text" id="f-city" data-city-inp placeholder="Bengaluru"></div>
+        <div class="form-group" style="margin-bottom:0;"><label id="lbl-zip" data-zip-lbl>PIN code (optional)</label><input type="text" id="f-zip" data-zip-inp placeholder="6-digit PIN" maxlength="6"></div>
       </div>
       <div style="margin-bottom:0.95rem;"></div>
       <div class="form-group"><label>Access notes (optional)</label><textarea id="f-notes" placeholder="3rd floor, ring bell twice, gate code 1234..." style="min-height:60px;"></textarea></div>
@@ -442,7 +444,7 @@ input[type=range]{accent-color:var(--accent);width:100%;}
       <h3>📞 Contact details</h3>
       <div class="form-group"><label>Your name <span class="req">*</span></label><input type="text" id="f-name" placeholder="Your full name"></div>
       <div class="form-row">
-        <div class="form-group" style="margin-bottom:0;"><label>Phone <span class="req">*</span></label><input type="tel" id="f-phone" placeholder="+91 98765 43210"></div>
+        <div class="form-group" style="margin-bottom:0;"><label>Phone <span class="req">*</span></label><input type="tel" id="f-phone" data-ph placeholder="+91 98765 43210"></div>
         <div class="form-group" style="margin-bottom:0;"><label>Email (optional)</label><input type="email" id="f-email" placeholder="you@email.com"></div>
       </div>
       <div style="margin-bottom:0.95rem;"></div>
@@ -560,7 +562,7 @@ input[type=range]{accent-color:var(--accent);width:100%;}
 <footer><div class="footer-inner">
   <div class="footer-grid">
     <div><a href="index.html" class="footer-logo">fix<span>err</span></a>
-      <p class="footer-desc">Trusted home service professionals across India and US. Pay Fixerr after job is done — we protect your money.</p>
+      <p class="footer-desc">Trusted home service professionals across the US and India. Pay Fixerr after job is done — we protect your money.</p>
       <div style="margin-top:0.65rem;font-size:0.8rem;color:#A8E06A;" data-cf>🇮🇳 ₹ INR</div>
     </div>
     <div class="footer-col"><h4>Services</h4><ul>
@@ -581,7 +583,7 @@ input[type=range]{accent-color:var(--accent);width:100%;}
   </div>
   <div class="footer-bottom">
     <div>© 2024 Fixerr · <a href="terms.html" style="color:#6B7280;">Privacy</a> · <a href="terms.html" style="color:#6B7280;">Terms</a></div>
-    <div>India 🇮🇳 &amp; US 🇺🇸</div>
+    <div>US 🇺🇸 &amp; India 🇮🇳</div>
   </div>
 </div></footer>
 <script>
@@ -590,8 +592,8 @@ const PR={plumbing:{inr:{b:399,h:499},usd:{b:49,h:65}},electrical:{inr:{b:449,h:
 const SUBS={plumbing:["Faucet Repair","Drain Cleaning","Toilet Repair","Garbage Disposal","Water Heater","Pipe Repair","Sprinkler Repair","Fixture Install"],electrical:["Ceiling Fan Install","Plugs & Switches","Light Fixtures","EV Charger Install","Motion Sensors","Panel Upgrade","Cable Lines"],cleaning:["Deep Cleaning","Regular Cleaning","Carpet Cleaning","Post-Construction Clean","Move-In/Out Clean","Window Cleaning"],appliance:["Washing Machine","Refrigerator","AC Service","TV Repair","Oven / Stove","Dishwasher","Dryer","Microwave"],beauty:["Haircut & Style","Manicure & Pedicure","Facial & Skincare","Massage Therapy","Bridal Makeup","Waxing","Mehendi/Henna","Threading"],tutoring:["Math & Science","English & Writing","Coding & Tech","Music Lessons","Language Learning","SAT/GRE Prep","IIT/JEE/NEET Coaching","Art & Drawing"],photography:["Event Photography","Portrait Sessions","Real Estate Photos","Corporate Shoots","Wedding Photography"],events:["Birthday Party","Wedding Planning","Corporate Events","Decoration Setup","Catering Coordination"],lawn:["Lawn Mowing","Tree Trimming","Landscaping","Pressure Washing","Garden Maintenance"],painting:["Interior Painting","Exterior Painting","Accent Walls","Cabinet & Trim Painting"],movers:["Local Moving","Long Distance Move","Packing Services","Commercial/Office Move"],handyman:["Furniture Assembly","Door & Window Fixes","General Repairs","TV Wall Mount","Picture Hanging"]};
 const SICONS={plumbing:["🚿","🌊","🚽","🗑️","♨️","🔩","💧","🛁"],electrical:["🌀","💡","🔦","🔋","🚨","⚙️","📡"],cleaning:["✨","🧹","🛋️","🏗️","📦","🪟"],appliance:["🧺","❄️","🌡️","📺","🔥","🍽️","🫧","♨️"],beauty:["💇","💅","🧖","💆","👰","🧴","🎀","🌸"],tutoring:["➗","📖","💻","🎵","🌐","🎓","🏫","🎨"],photography:["🎊","👶","🏠","💼","👰"],events:["🎂","💍","💼","🎊","🍽️"],lawn:["🌱","✂️","🌺","💦","🏡"],painting:["🏠","🏗️","🎨","🪟"],movers:["🏠","🚛","📦","🏢"],handyman:["🔨","🚪","🔧","📺","🖼️"]};
 const DISC={"FIXERR10":{v:10,t:"pct",d:"10% off"},"FIXERR20":{v:20,t:"pct",d:"20% off"},"WELCOME":{v:15,t:"pct",d:"15% welcome"},"INDIA15":{v:15,t:"pct",d:"15% India off",c:"IN"},"USA10":{v:10,t:"pct",d:"10% US off",c:"US"},"LAUNCH50":{v:50,t:"flat",d:"₹50/$5 off"}};
-const FX={city:null,country:"IN",currency:"INR",symbol:"₹",flag:"🇮🇳",
-  init(){const s=localStorage.getItem("fx_c");if(s)try{const c=JSON.parse(s);this.city=c;this.country=c.c;this.currency=c.cur;this.symbol=c.sym;this.flag=c.f;}catch(e){}this.paint();},
+const FX={city:null,country:"US",currency:"USD",symbol:"$",flag:"🇺🇸",
+  init(){const s=localStorage.getItem("fx_c");if(s)try{const c=JSON.parse(s);this.city=c;this.country=c.c;this.currency=c.cur;this.symbol=c.sym;this.flag=c.f;}catch(e){}this.paint();const nz=document.getElementById("nav-zip");if(nz&&this.city)nz.style.display="inline-block";},
   set(city){this.city=city;this.country=city.c;this.currency=city.cur;this.symbol=city.sym;this.flag=city.f;localStorage.setItem("fx_c",JSON.stringify(city));this.paint();toast("Currency: "+city.f+" "+city.sym+" "+city.cur+" ("+city.n+")","info");},
   fmt(v){return this.currency==="INR"?"₹"+Math.round(v).toLocaleString("en-IN"):"$"+Number(v).toFixed(0);},
   price(s,t="b"){const p=PR[s]||PR.other;return this.currency==="INR"?p.inr[t]||p.inr.b:p.usd[t]||p.usd.b;},
@@ -601,23 +603,6 @@ const FX={city:null,country:"IN",currency:"INR",symbol:"₹",flag:"🇮🇳",
     document.querySelectorAll("[data-cs]").forEach(el=>el.textContent=this.symbol);
     document.querySelectorAll("[data-cn]").forEach(el=>el.textContent=this.city?this.city.n+(this.city.st?", "+this.city.st:""):"Select city");
     // Locale-aware field updates
-    const isIN=this.country==="IN";
-    const ph=document.getElementById("f-phone");
-    if(ph)ph.placeholder=isIN?"+91 98765 43210":"+1 (555) 000-0000";
-    const zipLbl=document.getElementById("lbl-zip");
-    if(zipLbl)zipLbl.textContent=isIN?"PIN code (optional)":"ZIP code (optional)";
-    const zipInp=document.getElementById("f-zip");
-    if(zipInp){zipInp.placeholder=isIN?"6-digit PIN":"5-digit ZIP";zipInp.maxLength=isIN?6:10;}
-    const cityInp=document.getElementById("f-city");
-    if(cityInp)cityInp.placeholder=isIN?"e.g. Bengaluru":"e.g. New York";
-    const streetInp=document.getElementById("f-street");
-    if(streetInp)streetInp.placeholder=isIN?"e.g. 124 MG Road, Apt 4B, Near Indiranagar Metro":"e.g. 124 Main St, Apt 4B";
-    const upiRow=document.getElementById("pay-upi");
-    if(upiRow)upiRow.style.display=isIN?"flex":"none";
-    const zelleRow=document.getElementById("pay-zelle");
-    if(zelleRow)zelleRow.style.display=isIN?"none":"flex";
-    const confMsg=document.querySelector(".alert.alert-info");
-    if(confMsg)confMsg.innerHTML="We need your address to assign a nearby professional, and your phone so we can call to confirm.";
   }
 };
 function csearch(inp,dd){
@@ -625,7 +610,7 @@ function csearch(inp,dd){
   inp.addEventListener("input",()=>{
     const q=inp.value.toLowerCase().trim();
     if(q.length<1){dd.style.display="none";return;}
-    const hits=CITIES.filter(c=>c.n.toLowerCase().includes(q)||(c.st||"").toLowerCase().includes(q)).slice(0,9);
+    const lockedC=FX.city?FX.country:null;const hits=CITIES.filter(c=>(lockedC?c.c===lockedC:true)&&(c.n.toLowerCase().includes(q)||(c.st||"").toLowerCase().includes(q))).slice(0,9);
     if(!hits.length){dd.style.display="none";return;}
     dd.innerHTML=hits.map(c=>`<div class="city-option" data-city='${JSON.stringify(c).replace(/'/g,"&#39;")}' onclick="pickC(this)"><span>${c.f}</span><div><div style="font-weight:600;font-size:0.86rem;">${c.n}${c.st?", "+c.st:""}</div><div style="font-size:0.7rem;color:var(--muted);">${c.c==="IN"?"India":"United States"}</div></div><span style="margin-left:auto;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-light);padding:0.1rem 0.45rem;border-radius:50px;">${c.sym} ${c.cur}</span></div>`).join("");
     dd.style.display="block";
@@ -636,12 +621,31 @@ function pickC(el){
   const city=JSON.parse(el.getAttribute("data-city"));FX.set(city);
   const dd=el.closest(".city-dropdown");if(dd)dd.style.display="none";
   const wrap=dd?.parentElement;const inp=wrap?.querySelector("input");
-  if(inp)inp.value=city.f+" "+city.n+(city.st?", "+city.st:"");
-  const ni=document.getElementById("nav-city");if(ni&&ni!==inp)ni.value=city.f+" "+city.n;
+  if(inp){
+    inp.value=city.f+" "+city.n+(city.st?", "+city.st:"");
+    inp.readOnly=true;
+    inp.style.cssText+="background:#f0fdf4;border-color:var(--accent);color:var(--accent);font-weight:600;cursor:default;";
+    // Add or update "Change" link
+    let chg=wrap.querySelector(".city-change-btn");
+    if(!chg){chg=document.createElement("span");chg.className="city-change-btn";chg.style.cssText="font-size:0.7rem;color:var(--accent);cursor:pointer;text-decoration:underline;white-space:nowrap;margin-left:4px;font-weight:600;";wrap.appendChild(chg);}
+    chg.textContent="Change";
+    chg.onclick=()=>{inp.readOnly=false;inp.value="";inp.style.cssText=inp.style.cssText.replace("background:#f0fdf4;border-color:var(--accent);color:var(--accent);font-weight:600;cursor:default;","");inp.focus();chg.remove();};
+  }
+  const ni=document.getElementById("nav-city");
+  if(ni&&ni!==inp){
+    ni.value=city.f+" "+city.n+(city.st?", "+city.st:"");
+    ni.readOnly=true;
+    ni.style.cssText+="background:#f0fdf4;border-color:var(--accent);color:var(--accent);font-weight:600;cursor:default;";
+    const nwrap=ni.parentElement;
+    let nchg=nwrap.querySelector(".city-change-btn");
+    if(!nchg){nchg=document.createElement("span");nchg.className="city-change-btn";nchg.style.cssText="font-size:0.7rem;color:var(--accent);cursor:pointer;text-decoration:underline;white-space:nowrap;margin-left:4px;font-weight:600;";nwrap.appendChild(nchg);}
+    nchg.textContent="Change";
+    nchg.onclick=()=>{ni.readOnly=false;ni.value="";ni.style.cssText=ni.style.cssText.replace("background:#f0fdf4;border-color:var(--accent);color:var(--accent);font-weight:600;cursor:default;","");ni.focus();nchg.remove();};
+  }
 }
 function initNav(){
   csearch(document.getElementById("nav-city"),document.getElementById("nav-dd"));
-  const s=localStorage.getItem("fx_c");if(s)try{const c=JSON.parse(s);const ni=document.getElementById("nav-city");if(ni)ni.value=c.f+" "+c.n;}catch(e){}
+  const s=localStorage.getItem("fx_c");if(s)try{const c=JSON.parse(s);const ni=document.getElementById("nav-city");if(ni){ni.value=c.f+" "+c.n+(c.st?", "+c.st:"");ni.readOnly=true;ni.style.cssText+="background:#f0fdf4;border-color:var(--accent);color:var(--accent);font-weight:600;cursor:default;";const nwrap=ni.parentElement;let nchg=nwrap.querySelector(".city-change-btn");if(!nchg){nchg=document.createElement("span");nchg.className="city-change-btn";nchg.style.cssText="font-size:0.7rem;color:var(--accent);cursor:pointer;text-decoration:underline;white-space:nowrap;margin-left:4px;font-weight:600;";nwrap.appendChild(nchg);}nchg.textContent="Change";nchg.onclick=()=>{ni.readOnly=false;ni.value="";ni.style.cssText=ni.style.cssText.replace("background:#f0fdf4;border-color:var(--accent);color:var(--accent);font-weight:600;cursor:default;","");ni.focus();nchg.remove();};}}catch(e){}
   FX.init();
 }
 const API={
