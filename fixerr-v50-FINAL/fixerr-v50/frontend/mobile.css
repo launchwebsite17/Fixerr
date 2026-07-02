@@ -1,0 +1,118 @@
+/* Fixerr Mobile CSS */
+
+@media (max-width: 768px) {
+
+  /* ── NAV ── */
+  nav { padding: 0 1rem !important; height: 56px !important; }
+  .nav-links { display: none !important; }
+  #ham-btn { display: flex !important; }
+  .logo { font-size: 1.2rem !important; }
+
+  /* City pill - truncate on mobile */
+  #city-locked-label {
+    font-size: 0.7rem !important;
+    padding: 0.2rem 0.5rem !important;
+    max-width: 90px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* Hide "Change" text label, keep button */
+  #city-locked-display a { font-size: 0.65rem !important; }
+
+  /* ── HERO ── */
+  h1 { font-size: 1.9rem !important; line-height: 1.15 !important; letter-spacing: -0.5px !important; }
+  h2 { font-size: 1.4rem !important; }
+
+  /* ── GRIDS ── force everything to 2-col or 1-col */
+  .cat-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 0.5rem !important; }
+  .cal-grid { gap: 0.15rem !important; }
+
+  /* ── CONTAINER ── */
+  .container { padding: 0 1rem !important; }
+
+  /* ── FORMS ── */
+  .form-row { flex-direction: column !important; }
+  .form-row > * { width: 100% !important; }
+
+  /* ── FOOTER ── */
+  .footer-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
+  footer { padding: 2rem 1rem 1rem !important; }
+
+  /* ── DASHBOARD SIDEBAR ── */
+  .dash-layout { flex-direction: column !important; }
+  .sidebar {
+    width: 100% !important;
+    min-height: auto !important;
+    position: static !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    padding: 0.5rem 0.75rem !important;
+    gap: 0.25rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    overflow-x: auto !important;
+  }
+  .sidebar .logo { display: none !important; }
+  .sidebar .sb-sec { display: none !important; }
+  .sidebar .sb-link {
+    font-size: 0.72rem !important;
+    padding: 0.3rem 0.6rem !important;
+    white-space: nowrap !important;
+  }
+  .dash-main { padding: 1rem !important; }
+
+  /* ── TABLES ── */
+  table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+  .tbl { font-size: 0.74rem !important; }
+
+  /* ── BOOKING ── */
+  .step-panel { padding: 1rem !important; }
+  .fcard { padding: 1.1rem !important; }
+
+  /* ── STATS ── */
+  .stat-card { padding: 0.85rem !important; }
+  .stat-val { font-size: 1.5rem !important; }
+
+  /* ── SECTIONS ── */
+  .section-pad { padding: 2rem 0 !important; }
+
+  /* ── CITY PROMPT MODAL ── */
+  #city-prompt-modal > div {
+    padding: 1.5rem 1rem !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-lg { padding: 0.72rem 1.5rem !important; font-size: 0.92rem !important; }
+
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.65rem !important; }
+  nav { padding: 0 0.75rem !important; }
+  .cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Grid classes added via JS */
+@media (max-width: 768px) {
+  .services-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 0.65rem !important; }
+  .steps-grid-inner { grid-template-columns: repeat(2, 1fr) !important; gap: 0.85rem !important; }
+  .why-grid { grid-template-columns: 1fr !important; }
+  .stats-row-inner { gap: 1.5rem !important; flex-wrap: wrap !important; justify-content: center !important; }
+}
+@media (max-width: 480px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .steps-grid-inner { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Hamburger visibility */
+#ham-btn { display: none; } /* hidden on desktop */
+@media (max-width: 768px) {
+  #ham-btn { display: flex !important; }
+  .nav-links { display: none !important; }
+  /* Hide city selector from nav on very small screens */
+  #city-select-ui { display: none !important; }
+}
