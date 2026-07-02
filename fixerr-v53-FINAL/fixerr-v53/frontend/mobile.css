@@ -1,0 +1,112 @@
+/* Fixerr Mobile CSS — v50 */
+
+/* ── DESKTOP DEFAULT: hide hamburger ── */
+#ham-btn { display: none !important; }
+#mobile-menu { display: none; }
+
+/* ── TABLET + MOBILE (<=768px) ── */
+@media (max-width: 768px) {
+
+  /* Nav */
+  nav { padding: 0 1rem !important; height: 56px !important; }
+  .nav-links { display: none !important; }
+  #ham-btn { display: flex !important; }
+
+  /* City pill */
+  #city-locked-label {
+    font-size: 0.7rem !important;
+    padding: 0.2rem 0.5rem !important;
+    max-width: 100px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* Hide desktop city dropdowns on mobile */
+  #city-select-ui { display: none !important; }
+
+  /* Container */
+  .container { padding: 0 1rem !important; }
+
+  /* Typography */
+  h1 { font-size: 1.9rem !important; line-height: 1.15 !important; }
+  h2 { font-size: 1.35rem !important; }
+
+  /* Service cards grid */
+  .services-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 0.65rem !important; }
+
+  /* Steps grid */
+  .steps-grid-inner { grid-template-columns: repeat(2, 1fr) !important; gap: 0.85rem !important; }
+
+  /* Why section */
+  .why-grid { grid-template-columns: 1fr !important; }
+
+  /* Stats */
+  .stats-row-inner { gap: 1.5rem !important; }
+
+  /* Forms */
+  .form-row { flex-direction: column !important; }
+  .form-row > * { width: 100% !important; }
+
+  /* Buttons */
+  .btn-lg { padding: 0.72rem 1.4rem !important; font-size: 0.92rem !important; }
+
+  /* Sections */
+  .section-pad { padding: 2rem 0 !important; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
+  footer { padding: 2rem 1rem 1rem !important; }
+
+  /* Dashboard sidebar → horizontal */
+  .dash-layout { flex-direction: column !important; }
+  .sidebar {
+    width: 100% !important;
+    min-height: auto !important;
+    position: static !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    padding: 0.4rem 0.5rem !important;
+    gap: 0.25rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .sidebar .logo { display: none !important; }
+  .sidebar .sb-sec { display: none !important; }
+  .sidebar .sb-link {
+    font-size: 0.72rem !important;
+    padding: 0.3rem 0.65rem !important;
+    white-space: nowrap !important;
+    border-radius: 50px !important;
+  }
+  .dash-main { padding: 1rem !important; }
+
+  /* Tables */
+  table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+  .tbl { font-size: 0.74rem !important; }
+
+  /* Booking flow */
+  .step-panel { padding: 1rem !important; }
+  .cat-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 0.5rem !important; }
+  .fcard { padding: 1.1rem !important; }
+
+  /* Stat cards */
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .stat-card { padding: 0.85rem !important; }
+  .stat-val { font-size: 1.5rem !important; }
+
+  /* Login / auth pages */
+  [style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+  [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+}
+
+/* ── SMALL PHONES (<=480px) ── */
+@media (max-width: 480px) {
+  h1 { font-size: 1.65rem !important; }
+  .services-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .steps-grid-inner { grid-template-columns: repeat(2, 1fr) !important; }
+  .cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .form-row { flex-direction: column !important; }
+}
