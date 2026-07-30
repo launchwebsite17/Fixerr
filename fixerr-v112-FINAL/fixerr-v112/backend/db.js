@@ -7,9 +7,14 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
+const useSsl = process.env.DB_SSL === 'true' || 
+               (process.env.DATABASE_URL && 
+                (process.env.DATABASE_URL.includes('sslmode=require') || 
+                 process.env.DATABASE_URL.includes('render.com')));
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }  // Required for Render PostgreSQL (both internal & external URLs)
+  ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {})
 });
 
 pool.on('connect', () => {
