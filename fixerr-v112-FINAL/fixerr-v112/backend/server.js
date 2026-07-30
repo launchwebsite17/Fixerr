@@ -8,41 +8,47 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const { pool, query } = require('./db');
 const https = require('https');
-const nodemailer = require('nodemailer');
-
-// ── EMAIL SETUP (Zoho SMTP) ─────────────────────────────────
-// Primary: port 465 SSL, Fallback: port 587 TLS
-const mailer = nodemailer.createTransport({
-  host: 'smtp.zoho.com',
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.ZOHO_EMAIL || 'noreply@getfixerr.com',
-    pass: process.env.ZOHO_PASSWORD || ''
-  },
-  tls: { rejectUnauthorized: false },
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000
-});
+// ── EMAIL SETUP (Resend API) ─────────────────────────────────
 
 async function sendEmail(to, subject, html, type='general') {
-  if(!process.env.ZOHO_PASSWORD){
-    console.log(`[EMAIL SKIP - No ZOHO_PASSWORD set] To: ${to} | ${subject}`);
-    // Still log the attempt
+  if(!process.env.RESEND_API_KEY){
+    console.log(`[EMAIL SKIP - No RESEND_API_KEY] To: ${to} | ${subject}`);
     query(`INSERT INTO email_log (recipient,subject,type,status) VALUES ($1,$2,$3,'skipped')`,
       [to, subject, type]).catch(()=>{});
     return;
   }
   try {
-    await mailer.sendMail({
-      from: '"Fixerr" <noreply@getfixerr.com>',
-      replyTo: 'support@getfixerr.com',
-      to, subject, html
+    const body = JSON.stringify({
+      from: 'Fixerr <noreply@getfixerr.com>',
+      reply_to: 'support@getfixerr.com',
+      to: [to], subject, html
     });
-    console.log(`[EMAIL SENT] To: ${to} | ${subject}`);
-    query(`INSERT INTO email_log (recipient,subject,type,status) VALUES ($1,$2,$3,'sent')`,
-      [to, subject, type]).catch(()=>{});
+    const result = await new Promise((resolve, reject) => {
+      const req = https.request({
+        hostname: 'api.resend.com',
+        path: '/emails',
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(body)
+        }
+      }, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => resolve({ status: res.statusCode, body: data }));
+      });
+      req.on('error', reject);
+      req.write(body);
+      req.end();
+    });
+    if(result.status >= 200 && result.status < 300){
+      console.log(`[EMAIL SENT] To: ${to} | ${subject}`);
+      query(`INSERT INTO email_log (recipient,subject,type,status) VALUES ($1,$2,$3,'sent')`,
+        [to, subject, type]).catch(()=>{});
+    } else {
+      throw new Error(`Resend API ${result.status}: ${result.body}`);
+    }
   } catch(e){
     console.error('[EMAIL ERROR]', e.message);
     query(`INSERT INTO email_log (recipient,subject,type,status,error) VALUES ($1,$2,$3,'failed',$4)`,
