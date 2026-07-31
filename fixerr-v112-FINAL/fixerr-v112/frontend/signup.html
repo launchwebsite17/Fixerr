@@ -343,23 +343,12 @@ input[type=range]{accent-color:var(--accent);width:100%;}
       <span style="display:block;width:22px;height:2px;background:var(--text);border-radius:2px;"></span>
       <span style="display:block;width:22px;height:2px;background:var(--text);border-radius:2px;"></span>
     </button>
-    <div id="mobile-menu" style="display:none;position:fixed;top:56px;left:0;right:0;background:#fff;border-bottom:1px solid var(--border);padding:1.25rem 1rem;z-index:999;box-shadow:var(--shadow-lg);max-height:calc(100vh - 56px);overflow-y:auto;">
-      <div id="mob-city-bar" style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:0.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:0.5rem;cursor:pointer;" onclick="mobileChangeCity()">
-        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:700;color:var(--text);">
-          <span>📍</span>
-          <span id="mob-city-name">Select City</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.4rem;">
-          <span id="mob-curr-badge" style="font-size:0.75rem;font-weight:800;background:var(--accent-light);color:var(--accent);padding:0.2rem 0.55rem;border-radius:50px;border:1px solid var(--border-accent);"></span>
-          <span style="font-size:0.75rem;color:var(--accent);font-weight:700;text-decoration:underline;">Change</span>
-        </div>
-      </div>
+    <div id="mobile-menu" style="display:none;position:fixed;top:56px;left:0;right:0;background:#fff;border-bottom:1px solid var(--border);padding:1rem;z-index:999;box-shadow:var(--shadow-lg);">
       <a href="index.html" style="display:block;padding:0.6rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">Home</a>
       <a href="how-it-works.html" style="display:block;padding:0.6rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">How It Works</a>
       <a href="register-pro.html" style="display:block;padding:0.6rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">For Professionals</a>
       <a href="advertise.html" style="display:block;padding:0.6rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">Advertise</a>
-      <div id="mob-account-section" style="margin-top:0.25rem;"></div>
-      <a href="booking.html" style="display:block;margin-top:1rem;text-align:center;" class="btn-primary">Book a Service →</a>
+      <a href="booking.html" style="display:block;margin-top:0.75rem;" class="btn-primary">Book a Service →</a>
     </div>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
@@ -490,8 +479,6 @@ const FX={city:null,country:"US",currency:"USD",symbol:"$",flag:"🇺🇸",
     document.querySelectorAll("[data-cf]").forEach(el=>el.textContent=this.symbol+" "+this.currency);
     document.querySelectorAll("[data-cs]").forEach(el=>el.textContent=this.symbol);
     document.querySelectorAll("[data-cn]").forEach(el=>el.textContent=this.city?this.city.n+(this.city.st?", "+this.city.st:""):"Select city");
-    document.querySelectorAll("#mob-city-name").forEach(el=>el.textContent=this.city?this.city.n+(this.city.st?", "+this.city.st:""):"Select City");
-    document.querySelectorAll("#mob-curr-badge").forEach(el=>el.textContent=(this.flag||"")+" "+this.symbol+" "+(this.currency||""));
     const isIN=this.country==="IN";
     document.querySelectorAll("[data-ph]").forEach(el=>el.placeholder=isIN?"+91 98765 43210":"+1 (555) 000-0000");
     document.querySelectorAll("[data-zip-lbl]").forEach(el=>el.textContent=isIN?"PIN code":"ZIP code");
@@ -553,38 +540,10 @@ function clearErr(){
 }
 function v(id){const el=document.getElementById(id);return el?el.value.trim():"";}
 function updateNav(){
-  const u=API.user(),nr=document.getElementById("nav-right");
+  const u=API.user(),nr=document.getElementById("nav-right");if(!nr)return;
   const changeBtn=document.getElementById('city-change-btn');
   const citySelectUI=document.getElementById('city-select-ui');
   const cityLockedDisplay=document.getElementById('city-locked-display');
-
-  const mobCityName=document.getElementById("mob-city-name");
-  const mobCurrBadge=document.getElementById("mob-curr-badge");
-  if(mobCityName)mobCityName.textContent=FX.city?FX.city.n+(FX.city.st?", "+FX.city.st:""):"Select City";
-  if(mobCurrBadge)mobCurrBadge.textContent=(FX.flag||"")+" "+FX.symbol+" "+(FX.currency||"");
-
-  const mobAcc=document.getElementById("mob-account-section");
-  if(mobAcc){
-    if(u){
-      const dash=u.role==="admin"?"fixerr-owner-0si7erbb2ctq.html":u.role==="professional"?"dashboard-pro.html":"dashboard.html";
-      mobAcc.innerHTML=`
-        <a href="${dash}" style="display:flex;align-items:center;gap:0.5rem;padding:0.65rem 0;font-weight:700;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--border);">
-          <span>📊</span> My Dashboard
-        </a>
-        <button onclick="API.logout()" style="width:100%;text-align:left;background:none;border:none;padding:0.65rem 0;font-weight:700;color:#DC2626;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid var(--border);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-          Log Out (${u.name})
-        </button>
-      `;
-    }else{
-      mobAcc.innerHTML=`
-        <a href="login.html" style="display:block;padding:0.65rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">Log In</a>
-        <a href="signup.html" style="display:block;padding:0.65rem 0;font-weight:600;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--border);">Create Account</a>
-      `;
-    }
-  }
-
-  if(!nr)return;
 
   if(u){
     // LOGGED IN: hide city dropdown selects, show locked pill with Change option
@@ -601,7 +560,7 @@ function updateNav(){
       <span style="font-size:0.85rem;font-weight:700;color:var(--accent);">Hi, ${u.name}</span>
     </div>
     <a href="${dash}" class="btn-ghost btn-sm">Dashboard</a>
-    <button onclick="API.logout()" class="btn-ghost btn-sm btn-logout" style="color:#DC2626;" title="Log Out" aria-label="Log Out"><span class="logout-text">Log Out</span><span class="logout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></span></button>`;
+    <button onclick="API.logout()" class="btn-ghost btn-sm" style="color:#DC2626;">Log Out</button>`;
   } else {
     // NOT LOGGED IN
     if(FX.city){
