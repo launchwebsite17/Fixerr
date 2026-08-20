@@ -1,0 +1,865 @@
+/* Fixerr Universal Responsive Design System — v53 */
+
+/* ── GLOBAL RESET & BOX-SIZING FOR ALL DIVS & UI PIECES ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box !important;
+}
+html,
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+img,
+video,
+iframe,
+svg,
+canvas,
+embed,
+object {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* ── DESKTOP DEFAULT STATES ── */
+#ham-btn {
+  display: none !important;
+}
+#mobile-menu {
+  display: none;
+}
+
+/* ── NAVBAR & LOCATION SELECTION FOR ALL DEVICES ── */
+/* NOTE: `display` is intentionally NOT forced here. Visibility of the country/city
+   dropdowns is toggled inline by lockCity()/unlockCity() — once a city is chosen we
+   show only the locked location button + "Change" link. A !important display would
+   override that JS toggle and keep the dropdowns permanently visible. */
+#city-select-ui {
+  align-items: center !important;
+  gap: 0.35rem !important;
+}
+#nav-country,
+#nav-city-sel {
+  font-size: 0.82rem !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--border) !important;
+  background: var(--bg2) !important;
+  color: var(--text) !important;
+  max-width: 140px !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  height: 36px !important;
+}
+
+/* ── MOBILE MENU POPUP STYLING ── */
+#mobile-menu {
+  position: fixed !important;
+  top: 56px !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: #ffffff !important;
+  border-bottom: 2px solid var(--border) !important;
+  padding: 1.25rem 1rem !important;
+  z-index: 9999 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  max-height: calc(100vh - 56px) !important;
+  overflow-y: auto !important;
+}
+#mobile-menu a,
+#mobile-menu button {
+  font-size: 0.95rem !important;
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* The Fixerr logo is a dark/green mark that disappears on the near-black footer background.
+   Sit it on a small white chip so it stays clearly visible in every footer. */
+/*footer img[alt="Fixerr"] {
+  background: #ffffff;
+  padding: 5px 9px;
+  border-radius: 8px;
+}*/
+
+/* footer img[alt="Fixerr"] {
+  background: #ffffff;
+  padding: 5px 9px;
+  border-radius: 8px;
+  height: 84px !important;
+  width: auto !important;
+  max-width: none !important;
+} */
+
+footer img[alt="Fixerr"] {
+  background: transparent;
+  /* border: 1px solid #166534; */
+  /* border: 1px solid darkslategray; */
+  /* padding: 5px 9px; */
+  border-radius: 8px;
+  height: 84px !important;
+  width: auto !important;
+  max-width: none !important;
+  /* filter: blur(0.6px) brightness(1.2) contrast(1.2) drop-shadow(1px 1px 2px white); */
+  /* Electric Blue (#00FFFF) or Neon Green (#39FF14) */
+  filter: blur(0.6px) brightness(1.2) contrast(1.2) drop-shadow(1px 1px 2px #00FFFF);
+}
+
+/* QA #2 — navbar polish across every page (the Admin CPanel hides its nav, so it's unaffected):
+   enlarge the Fixerr logo on hover, and give the header menu a slightly larger, thick-green look.
+   The logo image itself is unchanged. */
+nav a img[alt="Fixerr"],
+.logo img[alt="Fixerr"] {
+  height: 52px !important;
+  width: auto !important;
+  max-width: none !important;
+  transition: transform 0.2s ease;
+  transform-origin: left center;
+}
+nav a img[alt="Fixerr"]:hover {
+  transform: scale(1.11);
+}
+.nav-links a {
+  font-size: 1.25rem !important;
+  color: #15803d !important;
+  font-weight: 600 !important;
+  /*font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif !important;  */
+}
+.nav-links a:hover,
+.nav-links a.active {
+  color: #0f5d2c !important;
+}
+
+/* ── LARGE SCREENS & DESKTOPS (>= 1280px) ── */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* ── LAPTOPS & DESKTOPS (1024px – 1279px) ── */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .container {
+    max-width: 980px !important;
+    margin: 0 auto !important;
+  }
+  .services-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+  .stats-grid,
+  .stats-row {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* ── TABLETS & IPADS (768px – 1023px) ── */
+@media (max-width: 1023px) {
+  nav {
+    padding: 0 1.25rem !important;
+    height: 60px !important;
+  }
+  /* iPad/tablet: the 4 inline nav links ("Home / How It Works / For Professionals /
+     Advertise") wrap onto multiple lines and overlap the right-side controls at this width,
+     so use the hamburger menu here too. Only true desktop (≥1024px) shows inline links. */
+  .nav-links {
+    display: none !important;
+  }
+  #ham-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  #mobile-menu {
+    top: 60px !important;
+  }
+  /* Keep the right-side nav controls (currency, greeting, Dashboard, Log In/Out) on a single
+     line — never let a label like "Log Out" wrap. */
+  #nav-right {
+    gap: 0.4rem !important;
+    flex-wrap: nowrap !important;
+  }
+  #nav-right .btn-sm,
+  #nav-right .btn-ghost,
+  #nav-right .btn-primary,
+  #nav-right a,
+  #nav-right button {
+    white-space: nowrap !important;
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.8rem !important;
+  }
+  .container {
+    padding: 0 1.25rem !important;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem) !important;
+    line-height: 1.2 !important;
+  }
+  h2 {
+    font-size: clamp(1.4rem, 3vw, 1.85rem) !important;
+  }
+
+  /* Booking page: collapse the form+sidebar grid into a single column on tablets.
+     JS toggles #booking-grid between '1fr' (step 1) and '1fr 275px' (steps 2+);
+     on tablet both states are forced to single-column via this rule. */
+  #booking-grid {
+    grid-template-columns: 1fr !important;
+  }
+  #order-side,
+  .order-side {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  /* Category grid: 3 columns on tablets (5 on desktop, 2 on mobile) */
+  .cat-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.65rem !important;
+  }
+  /* "Other / custom" card: span all 3 columns so it fills a full row on tablets */
+  .cat-card[data-k="other"] {
+    grid-column: span 3 !important;
+  }
+
+  /* Grids */
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.85rem !important;
+  }
+  .stats-grid,
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.85rem !important;
+  }
+  .steps-grid-inner {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+  .content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  .payment-wrap {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  /* Dashboard Layout → Convert sidebar to horizontal bar on iPads & Tablets */
+  .dashboard-layout,
+  .dash-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    /* Undo the desktop fixed-height app-shell so the page scrolls normally and the
+       sidebar becomes a horizontal bar on tablets/phones. */
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    width: 100% !important;
+    padding-top: 60px !important;
+  }
+  .sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    position: static !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    padding: 0.5rem 0.75rem !important;
+    gap: 0.35rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    background: var(--bg2) !important;
+  }
+  .sidebar .sidebar-logo,
+  .sidebar .logo,
+  .sidebar .sidebar-label,
+  .sidebar .sb-sec {
+    display: none !important;
+  }
+  .sidebar .sidebar-link,
+  .sidebar .sb-link {
+    display: inline-flex !important;
+    flex-shrink: 0 !important;
+    font-size: 0.8rem !important;
+    padding: 0.45rem 0.85rem !important;
+    white-space: nowrap !important;
+    border-radius: 50px !important;
+    width: auto !important;
+  }
+  .dash-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1.25rem !important;
+    overflow-x: hidden !important;
+    /* Undo the desktop app-shell internal scroll — grow with content, page scrolls. */
+    height: auto !important;
+    min-height: auto !important;
+    overflow-y: visible !important;
+  }
+
+  /* Location selects in navbar for Tablet/iPad */
+  #nav-country,
+  #nav-city-sel {
+    max-width: 110px !important;
+    font-size: 0.78rem !important;
+    padding: 0.2rem 0.4rem !important;
+    height: 34px !important;
+  }
+}
+
+/* ── PHONES & MOBILE DEVICES (<= 767px) ── */
+@media (max-width: 767px) {
+  /* Nav & Header */
+  nav {
+    padding: 0 0.85rem !important;
+    height: 56px !important;
+    width: 100% !important;
+  }
+  .nav-links {
+    display: none !important;
+  }
+  #ham-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Location UI on Mobile — `display` toggled inline by lockCity()/unlockCity(), not forced here */
+  #city-select-ui {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    max-width: 100% !important;
+  }
+  #nav-country,
+  #nav-city-sel {
+    max-width: 88px !important;
+    font-size: 0.72rem !important;
+    padding: 0.2rem 0.35rem !important;
+    height: 32px !important;
+  }
+  #nav-zip {
+    max-width: 55px !important;
+    font-size: 0.72rem !important;
+    padding: 0.2rem 0.3rem !important;
+    height: 32px !important;
+  }
+  /* Keep the top bar on one line: constrain the locked location button, shrink currency,
+     and move the Log In / Sign Up / Dashboard / Log Out controls into the hamburger menu
+     (updateNav already renders them there) so they don't overflow on narrow screens. */
+  nav .nav-right {
+    gap: 0.3rem !important;
+    flex-wrap: nowrap !important;
+    min-width: 0 !important;
+  }
+  #nav-right {
+    display: none !important;
+  }
+  /* Override the inline min-width:140px on the city dropdown so it respects the mobile
+     max-width; otherwise it stays 140px wide and crushes the currency off-screen. */
+  #nav-country,
+  #nav-city-sel {
+    min-width: 0 !important;
+  }
+  #city-locked-label {
+    max-width: 46vw !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 0.72rem !important;
+    padding: 0.3rem 0.6rem !important;
+  }
+  #city-change-btn {
+    font-size: 0.66rem !important;
+  }
+  nav [data-cf] {
+    font-size: 0.72rem !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+  /* Mobile: show the city only (hide ", State"), and keep the city + "Change" link + currency
+     together on a single row (the rest of the controls live in the hamburger menu). */
+  .loc-state {
+    display: none !important;
+  }
+  #city-picker-wrap {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+  }
+
+  /* Container & Sections */
+  .container {
+    padding: 0 0.85rem !important;
+    width: 100% !important;
+  }
+  .section-pad {
+    padding: 1.75rem 0 !important;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: clamp(1.5rem, 5.5vw, 2.1rem) !important;
+    line-height: 1.18 !important;
+  }
+  h2 {
+    font-size: clamp(1.18rem, 4vw, 1.5rem) !important;
+  }
+  h3 {
+    font-size: clamp(1.02rem, 3.5vw, 1.25rem) !important;
+  }
+
+  /* Dashboard Layout — FORCE SINGLE COLUMN STACK ON MOBILE */
+  .dashboard-layout,
+  .dash-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding-top: 56px !important;
+  }
+  .sidebar {
+    width: 100% !important;
+    max-width: 100vw !important;
+    height: auto !important;
+    min-height: auto !important;
+    position: static !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    padding: 0.4rem 0.5rem !important;
+    gap: 0.3rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    background: var(--bg2) !important;
+  }
+  .sidebar .sidebar-logo,
+  .sidebar .logo,
+  .sidebar .sidebar-label,
+  .sidebar .sb-sec {
+    display: none !important;
+  }
+  .sidebar .sidebar-link,
+  .sidebar .sb-link {
+    display: inline-flex !important;
+    flex-shrink: 0 !important;
+    font-size: 0.76rem !important;
+    padding: 0.45rem 0.8rem !important;
+    white-space: nowrap !important;
+    border-radius: 50px !important;
+    width: auto !important;
+  }
+
+  /* Admin dashboard uses an inline "220px 1fr" grid + dark .asb-link sidebar (not .sidebar).
+     Stack it and turn the sidebar into a sticky, horizontally-scrollable nav bar on mobile. */
+  [style*="grid-template-columns:220px 1fr"],
+  [style*="grid-template-columns: 220px 1fr"] {
+    display: block !important;
+    padding-top: 56px !important;
+  }
+  [style*="grid-template-columns:220px 1fr"] > div:first-child,
+  [style*="grid-template-columns: 220px 1fr"] > div:first-child {
+    position: sticky !important;
+    top: 56px !important;
+    z-index: 50 !important;
+    width: 100% !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 0.3rem !important;
+    padding: 0.5rem 0.6rem !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  [style*="grid-template-columns:220px 1fr"] > div:first-child > a {
+    display: none !important;
+  }
+  .asb-sec {
+    display: none !important;
+  }
+  .asb-link {
+    width: auto !important;
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.85rem !important;
+    border-radius: 50px !important;
+  }
+  .asb-badge {
+    position: static !important;
+    margin-left: 0.3rem !important;
+  }
+  .dash-main {
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding: 0.85rem !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Grids & Cards */
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem !important;
+  }
+  .steps-grid-inner {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  .why-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  .stats-grid,
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem !important;
+  }
+  .stat-card {
+    padding: 0.75rem !important;
+  }
+  .stat-val,
+  .stat-card-value {
+    font-size: 1.35rem !important;
+  }
+  .content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+  }
+  .payment-wrap {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  .order-summary,
+  .order-side {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  /* Booking step nav (Back / green Next): stack full-width on phones, primary action on top,
+     with a clear bottom margin before the order-summary card. */
+  .step-nav {
+    flex-direction: column-reverse !important;
+    align-items: stretch !important;
+    gap: 0.6rem !important;
+    margin-bottom: 1.75rem !important;
+  }
+  .step-nav > * {
+    width: 100% !important;
+  }
+
+  /* Auth & Form cards — every multi-column form layout becomes ONE full-width field per
+     line on mobile (works whether the container is display:grid or display:flex). */
+  .form-row,
+  .form-grid,
+  .form-2col,
+  .grid-2,
+  .two-col,
+  .field-row,
+  .input-row,
+  .fx-grid2,
+  .form-cols,
+  .field-grid,
+  .name-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  .form-row > *,
+  .form-grid > *,
+  .fx-grid2 > *,
+  .two-col > *,
+  .grid-2 > *,
+  .field-row > *,
+  .input-row > *,
+  .form-cols > *,
+  .field-grid > *,
+  .name-row > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr 1fr"],
+  [style*="grid-template-columns: 1fr 1fr 1fr"],
+  [style*="grid-template-columns:repeat(3"],
+  [style*="grid-template-columns: repeat(3"],
+  [style*="grid-template-columns:repeat(4"],
+  [style*="grid-template-columns: repeat(4"],
+  [style*="grid-template-columns:repeat(5"],
+  [style*="grid-template-columns: repeat(5"],
+  [style*="grid-template-columns:repeat(6"],
+  [style*="grid-template-columns: repeat(6"] {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  /* Catch-all: ANY inline grid with 2+ fractional columns (e.g. "2fr 1fr", "1fr 2fr",
+     "1fr 1fr", "3fr 1fr") — a multi-column track always contains "fr " (with a trailing
+     space), while a single "1fr" does not — collapses to one full-width column on mobile.
+     Covers content+sidebar layouts like register-pro's "2fr 1fr" (form + info card). */
+  [style*="grid-template-columns"][style*="fr "] {
+    grid-template-columns: 1fr !important;
+  }
+  .fcard,
+  .dash-card,
+  .form-card,
+  .card,
+  .modal-box {
+    padding: 1rem !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  /* .step-panel is only a wrapper (its .form-card already has its own padding); keep it
+     padding-free so the content lines up edge-to-edge with the step-bar and order summary. */
+  .step-panel {
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Touch Targets (Minimum 44px height for interactive elements) */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  select,
+  textarea,
+  .btn,
+  button {
+    min-height: 44px;
+  }
+  .btn-lg {
+    padding: 0.75rem 1.25rem !important;
+    font-size: 0.9rem !important;
+    min-height: 48px;
+  }
+  .btn-sm {
+    min-height: 36px;
+    padding: 0.35rem 0.7rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  /* Tables — Touch Scrollable */
+  table,
+  .data-table,
+  .tbl,
+  .admin-sec,
+  #db-results {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  th,
+  td {
+    padding: 0.5rem 0.65rem !important;
+    font-size: 0.76rem !important;
+  }
+
+  /* Step Indicators & Category Grids */
+  .cat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+  /* "Other / custom" card: span 2 in a 2-column grid = full row */
+  .cat-card[data-k="other"] {
+    grid-column: span 2 !important;
+  }
+  .sub-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+  .step-indicator,
+  .wizard-steps,
+  .steps-bar,
+  .step-bar {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+  footer {
+    padding: 1.75rem 0.85rem 1rem !important;
+  }
+
+  /* Fix right navbar buttons overflow */
+  #nav-right {
+    flex-wrap: nowrap !important;
+    gap: 0.3rem !important;
+    max-width: calc(100vw - 96px) !important;
+    overflow: hidden !important;
+  }
+  /* Hide the "Hi, {name}" identity pill on phones — the greeting + avatar take too much
+     room and the same Dashboard / Log Out actions live in the hamburger menu. The remaining
+     Dashboard/Log Out (or Log In/Sign Up) buttons then fit on one line without wrapping. */
+  #nav-right > div:first-child {
+    display: none !important;
+  }
+  #nav-right .btn-primary,
+  #nav-right .btn-ghost {
+    font-size: 0.72rem !important;
+    padding: 0.3rem 0.6rem !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Chat page — stack the conversation list above the message area on mobile
+     (the desktop 2-column grid pushed the messages off-screen). */
+  .chat-layout {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    min-height: calc(100vh - 56px) !important;
+    margin-top: 56px !important;
+  }
+  .chat-sidebar {
+    max-height: 34vh !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  .chat-main,
+  .chat-main-area {
+    min-height: 62vh !important;
+    width: 100% !important;
+  }
+  .chat-messages {
+    min-height: 300px !important;
+    padding: 1rem !important;
+  }
+  .chat-input-row {
+    padding: 0.75rem 1rem !important;
+  }
+}
+
+/* ── SMALL PHONES (<= 480px) ── */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.4rem !important;
+  }
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+  .cat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  #nav-country,
+  #nav-city-sel {
+    max-width: 78px !important;
+    font-size: 0.68rem !important;
+  }
+  .stat-val,
+  .stat-card-value {
+    font-size: 1.15rem !important;
+  }
+}
+
+/* Footer logo tooltip — on hover over the footer Fixerr logo, reveal the full logo enlarged
+   on a white card. Shared across every page via this one rule. */
+/* footer a:has(> img[alt="Fixerr"]) { position: relative; }
+footer a:has(> img[alt="Fixerr"])::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 10px);
+  width: 200px;
+  height: 84px;
+  background: #ffffff url("data:image/png;base64,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") center / contain no-repeat;
+  background-origin: content-box;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+  z-index: 1000;
+}
+footer a:has(> img[alt="Fixerr"]):hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+} */
+
+/*For Background image display in login page*/
+footer img[alt="Fixerr"] {
+  transition: transform 0.2s ease;
+  transform-origin: center center;
+}
+footer img[alt="Fixerr"]:hover {
+  transform: scale(1.15);
+}
+
+.login-visual {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, #f0fbf0, #fff);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+  min-height: 100%;
+}
+
+.login-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* background-image: url("assets/Fixerr-Pro.png"); */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0.3;
+  filter: blur(1px) brightness(1.03);
+  transform: scale(1.03);
+}
+
+body:not(.admin-login) .login-visual::before {
+  background-image: url("assets/Fixerr-Pro.png");
+}
+
+body.admin-login .login-visual::before {
+  background-image: url("assets/Fixerr-Admin.png");
+}
+
+.login-visual > * {
+  position: relative;
+  z-index: 1;
+}
