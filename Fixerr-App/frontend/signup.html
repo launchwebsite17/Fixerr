@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <title>Sign Up – Fixerr</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="mobile.css" />
+    <!-- PAGE-SPECIFIC OVERRIDE: signup.html uses --bg (white) instead of the
+         shared --bg2, an older/plainer footer color scheme (no uppercase
+         column headings, different muted-text colors) instead of the shared
+         redesigned footer, and needs the range-input accent-color rule that
+         isn't part of styles.css. -->
+    <style>
+      body{background:var(--bg);}
+      input[type="range"]{accent-color:var(--accent);width:100%;}
+      footer {
+        background: var(--text);
+        color: #fff;
+        padding: 4rem 3rem 2rem;
+      }
+      .footer-logo {
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: var(--accent-mid);
+        text-decoration: none;
+        display: block;
+        margin-bottom: 1rem;
+        letter-spacing: -0.5px;
+      }
+      .footer-desc {
+        font-size: 0.85rem;
+        color: #9ca3af;
+        line-height: 1.7;
+        max-width: 260px;
+      }
+      .footer-col h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #fff;
+      }
+      .footer-col ul a {
+        color: #9ca3af;
+        text-decoration: none;
+        font-size: 0.84rem;
+        transition: color 0.2s;
+      }
+      .footer-bottom {
+        border-top: 1px solid #374151;
+        padding-top: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8rem;
+        color: #6b7280;
+      }
+    </style>
+    <script src="common.js"></script>
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <div
+      style="
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding-top: 64px;
+      "
+    >
+      <div
+        style="
+          background: linear-gradient(160deg, #f0fbf0, #fff);
+          border-right: 1px solid var(--border);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 4rem;
+        "
+      >
+        <div
+          style="
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+          "
+        >
+          Join <span style="color: var(--accent)">Fixerr</span>
+        </div>
+        <p
+          style="
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 320px;
+            margin-bottom: 1.5rem;
+          "
+        >
+          Whether you need a service or offer one — join thousands using Fixerr
+          across the US and India.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 0.65rem">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.65rem;
+              font-size: 0.88rem;
+            "
+          >
+            <div
+              style="
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: var(--accent-light);
+                color: var(--accent);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.78rem;
+              "
+            >
+              🆓
+            </div>
+            Free to join
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.65rem;
+              font-size: 0.88rem;
+            "
+          >
+            <div
+              style="
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: var(--accent-light);
+                color: var(--accent);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.78rem;
+              "
+            >
+              ⚡
+            </div>
+            Under 3 minutes
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.65rem;
+              font-size: 0.88rem;
+            "
+          >
+            <div
+              style="
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: var(--accent-light);
+                color: var(--accent);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.78rem;
+              "
+            >
+              🌍
+            </div>
+            India (₹) and US ($)
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.65rem;
+              font-size: 0.88rem;
+            "
+          >
+            <div
+              style="
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: var(--accent-light);
+                color: var(--accent);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.78rem;
+              "
+            >
+              💰
+            </div>
+            Pay only after job done
+          </div>
+        </div>
+      </div>
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 3rem;
+          overflow-y: auto;
+        "
+      >
+        <div style="width: 100%; max-width: 400px; padding: 1rem 0">
+          <div
+            style="font-size: 1.7rem; font-weight: 800; margin-bottom: 0.38rem"
+          >
+            Create account
+          </div>
+          <p
+            style="
+              color: var(--muted);
+              margin-bottom: 1.15rem;
+              font-size: 0.88rem;
+            "
+          >
+            Already have one?
+            <a href="login.html" style="color: var(--accent)">Log in →</a>
+          </p>
+          <div
+            class="alert alert-info"
+            style="margin-bottom: 1.1rem; font-size: 0.8rem"
+          >
+            Looking to offer your services on Fixerr?
+            <a
+              href="register-pro.html"
+              style="color: var(--accent); font-weight: 600"
+              >Apply as a Professional →</a
+            >
+          </div>
+          <div id="customer-fields">
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom: 0">
+                <label>First name <span class="req">*</span></label
+                ><input type="text" id="su-fn" placeholder="Rahul" / name="su-fn" aria-label="Rahul">
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label>Last name <span class="req">*</span></label
+                ><input type="text" id="su-ln" placeholder="Sharma" / name="su-ln" aria-label="Sharma">
+              </div>
+            </div>
+            <div style="margin-bottom: 0.95rem"></div>
+            <div class="form-group">
+              <label>Email <span class="req">*</span></label
+              ><input type="email" id="su-em" placeholder="you@email.com" / name="su-em" aria-label="You@email.com">
+            </div>
+            <div class="form-group">
+              <label>Phone <span class="req">*</span></label
+              ><input
+                type="tel"
+                id="su-ph"
+                data-ph
+                placeholder="+91 98765 43210"
+              / name="su-ph" aria-label="+91 98765 43210">
+            </div>
+            <div class="form-group">
+              <label
+                >Password <span class="req">*</span>
+                <span style="font-weight: 400; color: var(--muted)"
+                  >(min 8 chars)</span
+                ></label
+              ><input
+                type="password"
+                id="su-pw"
+                placeholder="Create strong password"
+              / name="su-pw" aria-label="Create strong password">
+            </div>
+            <div class="form-group">
+              <label>Confirm password <span class="req">*</span></label
+              ><input
+                type="password"
+                id="su-pw2"
+                placeholder="Repeat password"
+              / name="su-pw2" aria-label="Repeat password">
+            </div>
+            <div class="form-group">
+              <label>Your city <span class="req">*</span></label>
+              <div
+                id="su-city-locked"
+                style="
+                  display: none;
+                  align-items: center;
+                  gap: 0.4rem;
+                  margin-bottom: 0.3rem;
+                "
+              >
+                <span
+                  id="su-city-locked-lbl"
+                  style="
+                    font-size: 0.82rem;
+                    font-weight: 700;
+                    color: var(--accent);
+                    background: var(--accent-light);
+                    border: 1.5px solid var(--border-accent);
+                    border-radius: 50px;
+                    padding: 0.28rem 0.8rem;
+                  "
+                ></span>
+                <span
+                  onclick="
+                    document.getElementById('su-city-locked').style.display =
+                      'none';
+                    document.getElementById('su-city-wrap').style.display =
+                      'block';
+                  "
+                  style="
+                    font-size: 0.7rem;
+                    color: var(--accent);
+                    cursor: pointer;
+                    text-decoration: underline;
+                  "
+                  >Change</span
+                >
+              </div>
+              <div id="su-city-wrap">
+                <div class="city-search-wrap" style="position: relative">
+                  <input
+                    id="su-city"
+                    type="text"
+                    placeholder="Type your city..."
+                  / name="su-city" aria-label="Type your city...">
+                  <div
+                    id="su-dd"
+                    class="city-dropdown"
+                    style="display: none"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label
+                >Street address
+                <span style="font-weight: 400; color: var(--muted)"
+                  >(optional)</span
+                ></label
+              ><input
+                id="su-street"
+                data-street-inp
+                placeholder="e.g. 124 Main St, Apt 4B"
+              / name="su-street" aria-label="E.g. 124 Main St, Apt 4B">
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom: 0">
+                <label id="su-zip-lbl" data-zip-lbl>ZIP code</label
+                ><input id="su-zip" data-zip-inp placeholder="5-digit ZIP" / name="su-zip" aria-label="5-digit ZIP">
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label>State</label
+                ><input id="su-state" placeholder="e.g. Karnataka, CO" / name="su-state" aria-label="E.g. Karnataka, CO">
+              </div>
+            </div>
+          </div>
+          <button
+            id="su-btn"
+            onclick="doSignup()"
+            class="btn-primary btn-full"
+            style="padding: 0.82rem; font-size: 0.95rem; margin-top: 0.45rem"
+          >
+            Create Account →
+          </button>
+          <p
+            style="
+              text-align: center;
+              font-size: 0.73rem;
+              color: var(--muted);
+              margin-top: 0.82rem;
+            "
+          >
+            By signing up you agree to our
+            <a href="terms.html" style="color: var(--accent)">Terms</a> &amp;
+            <a href="terms.html" style="color: var(--accent)">Privacy Policy</a>
+          </p>
+        </div>
+        <div id="su-success" style="display:none;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:2rem;box-shadow:var(--shadow);text-align:center;">
+          <div style="font-size:3rem;margin-bottom:0.75rem;">✓</div>
+          <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:0.6rem;">Welcome to Fixerr</h3>
+          <p id="su-success-msg" style="color:var(--muted);line-height:1.7;max-width:460px;margin:0 auto 1.1rem;">Your account is ready. Continue to login when you’re ready.</p>
+          <div class="alert alert-success" style="text-align:left;max-width:520px;margin:0 auto 1.1rem;font-size:0.84rem;">
+            ✓ Your profile has been created.<br>
+            ✓ Your location and currency were saved for your area.<br>
+            ✓ You can now log in and book your first service.
+          </div>
+          <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+            <a href="login.html" class="btn-primary">Go to Login →</a>
+            <a href="booking.html" class="btn-outline">Browse Services</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="site-footer"></div>
+    <script src="nav.js"></script>
+    <script>
+      const _layoutReady = initSharedLayout();
+
+      // PAGE-SPECIFIC OVERRIDE: signup.html clears its own location-picker
+      // validation error once both country and city are chosen.
+      function clearLocationErr() {
+        const c = document.getElementById("nav-country");
+        const ci = document.getElementById("nav-city-sel");
+        const cVal = c && c.value;
+        const ciVal = ci && ci.value && ci.value !== "📍 Select city";
+        if (cVal && c) c.style.borderColor = "";
+        if (ciVal && ci) ci.style.borderColor = "";
+        if (
+          cVal &&
+          (ciVal || (window.FX && FX.city)) &&
+          typeof clearErr === "function"
+        )
+          clearErr();
+      }
+      function onCountryChange() {
+        const cc = document.getElementById("nav-country")?.value;
+        const sel = document.getElementById("nav-city-sel");
+        if (!sel) return;
+        sel.innerHTML = '<option value="">📍 Select city</option>';
+        if (!cc) {
+          sel.disabled = true;
+          return;
+        }
+        const cities = window._CITIES.filter((c) => c.c === cc).sort((a, b) => a.n.localeCompare(b.n));
+        cities.forEach((c) => {
+          const o = document.createElement("option");
+          o.value = JSON.stringify(c);
+          o.textContent = c.f + " " + c.n + (c.st ? ", " + c.st : "");
+          sel.appendChild(o);
+        });
+        sel.disabled = false;
+        clearLocationErr();
+      }
+      function onCityChange() {
+        const v = document.getElementById("nav-city-sel").value;
+        if (!v || v === "📍 Select city") return;
+        try {
+          const city = JSON.parse(v);
+          FX.set(city);
+          lockCity(city);
+          clearLocationErr();
+        } catch (e) {}
+      }
+
+      function csearch(inp, dd) {
+        if (!inp || !dd) return;
+        let timer = null;
+        inp.addEventListener("input", () => {
+          clearTimeout(timer);
+          const q = inp.value.trim();
+          if (q.length < 2) {
+            dd.style.display = "none";
+            return;
+          }
+          timer = setTimeout(async () => {
+            try {
+              const res = await fetch(`/api/cities?q=${encodeURIComponent(q)}`);
+              const cities = await res.json();
+              if (!cities || !cities.length) {
+                dd.style.display = "none";
+                return;
+              }
+              dd.innerHTML = cities
+                .map(
+                  (c) => `
+          <div style="padding:10px 14px; cursor:pointer; font-size:14px; border-bottom:1px solid #f3f4f6;" onclick="selectCityItem('${c.n}', '${c.st || ""}', '${c.c || "US"}')">
+            ${c.f || ""} <strong>${c.n}</strong>${c.st ? ", " + c.st : ""} <span style="color:#9ca3af; font-size:12px;">(${c.c})</span>
+          </div>
+        `,
+                )
+                .join("");
+              dd.style.display = "block";
+            } catch (e) {
+              dd.style.display = "none";
+            }
+          }, 200);
+        });
+        document.addEventListener("click", (e) => {
+          if (!inp.contains(e.target) && !dd.contains(e.target))
+            dd.style.display = "none";
+        });
+      }
+
+      function selectCityItem(name, state, country) {
+        const ci = document.getElementById("su-city");
+        const si = document.getElementById("su-state");
+        const co = document.getElementById("su-country");
+        const dd = document.getElementById("su-dd");
+        if (ci) ci.value = name;
+        if (si && state) si.value = state;
+        if (co && country) co.value = country;
+        if (dd) dd.style.display = "none";
+      }
+
+      const SIGNUP_INDIA_STATES = [
+        "Karnataka",
+        "Maharashtra",
+        "Delhi",
+        "Tamil Nadu",
+        "Telangana",
+        "Uttar Pradesh",
+        "West Bengal",
+        "Gujarat",
+        "Kerala",
+        "Punjab",
+        "Haryana",
+        "Rajasthan",
+        "Andhra Pradesh",
+        "Madhya Pradesh",
+        "Bihar",
+        "Odisha",
+        "Goa",
+        "Assam",
+      ];
+      const SIGNUP_US_STATES = [
+        "California",
+        "New York",
+        "Texas",
+        "Florida",
+        "Illinois",
+        "Washington",
+        "Massachusetts",
+        "Georgia",
+        "New Jersey",
+        "Pennsylvania",
+        "Ohio",
+        "North Carolina",
+        "Virginia",
+        "Michigan",
+        "Colorado",
+        "Arizona",
+      ];
+
+      function onSignupCountryChange() {
+        const c = document.getElementById("su-country")?.value || "IN";
+        const stSel = document.getElementById("su-state-sel");
+        if (stSel) {
+          const states = c === "IN" ? SIGNUP_INDIA_STATES : SIGNUP_US_STATES;
+          const currVal = stSel.value;
+          stSel.innerHTML =
+            '<option value="">Select State</option>' +
+            states.map((s) => `<option value="${s}">${s}</option>`).join("");
+          if (currVal && states.includes(currVal)) stSel.value = currVal;
+        }
+        FX.country = c;
+        FX.currency = c === "IN" ? "INR" : "USD";
+        FX.symbol = c === "IN" ? "₹" : "$";
+        const countryEl = document.getElementById("nav-country");
+        if (countryEl) {
+          countryEl.value = c;
+          onCountryChange();
+        }
+        FX.paint();
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await _layoutReady;
+        const sc = document.getElementById("su-country");
+        if (sc && FX.country) sc.value = FX.country;
+        onSignupCountryChange();
+        if (FX.city && FX.city.st) {
+          const ss = document.getElementById("su-state-sel");
+          if (ss) ss.value = FX.city.st;
+        }
+        csearch(
+          document.getElementById("su-city"),
+          document.getElementById("su-dd"),
+        );
+        if (FX.city) {
+          const lbl = document.getElementById("su-city-locked-lbl");
+          if (lbl)
+            lbl.textContent =
+              FX.city.f +
+              " " +
+              FX.city.n +
+              (FX.city.st ? ", " + FX.city.st : "");
+          const lock = document.getElementById("su-city-locked");
+          if (lock) lock.style.display = "flex";
+          const wrap = document.getElementById("su-city-wrap");
+          if (wrap) wrap.style.display = "none";
+          const ci = document.getElementById("su-city");
+          if (ci) {
+            ci.value = FX.city.n;
+            ci.readOnly = true;
+          }
+          const si = document.getElementById("su-state");
+          if (si && FX.city.st) si.value = FX.city.st;
+        }
+      });
+      function validatePhone(ph, country) {
+        if (!ph) return "Phone number is required";
+        const clean = ph.replace(/[\s\-().]/g, "");
+        if (country === "IN") {
+          // Accept +91XXXXXXXXXX or 10-digit starting with 6-9
+          if (!/^(\+91)?[6-9]\d{9}$/.test(clean))
+            return "Enter a valid Indian mobile number (e.g. +91 98765 43210)";
+        } else {
+          // US: +1XXXXXXXXXX or 10-digit
+          if (!/^(\+1)?[2-9]\d{9}$/.test(clean))
+            return "Enter a valid US phone number (e.g. +1 555 000 0000)";
+        }
+        return null;
+      }
+      async function doSignup() {
+        clearErr();
+        // City is mandatory for registration — FX.city is set when user picks from the city autocomplete.
+        // Use toast only (BRD Option A — no duplicate inline validation message).
+        if (!FX.city) {
+          toast("Please select your city before creating an account.", "err");
+          const suCityEl = document.getElementById("su-city");
+          if (suCityEl) {
+            suCityEl.style.borderColor = "#DC2626";
+            setTimeout(() => {
+              suCityEl.style.borderColor = "";
+            }, 3000);
+            suCityEl.focus();
+          }
+          return;
+        }
+        const fn = v("su-fn"),
+          ln = v("su-ln"),
+          em = v("su-em"),
+          ph = v("su-ph"),
+          pw = v("su-pw"),
+          pw2 = v("su-pw2");
+        const suCountry = FX.city.c;
+        const suState = FX.city.st || "";
+        let ok = true;
+        if (!fn) {
+          showErr("su-fn", "First name is required");
+          ok = false;
+        }
+        if (!ln) {
+          showErr("su-ln", "Last name is required");
+          ok = false;
+        }
+        if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
+          showErr("su-em", "Enter a valid email address");
+          ok = false;
+        }
+        const phErr = validatePhone(ph, suCountry);
+        if (phErr) {
+          showErr("su-ph", phErr);
+          ok = false;
+        }
+        if (pw.length < 8) {
+          showErr("su-pw", "Password must be at least 8 characters");
+          ok = false;
+        }
+        if (pw !== pw2) {
+          showErr("su-pw2", "Passwords do not match");
+          ok = false;
+        }
+        if (!ok) return;
+        // ZIP/PIN validation
+        const zipVal = (v("su-zip") || "").trim().replace(/[^0-9]/g, "");
+        const cityObj = FX.city;
+        const isINzip = (cityObj && cityObj.c === "IN") || FX.country === "IN";
+        if (isINzip) {
+          if (!zipVal || !/^\d{6}$/.test(zipVal)) {
+            showErr("su-zip", "Please enter a valid 6-digit PIN code");
+            ok = false;
+          }
+        } else {
+          if (!zipVal || !/^\d{5}$/.test(zipVal)) {
+            showErr("su-zip", "Please enter a valid 5-digit ZIP code");
+            ok = false;
+          }
+        }
+        if (!ok) return;
+        const city = FX.city;
+        const btn = document.getElementById("su-btn");
+        btn.disabled = true;
+        btn.innerHTML =
+          (window.FXUI ? FXUI.spinner(15, "#fff") : "") + " Creating…";
+        try {
+          let _userLat = null,
+            _userLng = null;
+          try {
+            if (navigator.geolocation)
+              await new Promise((r) =>
+                navigator.geolocation.getCurrentPosition(
+                  (p) => {
+                    _userLat = p.coords.latitude;
+                    _userLng = p.coords.longitude;
+                    r();
+                  },
+                  r,
+                  { timeout: 3000 },
+                ),
+              );
+          } catch (e) {}
+          const d = await API.post("/api/auth/register", {
+            firstName: fn,
+            lastName: ln,
+            email: em,
+            phone: ph,
+            password: pw,
+            passkey: pw,
+            role: "customer",
+            city: city?.n || "",
+            state: city?.st || "",
+            country: city?.c || "IN",
+            currency: city?.cur || "INR",
+            address: v("su-street") || "",
+            zip: v("su-zip") || "",
+            lat: _userLat,
+            lng: _userLng,
+          });
+          // Security: do NOT auto-login after registration - force manual login
+          // API.save(d) intentionally omitted
+          const successWrap = document.getElementById("su-success");
+          const successMsg = document.getElementById("su-success-msg");
+          const btnEl = document.getElementById("su-btn");
+          const formCard = btnEl ? btnEl.closest(".card") : null;
+          if (formCard) {
+            const mainCard = formCard.parentElement;
+            formCard.style.display = "none";
+            if (successMsg) {
+              successMsg.textContent = d.welcome || "Your account is ready. Continue to login when you’re ready.";
+            }
+            if (successWrap && mainCard) {
+              successWrap.style.display = "block";
+              mainCard.appendChild(successWrap);
+            }
+          }
+          toast("Account created successfully. You can log in now.", "ok");
+        } catch (e) {
+          toast(e.message, "err");
+          btn.innerHTML = "Create Account";
+          btn.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Messages – Fixerr</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="mobile.css">
+<!-- PAGE-SPECIFIC STYLES for chat.html.
+     - body background override: this page uses --bg (white) instead of the
+       --bg2 (light gray) that styles.css's shared body{} rule uses.
+     - .chat-* classes: the two-pane message layout (thread sidebar + message
+       thread) is unique to this page and was never duplicated elsewhere, so
+       it stays here instead of moving into the shared styles.css. -->
+<style>
+body{background:var(--bg);}
+.chat-layout{display:grid;grid-template-columns:280px 1fr;height:calc(100vh - 64px);margin-top:64px;}
+.chat-sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1rem 0.75rem;overflow-y:auto;}
+.chat-thread-item{display:flex;flex-direction:column;gap:0.2rem;padding:0.7rem 0.75rem;border-radius:var(--radius-sm);cursor:pointer;margin-bottom:0.3rem;border:1.5px solid transparent;}
+.chat-thread-item:hover{background:var(--bg3);}
+.chat-thread-item.active{background:var(--accent-light);border-color:var(--accent);}
+.chat-thread-ref{font-size:0.7rem;color:var(--accent);font-family:monospace;font-weight:700;}
+.chat-thread-svc{font-size:0.84rem;font-weight:600;}
+.chat-thread-status{font-size:0.68rem;color:var(--muted);}
+.chat-main{display:flex;flex-direction:column;background:#fff;}
+.chat-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.chat-messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:0.75rem;min-height:380px;}
+.chat-bubble{max-width:65%;padding:0.65rem 0.95rem;border-radius:14px;font-size:0.86rem;line-height:1.5;}
+.chat-bubble.mine{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px;}
+.chat-bubble.theirs{align-self:flex-start;background:var(--bg2);border-bottom-left-radius:4px;}
+.chat-bubble-time{font-size:0.65rem;opacity:0.7;margin-top:0.25rem;}
+.chat-input-row{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:0.65rem;}
+.chat-input-row textarea{flex:1;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.6rem 0.9rem;font-size:0.88rem;outline:none;resize:none;font-family:inherit;min-height:42px;max-height:100px;}
+.chat-input-row textarea:focus{border-color:var(--accent);}
+.chat-empty{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.5rem;color:var(--muted);padding:2rem;text-align:center;}
+</style>
+</head><body>
+
+<div id="site-header"></div>
+
+<div class="chat-layout">
+  <div class="chat-sidebar">
+    <a id="chat-back-btn" href="dashboard.html" style="display:none;align-items:center;gap:0.4rem;color:var(--accent);font-weight:700;font-size:0.85rem;text-decoration:none;margin:0 0.4rem 0.85rem;">← Back to Dashboard</a>
+    <script>(function(){try{if(!localStorage.getItem("fx_tok"))return;var u=JSON.parse(localStorage.getItem("fx_usr")||"null");var b=document.getElementById("chat-back-btn");if(!b)return;b.href=u&&u.role==="professional"?"dashboard-pro.html":u&&u.role==="admin"?"fixerr-owner-0si7erbb2ctq.html":"dashboard.html";b.style.display="inline-flex";}catch(e){}})();</script>
+    <div style="font-weight:800;font-size:1.05rem;margin-bottom:0.85rem;padding:0 0.4rem;">💬 Messages</div>
+    <div style="font-size:0.74rem;color:var(--muted);margin-bottom:0.85rem;padding:0 0.4rem;">Select a booking to view or send messages.</div>
+    <div id="thread-list"><div style="padding:1.5rem 0.75rem;text-align:center;color:var(--muted);font-size:0.82rem;">Loading...</div></div>
+  </div>
+  <div class="chat-main">
+    <div class="chat-header">
+      <div><div id="chat-header-title" style="font-weight:700;font-size:0.95rem;">Select a booking</div><div id="chat-header-sub" style="font-size:0.78rem;color:var(--muted);">Choose a booking from the left to start chatting</div></div>
+    </div>
+    <div id="chat-empty-state" class="chat-empty">
+      <div style="font-size:2.2rem;">💬</div>
+      <div style="font-weight:700;">No conversation selected</div>
+      <div style="font-size:0.84rem;max-width:320px;">Pick a booking on the left to chat with our team about that service request.</div>
+    </div>
+    <div id="chat-messages" class="chat-messages" style="display:none;"></div>
+    <div id="chat-input-row" class="chat-input-row" style="display:none;">
+      <textarea id="chat-input" placeholder="Type a message... (Enter to send, Shift+Enter for new line)" name="chat-input" aria-label="Type a message... (Enter to send, Shift+Enter for new line)"></textarea>
+      <button id="chat-send-btn" onclick="sendMsg()" class="btn-primary" style="align-self:flex-end;">Send</button>
+    </div>
+    <div class="alert alert-info" style="margin:0 1.5rem 1.25rem;font-size:0.76rem;">🔒 For your safety, sharing phone numbers, emails, or social media handles in chat is not allowed. Our team will contact you directly using the phone number on your booking.</div>
+  </div>
+</div>
+<div id="site-footer"></div>
+
+<script src="nav.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", initSharedLayout);
+
+let THREADS=[];let ACTIVE_REF=null;
+async function loadThreads(){
+  try{
+    const requests=await API.get('/api/requests');
+    THREADS=requests;
+    const list=document.getElementById('thread-list');
+    if(!requests.length){
+      list.innerHTML='<div style="padding:1.5rem 0.75rem;text-align:center;color:var(--muted);font-size:0.82rem;">No bookings yet. Once you submit a booking request, you can chat about it here.</div>';
+      return;
+    }
+    const STATUS_LABEL={pending:'⏳ Pending',confirmed:'✓ Confirmed',completed:'✅ Completed',cancelled:'✕ Cancelled'};
+    list.innerHTML=requests.map(r=>`
+      <div class="chat-thread-item" data-ref="${r.ref}" onclick="openThread('${r.ref}')">
+        <div class="chat-thread-ref">${r.ref}</div>
+        <div class="chat-thread-svc">${r.service_key}${r.sub_service?' — '+r.sub_service:''}</div>
+        <div class="chat-thread-status">${STATUS_LABEL[r.status]||r.status}</div>
+      </div>`).join('');
+    if(requests.length&&!ACTIVE_REF)openThread(requests[0].ref);
+  }catch(e){toast(e.message,'err');}
+}
+async function openThread(ref){
+  ACTIVE_REF=ref;
+  document.querySelectorAll('.chat-thread-item').forEach(t=>t.classList.toggle('active',t.getAttribute('data-ref')===ref));
+  const req=THREADS.find(r=>r.ref===ref);
+  document.getElementById('chat-header-title').textContent=(req?.service_key||'Booking')+' — '+ref;
+  document.getElementById('chat-header-sub').textContent='Message the Fixerr team about this booking';
+  document.getElementById('chat-empty-state').style.display='none';
+  document.getElementById('chat-messages').style.display='flex';
+  document.getElementById('chat-input-row').style.display='flex';
+  await loadMessages();
+}
+async function loadMessages(){
+  try{
+    const all=await API.get('/api/messages');
+    const mine=all.filter(m=>m.booking_ref===ACTIVE_REF);
+    const box=document.getElementById('chat-messages');
+    const me=API.user();
+    if(!mine.length){
+      box.innerHTML='<div style="text-align:center;color:var(--muted);font-size:0.82rem;padding:2rem;">No messages yet for this booking. Send a message below to ask a question about your service.</div>';
+      return;
+    }
+    box.innerHTML=mine.map(m=>`
+      <div class="chat-bubble ${m.from===me.id?'mine':'theirs'}">
+        ${m.content}
+        <div class="chat-bubble-time">${new Date(m.created).toLocaleString()}</div>
+      </div>`).join('');
+    box.scrollTop=box.scrollHeight;
+  }catch(e){toast(e.message,'err');}
+}
+async function sendMsg(){
+  const inp=document.getElementById('chat-input');
+  const content=inp.value.trim();
+  if(!content){toast('Please type a message first','err');return;}
+  if(content.length<2){toast('Message is too short','err');return;}
+  if(content.length>1000){toast('Message is too long (max 1000 characters)','err');return;}
+  if(!ACTIVE_REF){toast('Please select a booking first to send a message','err');return;}
+  const btn=document.getElementById('chat-send-btn');
+  btn.disabled=true;
+  try{
+    await API.post('/api/messages',{booking_ref:ACTIVE_REF,content});
+    inp.value='';
+    await loadMessages();
+  }catch(e){
+    if(e.message&&e.message.includes('personal contact')){
+      toast(e.message,'err');
+    }else{
+      toast(e.message,'err');
+    }
+  }
+  btn.disabled=false;
+}
+document.getElementById('chat-input')?.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+});
+if(API.must()) loadThreads();
+
+</script></body></html>

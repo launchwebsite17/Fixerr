@@ -1,0 +1,27 @@
+# Render.com Blueprint — deploys the Fixerr app as a single Node web service.
+# backend/server.js serves BOTH the REST API (/api/*) and the static frontend (../frontend),
+# so this one service covers everything. Set the secret env vars in the Render dashboard.
+services:
+  - type: web
+    name: fixerr
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node backend/server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: ZOHO_EMAIL
+        sync: false
+      - key: ZOHO_PASSWORD
+        sync: false

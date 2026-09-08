@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Complete – Fixerr</title>
+<style>
+:root{
+  --accent:#3D8B37; --text:#1A1D1A; --muted:#6B7280;
+  --font-display:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+}
+body{font-family:var(--font-display);background:#fff;color:var(--text);padding:2rem 1.25rem;text-align:center;}
+.hidden{display:none;}
+h2{font-size:1.25rem;font-weight:800;margin-bottom:0.5rem;}
+p{color:var(--muted);font-size:0.9rem;line-height:1.6;max-width:420px;margin:0 auto;}
+.spinner{display:inline-block;width:20px;height:20px;border:2.5px solid #E5E7EB;border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin-bottom:0.6rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<div id="pending">
+  <div class="spinner"></div>
+  <p>Confirming your payment…</p>
+</div>
+
+<section id="success" class="hidden">
+  <div style="font-size:2.5rem;margin-bottom:0.5rem;">✅</div>
+  <h2>Payment successful</h2>
+  <p>We appreciate your business! A confirmation email will be sent to <strong id="customer-email"></strong>.</p>
+</section>
+
+<section id="cancelled" class="hidden">
+  <h2>Payment not completed</h2>
+  <p>Your checkout session is still open. You can return to complete payment.</p>
+</section>
+
+<script>
+const params = new URLSearchParams(location.search);
+const sessionId = params.get('session_id');
+const bookingRef = params.get('ref');
+
+function getToken(){ try { return localStorage.getItem('fx_tok'); } catch(e){ return null; } }
+
+function notifyParent(status, extra){
+  window.parent.postMessage(Object.assign({ source: 'fixerr-payment', bookingRef, status }, extra || {}), '*');
+}
+
+async function init(){
+  if (!sessionId){
+    document.getElementById('pending').innerHTML = '<p>Missing checkout session.</p>';
+    notifyParent('error', { message: 'Missing checkout session.' });
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/payment-gateway/session-status?session_id=' + encodeURIComponent(sessionId), {
+      headers: { 'Authorization': 'Bearer ' + getToken() }
+    });
+    const session = await res.json();
+    if (!res.ok) throw new Error(session.error || 'Could not verify payment status.');
+
+    document.getElementById('pending').classList.add('hidden');
+
+    if (session.status === 'open'){
+      document.getElementById('cancelled').classList.remove('hidden');
+      if (bookingRef){
+        setTimeout(() => {
+          location.replace('payment-checkout.html?ref=' + encodeURIComponent(bookingRef));
+        }, 1500);
+      }
+      notifyParent('failed', { message: 'Payment was not completed.' });
+      return;
+    }
+
+    if (session.status === 'complete' || session.paymentStatus === 'paid'){
+      document.getElementById('success').classList.remove('hidden');
+      if (session.customerEmail) document.getElementById('customer-email').textContent = session.customerEmail;
+      notifyParent('success', {});
+      return;
+    }
+
+    document.getElementById('cancelled').classList.remove('hidden');
+    notifyParent('failed', { message: 'Payment was not completed.' });
+  } catch (err) {
+    document.getElementById('pending').innerHTML = '<p style="color:#DC2626;">' + (err.message || 'Could not verify payment.') + '</p>';
+    notifyParent('error', { message: err.message });
+  }
+}
+
+init();
+</script>
+</body>
+</html>
