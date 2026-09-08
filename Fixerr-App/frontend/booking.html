@@ -1,0 +1,954 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Book a Service – Fixerr</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="mobile.css">
+<!-- PAGE-SPECIFIC OVERRIDE: booking.html tunes a handful of shared
+     component classes differently from the rest of the site (a wider
+     gap/wrap-friendly step nav, an image thumbnail in category cards,
+     a non-sticky order summary sidebar, and extra payment-method
+     states). Kept local since these values differ from styles.css. -->
+<style>
+.step-nav{display:flex;justify-content:space-between;align-items:center;gap:0.85rem;flex-wrap:wrap;margin-top:1.5rem;margin-bottom:2rem;}
+.step-nav.end{justify-content:flex-end;}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;width:100%;}
+.cat-img{width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:0.5rem;display:block;}
+.order-side{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;position:static;box-shadow:var(--shadow);}
+.pay-m:hover{border-color:var(--accent);background:var(--accent-light);}
+.pay-m.sel{border-color:var(--accent);background:var(--accent-light);box-shadow:0 0 0 2px var(--accent);position:relative;}
+.pay-m.sel::after{content:"✓";position:absolute;top:0.4rem;right:0.6rem;color:var(--accent);font-weight:800;font-size:0.8rem;}
+.pay-m-disabled,.pay-m.pay-m-disabled{opacity:0.55;cursor:not-allowed!important;pointer-events:none;}
+.pay-m-disabled:hover,.pay-m.pay-m-disabled:hover{border-color:var(--border)!important;background:#fff!important;}
+.pay-icon-wrap{display:flex;align-items:center;justify-content:center;width:1.75rem;flex-shrink:0;font-size:1.3rem;line-height:1;}
+.pay-icon-fixerr svg{display:block;}
+</style>
+<script src="common.js"></script>
+</head><body>
+<div id="site-header"></div>
+<div style="max-width:1280px;margin:0 auto;padding:9rem 2.5rem 5rem;">
+  <a id="bk-back-btn" href="dashboard.html" style="display:none;align-items:center;gap:0.4rem;color:var(--accent);font-weight:700;font-size:0.9rem;text-decoration:none;margin-bottom:0.75rem;">← Back to Dashboard</a>
+  <script>(function(){try{if(!localStorage.getItem("fx_tok"))return;var u=JSON.parse(localStorage.getItem("fx_usr")||"null");var b=document.getElementById("bk-back-btn");if(!b)return;b.href=u&&u.role==="professional"?"dashboard-pro.html":u&&u.role==="admin"?"fixerr-owner-0si7erbb2ctq.html":"dashboard.html";b.style.display="inline-flex";}catch(e){}})();</script>
+  <h1 style="font-size:1.65rem;font-weight:800;margin-bottom:0.22rem;">Book a Service</h1>
+  <p style="color:var(--muted);margin-bottom:1.4rem;font-size:0.9rem;">City: <strong data-cn>Select city above</strong> &nbsp;·&nbsp; Currency: <span data-cf>🇮🇳 ₹ INR</span> &nbsp;·&nbsp; <span style="color:var(--accent);">📞 We call you within 2 hours</span></p>
+  <div class="step-bar">
+    <div class="sp-dot active" id="d1"><div class="sp-num">1</div><div class="sp-lbl">Category</div></div>
+    <div class="sp-line" id="l1"></div>
+    <div class="sp-dot" id="d2"><div class="sp-num">2</div><div class="sp-lbl">Service</div></div>
+    <div class="sp-line" id="l2"></div>
+    <div class="sp-dot" id="d3"><div class="sp-num">3</div><div class="sp-lbl">Choose Pro</div></div>
+    <div class="sp-line" id="l3"></div>
+    <div class="sp-dot" id="d4"><div class="sp-num">4</div><div class="sp-lbl">Schedule</div></div>
+    <div class="sp-line" id="l4"></div>
+    <div class="sp-dot" id="d5"><div class="sp-num">5</div><div class="sp-lbl">Address &amp; Contact</div></div>
+    <div class="sp-line" id="l5"></div>
+    <div class="sp-dot" id="d6"><div class="sp-num">6</div><div class="sp-lbl">Payment</div></div>
+    <div class="sp-line" id="l6"></div>
+    <div class="sp-dot" id="d7"><div class="sp-num">✓</div><div class="sp-lbl">Confirmed</div></div>
+  </div>
+  <div id="booking-grid" style="display:grid;grid-template-columns:1fr;gap:1.35rem;align-items:start;">
+  <div>
+  <div class="step-panel active" id="s1">
+    <div class="form-card">
+      <h3>🔍 What do you need?</h3>
+      <p style="color:var(--muted);font-size:0.83rem;margin-bottom:1rem;">Select a category. Prices in <span data-cf>$</span>.</p>
+<div class="cat-grid">
+        <div class="cat-card" data-k="plumbing" onclick="selCat('plumbing')">
+          <img class="cat-img" src="https://images.pexels.com/photos/6419128/pexels-photo-6419128.jpeg?w=400&h=200&fit=crop" alt="Plumbing" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Plumbing</div>
+        </div>
+        <div class="cat-card" data-k="electrical" onclick="selCat('electrical')">
+          <img class="cat-img" src="https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?w=400&h=200&fit=crop" alt="Electrician" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Electrician</div>
+        </div>
+        <div class="cat-card" data-k="cleaning" onclick="selCat('cleaning')">
+          <img class="cat-img" src="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=200&h=100&fit=crop" alt="Home Cleaning" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Home Cleaning</div>
+        </div>
+        <div class="cat-card" data-k="appliance" onclick="selCat('appliance')">
+          <img class="cat-img" src="https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?auto=compress&w=400&h=200&fit=crop" alt="Appliance Repair" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Appliance Repair</div>
+        </div>
+        <div class="cat-card" data-k="beauty" onclick="selCat('beauty')">
+          <img class="cat-img" src="https://images.pexels.com/photos/2253832/pexels-photo-2253832.jpeg?auto=compress&w=400&h=200&fit=crop" alt="Beauty & Spa" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Beauty & Spa</div>
+        </div>
+        <div class="cat-card" data-k="tutoring" onclick="selCat('tutoring')">
+          <img class="cat-img" src="https://images.pexels.com/photos/301926/pexels-photo-301926.jpeg?w=400&h=200&fit=crop" alt="Tutoring" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Tutoring</div>
+        </div>
+        <div class="cat-card" data-k="photography" onclick="selCat('photography')">
+          <img class="cat-img" src="https://images.pexels.com/photos/1983037/pexels-photo-1983037.jpeg?w=400&h=200&fit=crop" alt="Photography" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Photography</div>
+        </div>
+        <div class="cat-card" data-k="events" onclick="selCat('events')">
+          <img class="cat-img" src="https://images.pexels.com/photos/1857157/pexels-photo-1857157.jpeg?w=400&h=200&fit=crop" alt="Events" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Events</div>
+        </div>
+        <div class="cat-card" data-k="lawn" onclick="selCat('lawn')">
+          <img class="cat-img" src="https://images.pexels.com/photos/1453499/pexels-photo-1453499.jpeg?auto=compress&w=400&h=200&fit=crop" alt="Lawn & Garden" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Lawn & Garden</div>
+        </div>
+        <div class="cat-card" data-k="painting" onclick="selCat('painting')">
+          <img class="cat-img" src="https://images.pexels.com/photos/1669754/pexels-photo-1669754.jpeg?w=400&h=200&fit=crop" alt="Painting" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Painting</div>
+        </div>
+        <div class="cat-card" data-k="movers" onclick="selCat('movers')">
+          <img class="cat-img" src="https://images.pexels.com/photos/4246120/pexels-photo-4246120.jpeg?w=400&h=200&fit=crop" alt="Movers" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Movers</div>
+        </div>
+        <div class="cat-card" data-k="handyman" onclick="selCat('handyman')">
+          <img class="cat-img" src="https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?w=400&h=200&fit=crop" alt="Handyman" loading="lazy" onerror="this.style.display='none'">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">Handyman</div>
+        </div>
+        <div class="cat-card" data-k="other" onclick="selCat('other');gStep(2)" style="border:2px dashed var(--border-accent);background:var(--accent-light);grid-column:span 4;flex-direction:row;display:flex;align-items:center;gap:0.75rem;text-align:left;padding:0.9rem;">
+          <span style="font-size:1.5rem;">➕</span>
+          <div><div style="font-weight:700;font-size:0.85rem;color:var(--accent);">Don't see your service? Request anything custom</div><div style="font-size:0.75rem;color:#1F5020;">Describe any service — our team finds the right professional in 24 hours</div></div>
+          <span style="margin-left:auto;color:var(--accent);">→</span>
+        </div>
+      </div>
+    </div>
+    <div class="step-nav end"><button onclick="gStep(2)" class="btn-primary btn-lg">Next: Choose Service →</button></div>
+  </div>
+  <div class="step-panel" id="s2">
+    <div class="form-card"><h3 id="sub-title">Choose the specific service</h3><div id="sub-cont"></div>
+      <div style="margin-top:1rem;padding:0.85rem;background:var(--bg2);border-radius:var(--radius-sm);">
+        <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:0.4rem;">How many units / quantity needed? <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <input type="number" id="f-qty" min="1" max="99" value="1" style="width:80px;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem;font-size:0.9rem;text-align:center;" name="f-qty" aria-label="F qty">
+          <span style="font-size:0.8rem;color:var(--muted);" id="qty-hint">e.g. number of rooms, fixtures, items, sessions</span>
+        </div>
+      </div>
+    </div>
+    <div class="step-nav"><button onclick="gStep(1)" class="btn-outline">← Back</button><button onclick="gStep(3)" class="btn-primary">Next: Choose Professional →</button></div>
+  </div>
+  <div class="step-panel" id="s3">
+    <div class="form-card">
+      <h3>👤 Choose your professional</h3>
+      <p style="color:var(--muted);font-size:0.84rem;margin-bottom:1rem;">These professionals are shown for demo purposes during our soft launch — our team will confirm actual availability and pricing when they call you.</p>
+      <div id="pro-list-cont"></div>
+    </div>
+    <div class="step-nav"><button onclick="gStep(2)" class="btn-outline">← Back</button><button onclick="gStep(4)" class="btn-primary">Next: Schedule →</button></div>
+  </div>
+  <div class="step-panel" id="s4">
+    <div class="form-card">
+      <h3>📅 When do you need it?</h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;"><button class="btn-ghost btn-sm" onclick="calNav(-1)">← Prev</button><strong style="font-size:0.88rem;" id="cal-month-lbl">—</strong><button class="btn-ghost btn-sm" onclick="calNav(1)">Next →</button></div>
+      <div class="cal-grid" id="cal-grid">
+        <div class="cal-h">Su</div><div class="cal-h">Mo</div><div class="cal-h">Tu</div><div class="cal-h">We</div><div class="cal-h">Th</div><div class="cal-h">Fr</div><div class="cal-h">Sa</div>
+      </div>
+      <div style="font-weight:700;font-size:0.88rem;margin-bottom:0.58rem;">Preferred time</div>
+      <div class="time-row">
+        <div class="t-slot na">8:00 AM</div><div class="t-slot">9:00 AM</div><div class="t-slot">10:00 AM</div>
+        <div class="t-slot">11:00 AM</div><div class="t-slot">12:00 PM</div><div class="t-slot">1:00 PM</div>
+        <div class="t-slot na">2:00 PM</div><div class="t-slot">3:00 PM</div><div class="t-slot">4:00 PM</div>
+        <div class="t-slot">5:00 PM</div><div class="t-slot">6:00 PM</div>
+      </div>
+      <div class="alert alert-info" style="font-size:0.8rem;">This is your preferred time. Our team will confirm the exact time when they call you.</div>
+    </div>
+    <div class="step-nav"><button onclick="gStep(3)" class="btn-outline">← Back</button><button onclick="gStep(5)" class="btn-primary">Next: Address &amp; Contact →</button></div>
+  </div>
+  <div class="step-panel" id="s5">
+    <div class="form-card">
+      <h3>📍 Your address &amp; contact</h3>
+      <div class="alert alert-info" style="margin-bottom:1rem;">Your saved address and contact details are loaded from your account. Address fields cannot be changed here — update your profile if needed.</div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Country <span class="req">*</span></label>
+          <select id="f-country" onchange="onBkCountryChange()" style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.62rem 0.85rem;font-size:0.95rem;width:100%;background:#fff;outline:none;font-weight:600;" name="f-country" aria-label="F country">
+            <option value="IN">🇮🇳 India</option>
+            <option value="US">🇺🇸 United States</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>State / Region <span class="req">*</span></label>
+          <select id="f-state" style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.62rem 0.85rem;font-size:0.95rem;width:100%;background:#fff;outline:none;font-weight:600;" name="f-state" aria-label="F state">
+            <option value="">Select State</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:0.85rem;"></div>
+      <div class="form-group"><label>Street address <span class="req">*</span></label><input type="text" id="f-street" data-street-inp placeholder="e.g. 124 MG Road, Apt 4B, Near Indiranagar Metro" name="f-street" aria-label="E.g. 124 MG Road, Apt 4B, Near Indiranagar Metro"><div style="font-size:0.72rem;color:var(--muted);margin-top:0.25rem;">Include house/flat number and street name — at least 10 characters.</div></div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>City <span class="req">*</span></label>
+          <input type="text" id="f-city" data-city-inp placeholder="e.g. Bengaluru / New York" name="f-city" aria-label="E.g. Bengaluru / New York">
+        </div>
+        <div class="form-group" style="margin-bottom:0;"><label id="lbl-zip" data-zip-lbl>ZIP / PIN code (optional)</label><input type="text" id="f-zip" data-zip-inp placeholder="ZIP or PIN code" name="f-zip" aria-label="ZIP or PIN code"></div>
+      </div>
+      <div style="margin-bottom:0.95rem;"></div>
+      <div class="form-group"><label>Access notes (optional)</label><textarea id="f-notes" placeholder="3rd floor, ring bell twice, gate code 1234..." style="min-height:60px;" name="f-notes" aria-label="3rd floor, ring bell twice, gate code 1234..."></textarea></div>
+      <div class="alert alert-info" style="font-size:0.78rem;">👤 <strong>Important:</strong> An adult (18+) must be present at the service address during the professional's visit.</div>
+      <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;font-size:0.84rem;background:#FEF9C3;border:1px solid #FDE047;border-radius:var(--radius-sm);padding:0.75rem 0.85rem;">
+        <input type="checkbox" id="f-adult18" style="accent-color:var(--accent);margin-top:0.2rem;flex-shrink:0;" name="f-adult18" aria-label="F adult18">
+        <span>✓ I confirm that an adult aged <strong>18 years or older</strong> will be present at the service address for the entire duration of the professional's visit. <span class="req">*</span></span>
+      </label>
+      <hr class="divider">
+      <h3>📞 Contact details</h3>
+      <div class="form-group"><label>Your name <span class="req">*</span></label><input type="text" id="f-name" placeholder="Your full name" name="f-name" aria-label="Your full name"></div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0;"><label>Phone <span class="req">*</span></label><input type="tel" id="f-phone" data-ph placeholder="+91 98765 43210" name="f-phone" aria-label="+91 98765 43210"></div>
+        <div class="form-group" style="margin-bottom:0;"><label>Email (optional)</label><input type="email" id="f-email" placeholder="you@email.com" name="f-email" aria-label="You@email.com"></div>
+      </div>
+      <div style="margin-bottom:0.95rem;"></div>
+      <div class="alert alert-success" style="font-size:0.8rem;">✓ Our team will call your phone within 2 hours to confirm booking, professional, and final price.</div>
+      <hr class="divider">
+      <h3>🏷️ Promo code</h3>
+      <div style="display:flex;gap:0.65rem;"><input type="text" id="disc-inp" placeholder="WELCOME · INDIA15 · FIXERR20 · LAUNCH50" style="flex:1;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.62rem 0.95rem;font-size:0.86rem;outline:none;" name="disc-inp" aria-label="WELCOME · INDIA15 · FIXERR20 · LAUNCH50"><button onclick="applyDisc()" class="btn-outline btn-sm">Apply</button></div>
+      <div id="disc-msg" style="font-size:0.78rem;margin-top:0.32rem;"></div>
+    </div>
+    <div class="step-nav"><button onclick="gStep(4)" class="btn-outline">← Back</button><button onclick="gStep(6)" class="btn-primary">Next: Payment →</button></div>
+  </div>
+  <div class="step-panel" id="s6">
+    <div class="form-card">
+      <h3>💰 How you'll pay</h3>
+      <div class="alert alert-info" style="margin-bottom:1.1rem;">💡 <strong>How payment works:</strong> All payments go to <strong>Fixerr</strong> — not the professional directly. Once the job is done and you're satisfied, Fixerr processes your payment securely. This protects you as a customer.</div>
+      <p style="font-size:0.86rem;font-weight:600;margin-bottom:0.65rem;">Choose how you'd like to pay Fixerr <span class="req">*</span></p>
+      <div id="pay-options-cont"></div>
+      <hr class="divider">
+      <div class="alert alert-success" style="font-size:0.8rem;">
+        ✓ <strong>How this works:</strong><br>
+        1. Professional arrives and completes the job<br>
+        2. You confirm you're satisfied with the work<br>
+        3. You pay the final amount to <strong>Fixerr</strong> (not the pro)<br>
+        4. Fixerr processes your payment and dispatches the professional ✅
+      </div>
+      <hr class="divider">
+      <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:1rem 1.15rem;font-size:0.8rem;line-height:1.65;color:var(--muted);margin-bottom:0.85rem;">
+        Professionals on Fixerr are independent contractors, not Fixerr employees. Fixerr is not responsible for property damage, injury, theft, or service quality issues that may arise during a booking — these are matters between you and the professional. By submitting this request, you acknowledge you've read our <a href="terms.html" style="color:var(--accent);">Terms of Service</a>.
+      </div>
+      <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;font-size:0.83rem;margin-bottom:0.5rem;">
+        <input type="checkbox" id="cust-agree" style="accent-color:var(--accent);margin-top:0.2rem;flex-shrink:0;" name="cust-agree" aria-label="Cust agree">
+        <span>I understand Fixerr is not liable for damage, injury, or disputes related to this booking, and I agree to the <a href="terms.html" style="color:var(--accent);">Terms of Service</a>.</span>
+      </label>
+    </div>
+    <div class="step-nav"><button onclick="gStep(5)" class="btn-outline">← Back</button><button id="sub-btn" onclick="submitBk()" class="btn-primary btn-lg">✓ Submit Booking Request</button></div>
+  </div>
+  <div class="step-panel" id="s7">
+    <div style="text-align:center;padding:3rem 1rem;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);">
+      <div style="font-size:3.5rem;margin-bottom:0.85rem;">🎉</div>
+      <h2 style="font-size:1.7rem;font-weight:800;margin-bottom:0.65rem;">Booking Request Confirmed!</h2>
+      <p style="color:var(--muted);max-width:420px;margin:0 auto 1.5rem;line-height:1.7;">We'll call you at <strong id="conf-phone">—</strong> within 2 hours to confirm everything.</p>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;max-width:420px;margin:0 auto 1.5rem;text-align:left;">
+        <div style="display:flex;flex-direction:column;gap:0.38rem;">
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.32rem 0;border-bottom:1px solid var(--border);"><span style="color:var(--muted);">Booking Ref</span><strong id="conf-ref" style="color:var(--accent);font-family:monospace;font-size:0.82rem;">—</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.32rem 0;border-bottom:1px solid var(--border);"><span style="color:var(--muted);">Service</span><span id="conf-svc">—</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.32rem 0;border-bottom:1px solid var(--border);"><span style="color:var(--muted);">Your Pro</span><strong id="conf-pro" style="color:var(--accent);">—</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.32rem 0;border-bottom:1px solid var(--border);"><span style="color:var(--muted);">Unit price</span><span id="conf-unit">—</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.32rem 0;border-bottom:1px solid var(--border);"><span style="color:var(--muted);">Quantity</span><span id="conf-qty">—</span></div>
+          <div id="conf-disc-row" style="display:none;justify-content:space-between;font-size:0.85rem;padding:0.32rem 0;border-bottom:1px solid var(--border);color:var(--accent);"><span>Discount (<span id="conf-disc-code"></span>)</span><span id="conf-disc">—</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.32rem 0;border-bottom:1px solid var(--border);"><span style="color:var(--muted);">Total estimate</span><strong id="conf-est" style="color:var(--accent);">—</strong></div>
+          <div style="font-size:0.72rem;color:#F59E0B;padding:0.4rem 0;line-height:1.5;">⚠️ <strong>Starting estimate only.</strong> Your professional will call you to discuss the job and agree on the <strong>final price</strong> before any work begins.</div>
+        </div>
+      </div>
+      <div class="alert alert-success" style="max-width:420px;margin:0 auto 1.5rem;font-size:0.82rem;text-align:left;">
+        ✓ <strong>What happens next:</strong><br>
+        1. Fixerr calls you within 2 hours to confirm your booking ✅<br>
+        2. Your chosen professional calls you to discuss the job scope<br>
+        3. You both agree on a <strong>final price</strong> over the phone<br>
+        4. Pro updates Fixerr with the agreed price — you'll see it in your <a href="dashboard.html" style="color:var(--accent);">dashboard</a><br>
+        5. Professional arrives and completes the job<br>
+        6. You pay <strong>Fixerr</strong> the agreed amount after job is done ✅
+      </div>
+      <div id="conf-service-address-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;max-width:420px;margin:0 auto 1.5rem;text-align:left;font-size:0.82rem;">
+        <p style="margin:0 0 0.65rem;line-height:1.6;color:var(--muted);">Service will be rendered at the below address. If any changes, please notify the professional.</p>
+        <div id="conf-address" style="font-weight:600;color:var(--text);line-height:1.55;">—</div>
+        <div style="margin-top:0.85rem;padding-top:0.75rem;border-top:1px solid var(--border);">
+          <p style="margin:0 0 0.3rem;color:var(--muted);">Your Preferred Service Date &amp; Time :</p>
+          <div id="conf-datetime" style="font-weight:600;color:var(--text);">—</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.85rem;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:0.25rem;padding-bottom:0.5rem;">
+        <a href="booking.html" class="btn-outline">Browse More Services</a>
+        <a href="chat.html" class="btn-outline">💬 Message Us</a>
+        <a href="dashboard.html" class="btn-primary">View My Requests</a>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div id="order-side" class="order-side"><div style="color:var(--muted);font-size:0.83rem;text-align:center;padding:0.65rem;">Select a service to see estimate</div></div>
+  </div>
+</div>
+<div id="site-footer"></div>
+<script src="nav.js"></script>
+<script>
+const _layoutReady = initSharedLayout();
+document.addEventListener("DOMContentLoaded",async()=>{await _layoutReady;
+  // General Note 3: Booking requires login
+  const user = API.user();
+  if(!user || !API.tok()){
+    // Show login required banner before booking steps
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:#FEF9C3;border:2px solid #FDE047;border-radius:var(--radius);padding:1.5rem;text-align:center;margin:2rem auto;max-width:500px;';
+    banner.innerHTML = '<div style="font-size:2rem;margin-bottom:0.5rem;">🔐</div><h3 style="font-weight:800;margin-bottom:0.5rem;">Login Required to Book</h3><p style="color:var(--muted);margin-bottom:1rem;">Please log in or create a free account to book a service. This helps us track your bookings and keep you updated.</p><div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;"><a href="login.html" class="btn-primary">Log In →</a><a href="signup.html" class="btn-outline">Create Free Account</a></div>';
+    const stepPanel = document.querySelector('.step-panel');
+    if(stepPanel) stepPanel.parentNode.insertBefore(banner, stepPanel);
+    // Disable the booking steps
+    document.querySelectorAll('.step-panel').forEach(p => p.style.opacity = '0.4');
+    document.querySelectorAll('.step-panel button, .step-panel input, .step-panel select').forEach(el => el.disabled = true);
+  }
+});
+
+let CAL_VIEW=new Date();CAL_VIEW.setDate(1);
+const MONTH_NAMES=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function renderCalendar(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const y=CAL_VIEW.getFullYear(),m=CAL_VIEW.getMonth();
+  document.getElementById('cal-month-lbl').textContent=MONTH_NAMES[m]+' '+y;
+  const firstDay=new Date(y,m,1).getDay();
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='<div class="cal-h">Su</div><div class="cal-h">Mo</div><div class="cal-h">Tu</div><div class="cal-h">We</div><div class="cal-h">Th</div><div class="cal-h">Fr</div><div class="cal-h">Sa</div>';
+  for(let i=0;i<firstDay;i++)grid.innerHTML+='<div class="cal-d dis"></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const thisDate=new Date(y,m,d);thisDate.setHours(0,0,0,0);
+    const isPast=thisDate<today;
+    grid.innerHTML+=`<div class="cal-d${isPast?' dis':''}" data-y="${y}" data-m="${m}" data-d="${d}" ${isPast?'':'onclick="selDate(this)"'}>${d}</div>`;
+  }
+}
+function calNav(dir){
+  const today=new Date();today.setDate(1);today.setHours(0,0,0,0);
+  const next=new Date(CAL_VIEW);next.setMonth(next.getMonth()+dir);
+  if(next<today){toast("Can't go back further than this month","err");return;}
+  CAL_VIEW=next;renderCalendar();
+}
+
+let BK={step:1,cat:null,sub:null,pro:null,date:null,time:null,qty:1,disc:0,discCode:"",payMethod:"card"};
+const CAT_TAGLINES={
+  plumbing:"Drip Fixed",electrical:"Lights On",cleaning:"Spotless Home",appliance:"Back to Life",
+  beauty:"Glow Up",tutoring:"Ace It",photography:"Perfect Shot",events:"Party Ready",
+  lawn:"Green & Lush",painting:"Fresh Look",movers:"Stress-Free",handyman:"Fixed & Done"
+};
+const FIXERR_WALLET_ICON=`<span class="pay-icon-fixerr"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="3" y="9" width="26" height="18" rx="3.5" fill="var(--accent-light,#E8F5E3)" stroke="var(--accent,#15803d)" stroke-width="1.6"/><path d="M3 13.5h26" stroke="var(--accent,#15803d)" stroke-width="1.3" stroke-linecap="round"/><rect x="19" y="17" width="9" height="7" rx="2" fill="#fff" stroke="var(--accent,#15803d)" stroke-width="1.2"/><circle cx="23.5" cy="20.5" r="1.3" fill="var(--accent,#15803d)"/><text x="11.5" y="22.5" text-anchor="middle" font-family="Plus Jakarta Sans,system-ui,sans-serif" font-size="11" font-weight="800" fill="var(--accent,#15803d)">F</text></svg></span>`;
+const PAY_OPTIONS={
+  US:[
+    {method:"card",icon:"💳",title:"Credit / Debit Cards",desc:"Visa, Mastercard, Amex, and more"},
+    {method:"bank_debit",icon:"🏦",title:"Bank Debit",desc:"Pay directly from your bank account"},
+    {method:"wallet",icon:"👛",title:"Digital Wallet (Amazon Pay / Apple Pay / Cash App Pay / Google Pay)",desc:"Quick checkout with your digital wallet"},
+    {method:"wallet_apps",icon:"💰",title:"Wallet (Amazon Pay / PayPal / Bajaj Pay)",desc:"Pay with Amazon Pay, PayPal, or Bajaj Pay after your job is done"},
+    {method:"fixerr_wallet",iconHtml:FIXERR_WALLET_ICON,title:"Fixerr Wallet",desc:"Coming soon — pay from your Fixerr balance",disabled:true}
+  ],
+  IN:[
+    {method:"card",icon:"💳",title:"Credit / Debit Cards",desc:"Visa, Mastercard, RuPay, and more"},
+    {method:"netbanking",icon:"🏦",title:"Netbanking",desc:"Pay via your bank's net banking portal"},
+    {method:"upi",icon:"📱",title:"UPI (GPay / PhonePe / Amazon Pay / Paytm / BHIM)",desc:"Pay via UPI after job is done"},
+    {method:"wallet_apps",icon:"💰",title:"Wallet (Amazon Pay / PayPal / Bajaj Pay)",desc:"Pay with Amazon Pay, PayPal, or Bajaj Pay after your job is done"},
+    {method:"fixerr_wallet",iconHtml:FIXERR_WALLET_ICON,title:"Fixerr Wallet",desc:"Coming soon — pay from your Fixerr balance",disabled:true}
+  ]
+};
+const CATS=[
+  {k:"plumbing",n:"Plumbing",ic:"🔧"},{k:"electrical",n:"Electrician",ic:"⚡"},
+  {k:"cleaning",n:"Home Cleaning",ic:"🏠"},{k:"appliance",n:"Appliance Repair",ic:"🔌"},
+  {k:"beauty",n:"Beauty & Spa",ic:"💆"},{k:"tutoring",n:"Tutoring",ic:"📚"},
+  {k:"photography",n:"Photography",ic:"📷"},{k:"events",n:"Events",ic:"🎉"},
+  {k:"lawn",n:"Lawn & Garden",ic:"🌿"},{k:"painting",n:"Painting",ic:"🎨"},
+  {k:"movers",n:"Movers",ic:"🚛"},{k:"handyman",n:"Handyman",ic:"🛠️"},
+  {k:"other",n:"Custom/Other",ic:"➕"}
+];
+const DEMO_PROS={
+  plumbing:[
+    {id:1,nm:"Raj Patel",init:"RP",exp:"8 yrs",rating:4.9,revs:127,badge:"Top Rated",avail:"Today",inr:450,usd:55},
+    {id:2,nm:"James Kim",init:"JK",exp:"5 yrs",rating:4.8,revs:89,badge:"Verified",avail:"Today",inr:380,usd:45}
+  ],
+  electrical:[
+    {id:3,nm:"Anita Kumar",init:"AK",exp:"6 yrs",rating:4.9,revs:103,badge:"Top Rated",avail:"Today",inr:500,usd:60},
+    {id:4,nm:"Tony Singh",init:"TS",exp:"10 yrs",rating:4.8,revs:156,badge:"Expert",avail:"Tomorrow",inr:650,usd:75}
+  ],
+  cleaning:[
+    {id:5,nm:"Sarah Lopez",init:"SL",exp:"4 yrs",rating:4.9,revs:201,badge:"Top Rated",avail:"Today",inr:600,usd:70},
+    {id:6,nm:"Ana Mehta",init:"AM",exp:"3 yrs",rating:4.7,revs:67,badge:"Verified",avail:"Today",inr:480,usd:55}
+  ],
+  appliance:[
+    {id:7,nm:"Vikram Rao",init:"VR",exp:"9 yrs",rating:4.9,revs:188,badge:"Expert",avail:"Today",inr:520,usd:62},
+    {id:7.5,nm:"Neha Joshi",init:"NJ",exp:"4 yrs",rating:4.7,revs:71,badge:"Verified",avail:"Today",inr:420,usd:50}
+  ],
+  beauty:[
+    {id:8,nm:"Priya Nair",init:"PN",exp:"5 yrs",rating:5.0,revs:142,badge:"Top Rated",avail:"Today",inr:350,usd:42},
+    {id:8.5,nm:"Kavya Reddy",init:"KR",exp:"3 yrs",rating:4.8,revs:58,badge:"Verified",avail:"Today",inr:280,usd:35}
+  ],
+  tutoring:[
+    {id:9,nm:"David Chen",init:"DC",exp:"8 yrs",rating:5.0,revs:156,badge:"Expert",avail:"Today",inr:300,usd:38},
+    {id:9.5,nm:"Meera Iyer",init:"MI",exp:"6 yrs",rating:4.9,revs:112,badge:"Top Rated",avail:"Today",inr:260,usd:32}
+  ],
+  photography:[
+    {id:10,nm:"Aisha Khan",init:"AK",exp:"6 yrs",rating:4.9,revs:78,badge:"Top Rated",avail:"Today",inr:850,usd:105},
+    {id:10.5,nm:"Rohan Das",init:"RD",exp:"4 yrs",rating:4.7,revs:44,badge:"Verified",avail:"Tomorrow",inr:700,usd:85}
+  ],
+  events:[
+    {id:11,nm:"Aisha Khan",init:"AK",exp:"6 yrs",rating:4.9,revs:78,badge:"Top Rated",avail:"Today",inr:1300,usd:160},
+    {id:11.5,nm:"Sameer Verma",init:"SV",exp:"7 yrs",rating:4.8,revs:91,badge:"Expert",avail:"Tomorrow",inr:1100,usd:135}
+  ],
+  lawn:[
+    {id:12,nm:"Jake Peterson",init:"JP",exp:"7 yrs",rating:4.8,revs:94,badge:"Verified",avail:"Today",inr:380,usd:48},
+    {id:12.5,nm:"Suresh Kumar",init:"SK",exp:"5 yrs",rating:4.7,revs:62,badge:"Verified",avail:"Today",inr:320,usd:40}
+  ],
+  painting:[
+    {id:13,nm:"Chris Wang",init:"CW",exp:"12 yrs",rating:4.9,revs:211,badge:"Expert",avail:"Tomorrow",inr:650,usd:78},
+    {id:13.5,nm:"Arjun Mehta",init:"AM",exp:"6 yrs",rating:4.7,revs:73,badge:"Verified",avail:"Today",inr:550,usd:65}
+  ],
+  movers:[
+    {id:14,nm:"Maria Santos",init:"MS",exp:"5 yrs",rating:4.8,revs:89,badge:"Verified",avail:"Today",inr:1250,usd:155},
+    {id:14.5,nm:"Karan Malhotra",init:"KM",exp:"8 yrs",rating:4.9,revs:134,badge:"Top Rated",avail:"Today",inr:1450,usd:175}
+  ],
+  handyman:[
+    {id:15,nm:"Alex Brown",init:"AB",exp:"10 yrs",rating:4.9,revs:234,badge:"Top Rated",avail:"Today",inr:480,usd:58},
+    {id:15.5,nm:"Deepak Sharma",init:"DS",exp:"5 yrs",rating:4.7,revs:79,badge:"Verified",avail:"Today",inr:400,usd:48}
+  ],
+};
+// Haversine great-circle distance (km) — module-level to avoid recreating on every renderPros() call
+function haversineKm(lat1,lng1,lat2,lng2){
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+async function renderPros(){
+  const cont=document.getElementById("pro-list-cont");
+  if(BK.cat==="other"||!BK.cat){
+    cont.innerHTML='<div class="alert alert-info">For custom requests, our team will personally match you with the right professional after reviewing your description — no need to choose one now.</div><div style="text-align:center;padding:1rem;"><button onclick="skipPro()" class="btn-outline">Skip — Let Fixerr Match Me →</button></div>';
+    return;
+  }
+  cont.innerHTML='<div style="text-align:center;padding:2rem 1.5rem;color:var(--muted);font-size:0.86rem;">'+(window.FXUI?FXUI.spinner(26,'var(--accent)'):'')+'<div style="margin-top:0.6rem;">Finding professionals near you…</div></div>';
+  let realPros=[], custLat=null, custLng=null, locSource='';
+  try{
+    await loadCustomerProfile();
+    const profile = window._custProfile;
+    if(profile && profile.lat != null && profile.lng != null){
+      custLat = parseFloat(profile.lat);
+      custLng = parseFloat(profile.lng);
+      locSource = 'profile';
+    }
+    const params = new URLSearchParams();
+    if(profile?.country) params.set('country', profile.country);
+    else if(FX.country) params.set('country', FX.country);
+    if(profile?.city) params.set('city', profile.city);
+    else if(FX.city) params.set('city', FX.city.n);
+    if(BK.cat) params.set('category', BK.cat);
+    if(custLat !== null && custLng !== null){
+      params.set('lat', custLat);
+      params.set('lng', custLng);
+    }
+    realPros = await API.get('/api/pros?' + params.toString());
+  }catch(e){realPros=[];}
+  const demo=DEMO_PROS[BK.cat]||[];
+  const mapPro = p => {
+    // Prefer this pro's experience in the specific service being booked (experience_map is
+    // keyed by service category, e.g. "3–5 years") over their overall years_exp — a customer
+    // booking plumbing cares how long this pro has done plumbing, not their total career length.
+    // Falls back to years_exp for pros registered before per-service experience was collected.
+    const svcExp = BK.cat && p.experience_map ? p.experience_map[BK.cat] : null;
+    const expLabel = svcExp || ((p.years_exp && parseInt(p.years_exp) > 0) ? parseInt(p.years_exp) + '+ yrs' : 'Experienced');
+    return {
+    id:'r_'+p.id, nm:(p.name&&String(p.name).trim())||'Professional', init:p.initials||'PRO',
+    exp:expLabel, rating:p.rating, revs:p.reviews||0,
+    badge:p.badge||'Verified', avail:'Today', inr:p.rate_inr||0, usd:p.rate_usd||0,
+    userId:p.user_id||p.id, isReal:true,
+    lat:p.lat||null, lng:p.lng||null,
+    dist:(custLat!==null&&custLng!==null&&p.lat!=null&&p.lng!=null)?haversineKm(parseFloat(custLat),parseFloat(custLng),parseFloat(p.lat),parseFloat(p.lng)):null
+    };
+  };
+  // Demo/sample pros are spread in raw — normalise them to the same shape so no field is undefined.
+  const mapDemo = d => ({ ...d, nm:d.nm||'Professional', init:d.init||'PRO', exp:d.exp||'Experienced', badge:d.badge||'Verified', inr:d.inr||0, usd:d.usd||0, userId:d.userId||null, isReal:false, lat:null, lng:null, dist:null });
+  // let allPros = realPros.length>=2 ? realPros.map(mapPro) : [...realPros.map(mapPro),...demo.map(mapDemo)];
+  let allPros = realPros.map(mapPro);
+  // Sort: 1) real pros with distance (closest first), 2) real pros without distance (by rating),
+  // 3) demo/sample pros (by rating). Real pros always appear before demo pros.
+  allPros.sort((a,b)=>{
+    const aDist = (typeof a.dist === 'number' && !isNaN(a.dist)) ? a.dist : null;
+    const bDist = (typeof b.dist === 'number' && !isNaN(b.dist)) ? b.dist : null;
+    if(aDist!==null && bDist!==null) return aDist - bDist;   // both have distance → closest first
+    if(aDist!==null) return -1;                               // only a has distance → a first
+    if(bDist!==null) return 1;                                // only b has distance → b first
+    if(a.isReal && !b.isReal) return -1;                      // real pros before demo pros
+    if(!a.isReal && b.isReal) return 1;
+    return (b.rating||0)-(a.rating||0);                       // same tier → higher rating first
+  });
+  window._allPros = allPros; // store globally so selectPro can find by id
+  // Build location context banner (before any early-return so it's always available)
+  let locBanner='';
+  if(locSource==='profile'){
+    locBanner='<div class="alert alert-info" style="font-size:0.78rem;margin-bottom:0.75rem;">📍 <strong>Based on your saved account location</strong> — showing professionals within 25km, sorted by proximity.</div>';
+  } else if(FX.city){
+    locBanner='<div class="alert alert-info" style="font-size:0.78rem;margin-bottom:0.75rem;">📍 Showing professionals in <strong>'+FX.city.n+(FX.city.st?', '+FX.city.st:'')+'</strong>.</div>';
+  }
+  if(!allPros.length){
+    cont.innerHTML=locBanner+'<div class="alert alert-info">No professionals listed yet for this category in '+(FX.city?FX.city.n:'your area')+' — our team will assign one when they call you.</div><div style="text-align:center;padding:1rem;"><button onclick="skipPro()" class="btn-outline">Continue ✍️ Fixerr Will Assign →</button></div>';
+    return;
+  }
+  const demoNote=realPros.length<2?'<div class="alert alert-warn" style="margin-top:0.85rem;font-size:0.78rem;">💡 Showing sample professionals during soft launch. Our team confirms the final assignment and price when they call you.</div>':'';
+  const unitPrice=getCategoryPrice(BK.cat);
+  cont.innerHTML=locBanner+'<div class="sub-grid" style="grid-template-columns:1fr 1fr;">'+allPros.map(p=>{
+    const stars='★'.repeat(Math.round(p.rating||0))+'☆'.repeat(5-Math.round(p.rating||0));
+    const distHtml=(typeof p.dist==='number'&&!isNaN(p.dist))?' · <span style="color:var(--accent);">📍 '+p.dist.toFixed(1)+' km</span>':'';
+    return `<div class="sub-item" style="align-items:flex-start;flex-direction:column;gap:0.5rem;padding:1rem;" onclick='selectPro("${p.id}",this)'>
+      <div style="display:flex;align-items:center;gap:0.65rem;width:100%;">
+        <div style="width:42px;height:42px;border-radius:50%;background:var(--accent-light);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.82rem;flex-shrink:0;border:2px solid var(--border-accent);">${p.init}</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.1rem;">${p.nm}</div>
+          <div style="font-size:0.72rem;color:var(--muted);">${p.exp} exp · <span style="color:${p.avail==='Today'?'var(--accent)':'#F59E0B'};">● ${p.avail}</span>${distHtml}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <div style="display:flex;align-items:center;gap:0.25rem;">
+          <span style="color:#F59E0B;font-size:0.85rem;letter-spacing:-1px;">${stars}</span>
+          <span style="font-size:0.75rem;font-weight:700;color:var(--text);">${p.rating||'New'}</span>
+          <span style="font-size:0.72rem;color:var(--muted);">(${p.revs||0})</span>
+        </div>
+        <span style="background:var(--accent-light);color:var(--accent);border-radius:50px;padding:0.12rem 0.5rem;font-size:0.65rem;font-weight:700;">${p.badge}</span>
+        ${!p.isReal?'<span style="background:#FEF9C3;color:#92400E;border-radius:50px;padding:0.12rem 0.5rem;font-size:0.6rem;font-weight:700;margin-left:0.25rem;">Sample</span>':''}
+      </div>
+      <div style="font-weight:700;color:var(--accent);font-size:0.88rem;">${unitPrice?FX.fmt(unitPrice)+' starting':'Price confirmed on call'}</div>
+    </div>`;
+  }).join('')+`<div class="sub-item" style="align-items:center;justify-content:center;flex-direction:column;gap:0.6rem;padding:1rem;text-align:center;" onclick='selectFixerrAssign(this)'>
+      <img src="assets/fixerr-assign.png" alt="Let Fixerr Assign" style="width:56px;height:56px;object-fit:contain;">
+      <div style="font-weight:700;font-size:0.88rem;color:var(--text);">Let Fixerr Assign My Professional</div>
+    </div>`+'</div>'+demoNote;
+}
+function selectPro(id,el){
+  const demo=DEMO_PROS[BK.cat]||[];
+  if(String(id).startsWith('r_')){
+    const found=window._allPros&&window._allPros.find(p=>p.id===id);
+    if(found){
+      BK.pro={nm:found.nm,init:found.init,inr:found.inr||0,usd:found.usd||0,userId:found.userId,isReal:true};
+    } else {
+      BK.pro={nm:el.querySelector('.sub-item > div > div')?.textContent?.trim()||'Professional',init:'PR',inr:0,usd:0,isReal:true};
+    }
+  } else {
+    BK.pro=demo.find(p=>p.id===+id)||{nm:'Professional',init:'PR',inr:0,usd:0};
+  }
+  document.querySelectorAll("#pro-list-cont .sub-item").forEach(s=>s.classList.remove("sel"));
+  el.classList.add("sel");
+  updateOrder();
+}
+// Explicit "Let Fixerr Assign My Professional" card, shown alongside real pro cards. Unlike
+// skipPro() (used only by the empty-state fallback), this is a selectable card like any other
+// pro — it doesn't jump ahead a step, it just records the choice so preferredPro/preferredProId
+// are left blank at submission (see submitBooking's isFixerrAssign check) instead of storing a
+// placeholder name.
+function selectFixerrAssign(el){
+  BK.pro={nm:"Let Fixerr Assign My Professional",init:"FX",inr:0,usd:0,isReal:false,isFixerrAssign:true};
+  document.querySelectorAll("#pro-list-cont .sub-item").forEach(s=>s.classList.remove("sel"));
+  el.classList.add("sel");
+  updateOrder();
+}
+function skipPro(){
+  BK.pro={nm:"To be assigned by Fixerr",init:"FX",inr:0,usd:0,isReal:false,isFixerrAssign:true};
+  gStep(4);
+}
+function selectPayMethod(el){
+  if(el.classList.contains("pay-m-disabled")) return;
+  document.querySelectorAll(".pay-m").forEach(p=>p.classList.remove("sel"));
+  el.classList.add("sel");
+  BK.payMethod=el.getAttribute("data-method");
+  updateOrder();
+}
+
+async function gStep(n){
+  const navC = document.getElementById("nav-country")?.value || (FX.city ? FX.city.c : "");
+  const navCityVal = document.getElementById("nav-city-sel")?.value || (FX.city ? FX.city.n : "");
+  if(!navC || !navCityVal || navCityVal === "📍 Select city"){
+    toast("Please select Country & City first before booking a service.", "err");
+    const cEl = document.getElementById("nav-country");
+    const ciEl = document.getElementById("nav-city-sel");
+    if(cEl) cEl.style.borderColor = "#DC2626";
+    if(ciEl) ciEl.style.borderColor = "#DC2626";
+    return;
+  }
+  if(n===5){
+    await loadCustomerProfile();
+    FX.paint();
+  }
+  if(n===6) renderPaymentOptions();
+  if(n>BK.step){
+    if(BK.step===1&&!BK.cat){toast("Please select a service category","err");return;}
+    if(BK.step===2&&!BK.sub&&BK.cat!=="other"){toast("Please select a specific service","err");return;}
+    if(BK.step===3&&!BK.pro){toast("Please choose a professional to continue","err");return;}
+    if(BK.step===4){
+      if(!BK.date||!BK.time){toast("Please select a date and time","err");return;}
+      if(BK.pro?.userId && BK.pro?.isReal){
+        try{
+          const q = new URLSearchParams({
+            proId: String(BK.pro.userId),
+            date: BK.date,
+            time: BK.time
+          });
+          const chk = await API.get('/api/requests/availability?' + q.toString());
+          if(!chk.available){
+            toast("Please select a different date & time","err");
+            return;
+          }
+        }catch(e){
+          toast(e.message || "Could not verify availability","err");
+          return;
+        }
+      }
+    }
+    if(BK.step===5){
+      const street=v("f-street"),city=v("f-city"),zip=v("f-zip"),ph=v("f-phone"),em=v("f-email"),nm=v("f-name"),st=v("f-state");
+      clearErr();
+      let addrOk=true;
+      if(!st){showErr("f-state","State / Region is required");addrOk=false;}
+      if(!street||street.length<10){showErr("f-street","Please enter a complete street address (min 10 characters)");addrOk=false;}
+      else if(!/\d/.test(street)){showErr("f-street","Include a house/flat/building number in the address");addrOk=false;}
+      if(!city||city.length<2){showErr("f-city","Please enter your city name");addrOk=false;}
+      else if(!/^[a-zA-Z\s.\-]+$/.test(city)){showErr("f-city","City name should only contain letters");addrOk=false;}
+      if(zip){
+        if(FX.country==="IN"&&!/^\d{6}$/.test(zip)){showErr("f-zip","Indian PIN code must be exactly 6 digits");addrOk=false;}
+        if(FX.country==="US"&&!/^\d{5}(-\d{4})?$/.test(zip)){showErr("f-zip","US ZIP code must be 5 digits (e.g. 10001)");addrOk=false;}
+      }
+      if(!nm){showErr("f-name","Your name is required");addrOk=false;}
+      if(!ph&&!em){showErr("f-phone","Phone number is required so we can call you");addrOk=false;}
+      if(ph){
+        const clean=ph.replace(/[\s\-().]/g,'');
+        if(FX.country==="IN"&&!/^(\+91)?[6-9]\d{9}$/.test(clean)){showErr("f-phone","Enter a valid Indian mobile number (e.g. +91 98765 43210)");addrOk=false;}
+        if(FX.country==="US"&&!/^(\+1)?[2-9]\d{9}$/.test(clean)){showErr("f-phone","Enter a valid US phone number (e.g. +1 555 000 0000)");addrOk=false;}
+      }
+      if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){showErr("f-email","Enter a valid email address");addrOk=false;}
+      if(!document.getElementById('f-adult18')?.checked){toast('Please confirm that an adult (18+) will be present during the visit','err');return;}
+      if(!addrOk){toast("Please fix the errors above before continuing","err");return;}
+    }
+    if(BK.step===6&&!BK.payMethod){toast("Please select how you'd like to pay","err");return;}
+  }
+  document.getElementById("s"+BK.step).classList.remove("active");
+  for(let i=1;i<=7;i++){
+    const d=document.getElementById("d"+i),l=document.getElementById("l"+i);
+    if(!d)continue;d.classList.remove("active","done");
+    if(i<n)d.classList.add("done");if(i===n)d.classList.add("active");
+    if(l){if(i<n)l.classList.add("done");else l.classList.remove("done");}
+  }
+  BK.step=n;document.getElementById("s"+n).classList.add("active");
+  // Step 1 = full width (matches step-bar); steps 2+ restore the order-summary sidebar
+  const bkGrid=document.getElementById('booking-grid');const orderSide=document.getElementById('order-side');
+  if(bkGrid&&orderSide){bkGrid.style.gridTemplateColumns='1fr';orderSide.style.display=(n===1?'none':'');}
+  window.scrollTo({top:100,behavior:"smooth"});
+  updateOrder();
+  if(n===2)renderSubs();
+  if(n===3)renderPros();
+}
+function syncBookingQty(){
+  const el=document.getElementById("f-qty");
+  if(!el) return;
+  BK.qty=Math.max(1,Math.min(99,parseInt(el.value,10)||1));
+  el.value=BK.qty;
+  updateOrder();
+  if(BK.step===3) renderPros();
+}
+function selCat(k){
+  BK.cat=k;BK.sub=null;
+  document.querySelectorAll(".cat-card").forEach(c=>c.classList.remove("sel"));
+  document.querySelector(`.cat-card[data-k="${k}"]`)?.classList.add("sel");
+  updateOrder();
+}
+function renderSubs(){
+  const cat=CATS.find(c=>c.k===BK.cat);
+  document.getElementById("sub-title").textContent=(cat?cat.ic+" "+cat.n:"")+" — Choose specific service:";
+  const cont=document.getElementById("sub-cont");
+  if(!cat||cat.k==="other"){
+    BK.sub="Custom — to be determined";
+    cont.innerHTML="<div class='form-group' style='margin-top:0.65rem;'><label for='other-desc'>Describe exactly what you need <span class='req'>*</span></label><textarea id='other-desc' name='other-desc' placeholder='e.g. Piano tuning, Pool cleaning, Pest control, Yoga instructor, Pet grooming... Be specific so we find the right pro.' style='min-height:110px;' aria-label='Describe service'></textarea><div style='font-size:0.76rem;color:var(--muted);margin-top:0.35rem;'>Our team reviews your description and matches you with the right professional within 24 hours.</div></div>";
+    return;
+  }
+  const subs=SUBS[BK.cat]||[];
+  const icons=SICONS[BK.cat]||[];
+  cont.innerHTML="<div class='sub-grid'>"+subs.map((s,i)=>`
+    <div class="sub-item" onclick="selSub('${s.replace(/'/g,"\\'")}',this)">
+      <div style="font-size:1.35rem;flex-shrink:0;">${icons[i]||"🛠️"}</div>
+      <div><div style="font-weight:600;font-size:0.83rem;">${s}</div></div>
+    </div>`).join("")+"</div><div class='alert alert-info' style='margin-top:0.85rem;font-size:0.78rem;'>💡 Pricing is set by each professional — you'll see it when choosing your pro in the next step.</div>";
+}
+function selSub(name,el){
+  BK.sub=name;
+  document.querySelectorAll(".sub-item").forEach(s=>s.classList.remove("sel"));
+  el.classList.add("sel");
+  updateOrder();
+}
+function selDate(el){
+  document.querySelectorAll(".cal-d:not(.dis)").forEach(d=>d.classList.remove("sel"));
+  el.classList.add("sel");
+  const m=+el.getAttribute('data-m'),d=+el.getAttribute('data-d'),y=+el.getAttribute('data-y');
+  BK.date=MONTH_NAMES[m]+" "+d+", "+y;
+  updateOrder();
+}
+function selTime(el){document.querySelectorAll(".t-slot:not(.na)").forEach(t=>t.classList.remove("sel"));el.classList.add("sel");BK.time=el.textContent;updateOrder();}
+function getCategoryPrice(catKey){
+  if(!catKey) return 0;
+  const p=PR[catKey]||PR.other;
+  const isINR=FX.country==="IN"||FX.currency==="INR";
+  return isINR?p.inr.b:p.usd.b;
+}
+function getBookingQty(){
+  const el=document.getElementById("f-qty");
+  const q=parseInt(el?.value,10)||BK.qty||1;
+  return Math.max(1,Math.min(99,q));
+}
+function getBookingTotals(){
+  const unit=getCategoryPrice(BK.cat);
+  const qty=getBookingQty();
+  const subtotal=unit*qty;
+  const disc=Math.min(BK.disc||0,subtotal);
+  return {unit,qty,subtotal,disc,total:subtotal-disc};
+}
+function initCategoryPriceLabels(){
+  document.querySelectorAll(".cat-card[data-k]").forEach(card=>{
+    if(card.getAttribute("data-k")==="other") return;
+    if(!card.querySelector(".cat-price")){
+      const div=document.createElement("div");
+      div.className="cat-price";
+      div.style.cssText="font-size:0.78rem;font-weight:700;color:var(--accent);margin-top:0.35rem;";
+      card.appendChild(div);
+    }
+  });
+  paintCategoryPrices();
+}
+function paintCategoryPrices(){
+  document.querySelectorAll(".cat-card[data-k]").forEach(card=>{
+    const k=card.getAttribute("data-k");
+    if(!k||k==="other") return;
+    const priceEl=card.querySelector(".cat-price");
+    if(!priceEl) return;
+    const tag=CAT_TAGLINES[k]||"From";
+    const p=getCategoryPrice(k);
+    priceEl.textContent=tag+" @ "+FX.fmt(p);
+  });
+}
+function renderPaymentOptions(){
+  const cont=document.getElementById("pay-options-cont");
+  if(!cont) return;
+  const country=(v("f-country")||FX.country||"US")==="IN"?"IN":"US";
+  const opts=PAY_OPTIONS[country];
+  const enabled=opts.filter(o=>!o.disabled);
+  if(!enabled.some(o=>o.method===BK.payMethod)) BK.payMethod=enabled[0]?.method||"card";
+  cont.innerHTML=opts.map(o=>{
+    const dis=!!o.disabled;
+    const sel=!dis&&BK.payMethod===o.method;
+    return `<div class="pay-m${sel?" sel":""}${dis?" pay-m-disabled":""}" data-method="${o.method}"${dis?"":' onclick="selectPayMethod(this)"'}>
+      <div class="pay-icon-wrap">${o.iconHtml||o.icon||""}</div>
+      <div><div style="font-weight:600;font-size:0.86rem;">${o.title}${dis?' <span style="font-size:0.7rem;color:var(--muted);">(Unavailable)</span>':""}</div><div style="font-size:0.74rem;color:var(--muted);">${o.desc}</div></div>
+    </div>`;
+  }).join("");
+}
+function summaryContinue(){
+  gStep(BK.step+1);
+}
+function applyDisc(){
+  const code=v("disc-inp").toUpperCase();const d=DISC[code];const msg=document.getElementById("disc-msg");
+  if(!d){msg.textContent="❌ Invalid code";msg.style.color="#DC2626";return;}
+  if(d.c&&d.c!==FX.country){msg.textContent="❌ This code is for "+d.c+" only";msg.style.color="#DC2626";return;}
+  const {subtotal}=getBookingTotals();
+  if(!subtotal){msg.textContent="❌ Please select a service category first";msg.style.color="#DC2626";return;}
+  BK.discCode=code;
+  BK.disc=d.t==="pct"?Math.round(subtotal*d.v/100):FX.currency==="INR"?d.v:(d.v_usd||Math.round(d.v/80));
+  msg.textContent="✓ "+d.d+" applied!";msg.style.color="var(--accent)";
+  updateOrder();
+}
+function updateOrder(){
+  const box=document.getElementById("order-side");if(!box)return;
+  const cat=CATS.find(c=>c.k===BK.cat);
+  const {unit,qty,subtotal,disc,total}=getBookingTotals();
+  const hasPrice=unit>0;
+  box.innerHTML=`
+    <div style="font-weight:700;font-size:0.92rem;margin-bottom:0.8rem;padding-bottom:0.65rem;border-bottom:1px solid var(--border);">📋 Booking Summary</div>
+    ${cat?`<div style="font-size:0.83rem;margin-bottom:0.28rem;">${cat.ic} <strong>${cat.n}</strong></div>`:""}
+    ${BK.sub&&BK.sub!=="Custom — to be determined"?`<div style="font-size:0.76rem;color:var(--muted);margin-bottom:0.28rem;">→ ${BK.sub}</div>`:""}
+    ${BK.pro?`<div style="font-size:0.76rem;color:var(--muted);margin-bottom:0.28rem;">👤 ${BK.pro.nm}</div>`:""}
+    ${BK.date&&BK.time?`<div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.65rem;">📅 ${BK.date} · ${BK.time}</div>`:""}
+    ${hasPrice?`
+    <div class="or"><span class="l">Unit price</span><span class="v">${FX.fmt(unit)}</span></div>
+    <div class="or"><span class="l">Quantity</span><span class="v">× ${qty}</span></div>
+    <div class="or"><span class="l">Subtotal</span><span class="v">${FX.fmt(subtotal)}</span></div>
+    ${disc>0?`<div class="or" style="color:var(--accent);"><span class="l">Discount (${BK.discCode})</span><span class="v">-${FX.fmt(disc)}</span></div>`:""}
+    <div class="or tot"><span class="l">Total estimate</span><span class="v">${FX.fmt(total)}</span></div>
+    `:`<div class="alert alert-info" style="font-size:0.76rem;margin:0.5rem 0;">Select a service category to see the starting price.</div>`}
+    <div style="margin-top:0.65rem;font-size:0.68rem;color:var(--muted);background:var(--bg2);border-radius:6px;padding:0.48rem 0.68rem;line-height:1.5;">
+      💰 <strong>Starting estimate only</strong> — your pro will contact you to confirm the final price before starting work.<br>
+      🔒 <strong>Pay NOTHING now.</strong> Pay Fixerr only after job is done &amp; you're satisfied.<br>
+      📞 Team calls you within 2 hours to confirm.
+    </div>
+    ${BK.step>1&&BK.step<6?`<div style="text-align:right;margin-top:0.9rem;"><button type="button" onclick="summaryContinue()" class="btn-primary" style="padding:0.68rem 1.6rem;">Continue →</button></div>`:""}`;
+}
+const BK_INDIA_STATES = ["Karnataka","Maharashtra","Delhi","Tamil Nadu","Telangana","Uttar Pradesh","West Bengal","Gujarat","Kerala","Punjab","Haryana","Rajasthan","Andhra Pradesh","Madhya Pradesh","Bihar","Odisha","Goa","Assam"];
+const BK_US_STATES = ["California","New York","Texas","Florida","Illinois","Washington","Massachusetts","Georgia","New Jersey","Pennsylvania","Ohio","North Carolina","Virginia","Michigan","Colorado","Arizona"];
+
+// Load customer profile from users table — address, contact, lat/lng for pro matching.
+let _bkProfileLoaded = false;
+function disableAddressFields(locked){
+  ['f-country','f-state','f-street','f-city','f-zip'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.disabled=!!locked;
+    if(el.tagName==='INPUT') el.readOnly=!!locked;
+    el.style.background=locked?'var(--bg2,#f3f4f6)':'#fff';
+    el.style.cursor=locked?'not-allowed':'';
+  });
+}
+function formatCustomerAddress(){
+  const country=v('f-country');
+  const parts=[v('f-street'),v('f-city'),v('f-state'),v('f-zip'),country==='IN'?'India':country==='US'?'United States':''].filter(Boolean);
+  return parts.join(', ') || '—';
+}
+async function loadCustomerProfile(){
+  if(_bkProfileLoaded || !API.tok()) return;
+  try{
+    const u = await API.get('/api/auth/me');
+    if(!u || u.role === 'professional') return;
+    window._custProfile = u;
+    _bkProfileLoaded = true;
+    const set = (id, val) => { const el = document.getElementById(id); if(el && val != null && val !== '') el.value = String(val); };
+    if(u.country){
+      const fc = document.getElementById('f-country');
+      if(fc){ fc.value = u.country; onBkCountryChange(); }
+    }
+    set('f-street', u.address);
+    set('f-zip', u.zip);
+    set('f-city', u.city);
+    set('f-name', ((u.first||'') + ' ' + (u.last||'')).trim());
+    set('f-phone', u.phone);
+    set('f-email', u.email);
+    const sSel = document.getElementById('f-state');
+    if(sSel && u.state){
+      let found = false;
+      for(const o of sSel.options){ if(o.value === u.state){ sSel.value = u.state; found = true; break; } }
+      if(!found){
+        const opt = document.createElement('option');
+        opt.value = u.state;
+        opt.textContent = u.state;
+        sSel.appendChild(opt);
+        sSel.value = u.state;
+      }
+    }
+    disableAddressFields(true);
+  }catch(e){ /* non-fatal */ }
+}
+async function prefillCustomerAddress(){ await loadCustomerProfile(); }
+
+function onBkCountryChange(){
+  const c = document.getElementById("f-country")?.value || "IN";
+  const stSel = document.getElementById("f-state");
+  if(stSel){
+    const states = c === "IN" ? BK_INDIA_STATES : BK_US_STATES;
+    const currVal = stSel.value;
+    stSel.innerHTML = '<option value="">Select State</option>' + states.map(s=>`<option value="${s}">${s}</option>`).join("");
+    if(currVal && states.includes(currVal)) stSel.value = currVal;
+  }
+  const zipLbl = document.getElementById("lbl-zip");
+  if(zipLbl) zipLbl.textContent = c === "IN" ? "PIN code (optional)" : "ZIP code (optional)";
+  FX.country = c;
+  FX.currency = c === "IN" ? "INR" : "USD";
+  FX.symbol = c === "IN" ? "₹" : "$";
+  FX.paint();
+  updateOrder();
+  if(BK.step===6) renderPaymentOptions();
+}
+
+async function submitBk(){
+  clearErr();
+  const btn=document.getElementById("sub-btn");
+  const otherDesc=document.getElementById("other-desc")?.value?.trim()||"";
+  if(BK.cat==="other"&&!otherDesc){toast("Please describe the service you need","err");return;}
+  const bkCountry = v("f-country") || FX.country || "IN";
+  const bkState = v("f-state") || "";
+  if(!bkState){toast("Please select your State / Region","err");return;}
+  if(!document.getElementById("cust-agree").checked){toast("Please confirm you've read and agree to the Terms of Service","err");return;}
+  btn.textContent="Submitting...";btn.disabled=true;
+  try{
+    const d=await API.post("/api/requests",{
+      serviceKey:BK.cat||"other",subService:BK.sub!=="Custom — to be determined"?BK.sub:null,
+      customDesc:BK.cat==="other"?otherDesc:(otherDesc||null),
+      quantity:getBookingQty(),
+      preferredPro:(BK.pro&&!BK.pro.isFixerrAssign)?BK.pro.nm:null,
+      preferredProId:BK.pro?.isReal?BK.pro.userId||null:null,
+      paymentMethod:BK.payMethod,
+      date:BK.date,time:BK.time,
+      address:v("f-street"),city:v("f-city"),state:bkState,zip:v("f-zip"),
+      country:bkCountry,currency:bkCountry==="IN"?"INR":"USD",
+      name:v("f-name"),phone:v("f-phone"),email:v("f-email"),notes:v("f-notes"),termsAgreed:true
+    });
+    for(let i=1;i<=7;i++){const s=document.getElementById("s"+i);if(s)s.classList.remove("active");}
+    for(let i=1;i<=7;i++){const d2=document.getElementById("d"+i);if(d2){d2.classList.remove("active");d2.classList.add("done");}}
+    document.getElementById("d7").classList.add("active");
+    const {unit,qty,subtotal,disc,total}=getBookingTotals();
+    document.getElementById("conf-ref").textContent=d.ref;
+    document.getElementById("conf-svc").textContent=BK.sub||BK.cat||"Service";
+    document.getElementById("conf-unit").textContent=FX.fmt(d.unitPrice??unit);
+    document.getElementById("conf-qty").textContent=String(d.quantity??qty);
+    const discRow=document.getElementById("conf-disc-row");
+    if(disc>0&&discRow){
+      discRow.style.display="flex";
+      document.getElementById("conf-disc-code").textContent=BK.discCode||"";
+      document.getElementById("conf-disc").textContent="-"+FX.fmt(disc);
+    }else if(discRow){discRow.style.display="none";}
+    document.getElementById("conf-est").textContent=FX.fmt(disc>0?total:(d.estimate??subtotal));
+    document.getElementById("conf-phone").textContent=v("f-phone")||v("f-email")||"your contact";
+    document.getElementById("conf-pro").textContent=BK.pro?.nm||"Being confirmed by Fixerr";
+    const confAddr=document.getElementById("conf-address");
+    if(confAddr) confAddr.textContent=formatCustomerAddress();
+    const confDateTime=document.getElementById("conf-datetime");
+    if(confDateTime) confDateTime.textContent=(BK.date||"Flexible")+(BK.time?", "+BK.time:"");
+    BK.step=7;document.getElementById("s7").classList.add("active");
+    const orderSide=document.getElementById("order-side");
+    if(orderSide) orderSide.style.display="none";
+    updateOrder();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }catch(e){toast(e.message,"err");btn.textContent="Submit Booking Request";btn.disabled=false;}
+}
+/* invoice creation code commented
+async function confirmManualPaymentAndGetInvoice(){
+  const ref = document.getElementById("conf-ref")?.textContent?.trim();
+  if(!ref || ref==='—'){toast("Booking reference not found.","err");return;}
+  const btn = document.getElementById("btn-manual-inv");
+  if(btn){btn.textContent="Generating Tax Invoice...";btn.disabled=true;}
+  try{
+    const res = await API.post("/api/payments/verify",{
+      bookingRef: ref,
+      paymentMethod: BK.payMethod || "manual",
+      paymentId: "MANUAL-" + Date.now()
+    });
+    toast("Payment recorded & Invoice generated!","success");
+    if(btn){
+      btn.innerHTML = '📄 Download Tax Invoice →';
+      btn.disabled = false;
+      btn.onclick = () => window.open(res.downloadUrl || ('/api/invoices/'+ref+'/download'), '_blank');
+    }
+    window.open(res.downloadUrl || ('/api/invoices/'+ref+'/download'), '_blank');
+  }catch(e){
+    toast(e.message||"Invoice generation failed","err");
+    if(btn){btn.textContent="📄 Complete Payment (Manual) & Download Tax Invoice →";btn.disabled=false;}
+  }
+}
+*/
+document.addEventListener("DOMContentLoaded",async()=>{await _layoutReady;
+  renderCalendar();
+  const bkGrid=document.getElementById('booking-grid');const orderSide=document.getElementById('order-side');
+  if(bkGrid&&orderSide){bkGrid.style.gridTemplateColumns='1fr';orderSide.style.display='none';}
+  const navZipEl=document.getElementById('nav-zip');
+  if(navZipEl){
+    navZipEl.addEventListener('change',()=>{
+      const z=navZipEl.value.trim();
+      if(z)localStorage.setItem('fx_zip',z); else localStorage.removeItem('fx_zip');
+    });
+    navZipEl.addEventListener('blur',()=>{
+      const z=navZipEl.value.trim();
+      if(z)localStorage.setItem('fx_zip',z);
+    });
+  }
+  const fc = document.getElementById("f-country");
+  if(fc && FX.country) fc.value = FX.country;
+  onBkCountryChange();
+  if(API.tok()) loadCustomerProfile();
+  initCategoryPriceLabels();
+  const qtyEl=document.getElementById("f-qty");
+  if(qtyEl){
+    qtyEl.addEventListener("input",syncBookingQty);
+    qtyEl.addEventListener("change",syncBookingQty);
+  }
+  const p=new URLSearchParams(location.search);const pre=p.get("s");
+  if(pre){selCat(pre);if(pre!=="other")setTimeout(()=>gStep(2),50);}
+  updateOrder();
+  document.querySelectorAll(".t-slot:not(.na)").forEach(t=>t.addEventListener("click",()=>selTime(t)));
+});
+
+</script></body></html>

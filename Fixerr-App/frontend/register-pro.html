@@ -1,0 +1,858 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Join as Professional – Fixerr</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="mobile.css">
+<!-- PAGE-SPECIFIC OVERRIDE: register-pro.html uses a slightly larger
+     type scale for badges/table headers/breadcrumb/chips/tags/errors
+     than the shared styles.css defaults, plus two classes unique to
+     this page (a step divider rule and the payment-method radio-card
+     list used in the commission/payout step). -->
+<style>
+.form-group input,.form-group select,.form-group textarea{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-body);font-size:0.95rem;padding:0.7rem 1rem;transition:border-color 0.2s,box-shadow 0.2s;outline:none;width:100%;}
+.badge{display:inline-block;padding:0.25rem 0.7rem;border-radius:50px;font-size:0.78rem;font-weight:600;}
+.data-table th{text-align:left;padding:0.6rem 0.75rem;font-size:0.78rem;color:var(--muted);font-weight:600;border-bottom:2px solid var(--border);background:var(--bg2);}
+.prov-rating{font-size:0.88rem;color:#F59E0B;margin-bottom:0.75rem;}
+.breadcrumb{font-size:0.88rem;color:var(--muted);padding:5.5rem 3rem 0;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:0.4rem;}
+hr.step-divider{border:none;border-top:1px solid var(--accent);margin:1.25rem 0;}
+.chip{display:inline-block;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:0.35rem 0.9rem;font-size:0.88rem;cursor:pointer;transition:all 0.15s;color:var(--muted);}
+.tag{background:var(--accent-light);color:var(--accent);border-radius:50px;padding:0.2rem 0.65rem;font-size:0.78rem;font-weight:600;}
+.ferr{color:#DC2626;font-size:0.8rem;margin-top:0.18rem;}
+.stat-lbl{font-size:0.8rem;color:var(--muted);margin-bottom:0.18rem;}
+.pay-cb-opt{display:flex;align-items:center;gap:0.65rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem 1rem;cursor:pointer;font-size:0.9rem;font-weight:600;transition:all 0.15s;background:#fff;}
+.pay-cb-opt:hover{border-color:var(--accent);background:var(--accent-light);}
+.pay-cb-opt input{accent-color:var(--accent);width:16px;height:16px;flex-shrink:0;cursor:pointer;}
+</style>
+</head><body>
+<div id="site-header"></div>
+<div style="padding:9rem 2.5rem 5rem;max-width:900px;margin:0 auto;">
+  <div class="section-tag">For Professionals</div>
+  <h1 class="section-title">Join Fixerr as a Professional</h1>
+  <p style="color:var(--muted);margin-bottom:2rem;max-width:560px;line-height:1.7;">Receive booking requests from customers in your area. Set your own pricing, do the work, get paid directly. Free to join, no upfront fees.</p>
+
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.75rem;align-items:start;">
+  <div>
+  <div id="reg-form">
+    <div class="fcard">
+      <h3>Step 1: Personal Information &amp; Address</h3>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0;"><label>First name <span class="req">*</span></label><input id="p-fn" placeholder="Rahul" name="p-fn" aria-label="Rahul"></div>
+        <div class="form-group" style="margin-bottom:0;"><label>Last name <span class="req">*</span></label><input id="p-ln" placeholder="Sharma" name="p-ln" aria-label="Sharma"></div>
+      </div>
+      <div style="margin-bottom:0.95rem;"></div>
+      <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" id="p-em" placeholder="you@email.com" name="p-em" aria-label="You@email.com"></div>
+      <div class="form-group"><label>Phone number <span class="req">*</span></label><input type="tel" id="p-ph" data-ph placeholder="+91 98765 43210" name="p-ph" aria-label="+91 98765 43210"></div>
+      <div class="form-group"><label>Password <span class="req">*</span> <span style="font-weight:400;color:var(--muted);">(min 8 chars)</span></label><input type="password" id="p-pw" placeholder="Create a strong password" name="p-pw" aria-label="Create a strong password"></div>
+      <div class="form-group"><label>Confirm password <span class="req">*</span></label><input type="password" id="p-pw2" placeholder="Repeat your password" name="p-pw2" aria-label="Repeat your password"></div>
+      <hr style="margin:1rem 0;border:none;border-top:1px solid var(--border);">
+      <p style="font-size:0.88rem;font-weight:600;margin-bottom:0.75rem;">📍 Service Address — where you are based</p>
+      <div class="form-group"><label>Street address <span class="req">*</span></label><input id="p-street" data-street-inp placeholder="e.g. 124 Main St, Apt 4B" name="p-street" aria-label="E.g. 124 Main St, Apt 4B"></div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>City <span class="req">*</span></label>
+          <div id="p-city-locked" style="display:none;align-items:center;gap:0.4rem;margin-bottom:0.3rem;">
+            <span id="p-city-locked-lbl" style="font-size:0.88rem;font-weight:700;color:var(--accent);background:var(--accent-light);border:1.5px solid var(--border-accent);border-radius:50px;padding:0.28rem 0.8rem;"></span>
+
+          </div>
+          <input id="p-city-inp" placeholder="City" data-city-inp name="p-city-inp" aria-label="City">
+        </div>
+        <div class="form-group" style="margin-bottom:0;"><label>State / Province</label><input id="p-state" placeholder="e.g. Karnataka, CO" name="p-state" aria-label="E.g. Karnataka, CO"></div>
+      </div>
+      <div class="form-row" style="margin-top:0.75rem;">
+        <div class="form-group" style="margin-bottom:0;"><label id="p-zip-lbl" data-zip-lbl>ZIP code</label><input id="p-zip" data-zip-inp placeholder="5-digit ZIP" name="p-zip" aria-label="5-digit ZIP"></div>
+        <div class="form-group" style="margin-bottom:0;"><label>Country</label><input id="p-country-inp" placeholder="Auto-filled from city selection" readonly style="background:var(--bg2);color:var(--muted);font-size:0.88rem;" name="p-country-inp" aria-label="Auto-filled from city selection"></div>
+      </div>
+      <div class="form-group" style="margin-top:0.75rem;">
+        <label>Select your Service Radius <span class="req">*</span></label>
+        <div id="p-radius-cards" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.15rem 0.7rem;"></div>
+        <input type="hidden" id="p-service-radius" value="25" name="p-service-radius">
+        <div id="p-radius-custom-wrap" style="display:none;margin-top:0.65rem;">
+          <label>Enter custom radius (<span id="p-radius-unit-word">miles</span>) <span class="req">*</span></label>
+          <input id="p-radius-custom" type="text" inputmode="numeric" placeholder="e.g. 75" style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 1rem;font-size:0.95rem;width:100%;background:#fff;" oninput="onCustomRadiusInput()">
+        </div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:0.3rem;">📍 Customers within this distance will see your profile when booking.</div>
+      </div>
+    </div>
+    <hr class="step-divider">
+    <div class="fcard">
+      <h3>Step 2: Services You Offer <span class="req">(select at least one)</span></h3>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">Select all categories you can work in. Customers will be matched to you based on these.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;" id="service-picks">
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'"><input type="checkbox" value="plumbing" style="accent-color:var(--accent);" id="fx-inp-dg84n4" name="dg84n4" aria-label="Fx inp dg84n4"> 🔧 Plumbing</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="electrical" style="accent-color:var(--accent);" id="fx-inp-i6ob4g" name="i6ob4g" aria-label="Fx inp i6ob4g"> ⚡ Electrician</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="cleaning" style="accent-color:var(--accent);" id="fx-inp-z6l4fn" name="z6l4fn" aria-label="Fx inp z6l4fn"> 🏠 Cleaning</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="appliance" style="accent-color:var(--accent);" id="fx-inp-r7ojz3" name="r7ojz3" aria-label="Fx inp r7ojz3"> 🔌 Appliance Repair</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="beauty" style="accent-color:var(--accent);" id="fx-inp-2ilw9z" name="2ilw9z" aria-label="Fx inp 2ilw9z"> 💆 Beauty &amp; Spa</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="tutoring" style="accent-color:var(--accent);" id="fx-inp-svuytd" name="svuytd" aria-label="Fx inp svuytd"> 📚 Tutoring</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="photography" style="accent-color:var(--accent);" id="fx-inp-csetwh" name="csetwh" aria-label="Fx inp csetwh"> 📷 Photography</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="events" style="accent-color:var(--accent);" id="fx-inp-q8o6ad" name="q8o6ad" aria-label="Fx inp q8o6ad"> 🎉 Events</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="lawn" style="accent-color:var(--accent);" id="fx-inp-zs4i41" name="zs4i41" aria-label="Fx inp zs4i41"> 🌿 Lawn &amp; Garden</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="painting" style="accent-color:var(--accent);" id="fx-inp-q1blib" name="q1blib" aria-label="Fx inp q1blib"> 🎨 Painting</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="movers" style="accent-color:var(--accent);" id="fx-inp-xhjhwn" name="xhjhwn" aria-label="Fx inp xhjhwn"> 🚛 Movers</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem;cursor:pointer;transition:all 0.15s;font-size:0.84rem;"><input type="checkbox" value="handyman" style="accent-color:var(--accent);" id="fx-inp-sd4e4k" name="sd4e4k" aria-label="Fx inp sd4e4k"> 🛠️ Handyman</label>
+      </div>
+    </div>
+    <hr class="step-divider">
+
+    <div class="fcard">
+      <h3>Step 3: Experience &amp; Bio</h3>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.85rem;">Tell us about your experience for each service you selected above.</p>
+      <div id="per-service-experience"><div class="alert alert-info">Select your services above — experience fields will appear here.</div></div>
+      <div style="margin-top:0.95rem;">
+        <div class="form-group"><label>Years of Experience (Overall) <span class="req">*</span></label><input type="number" id="p-total-exp" min="0" max="60" step="1" placeholder="e.g. 8" style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 1rem;font-size:0.95rem;width:100%;background:#fff;" name="p-total-exp" aria-label="Years of experience overall">
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:0.3rem;">Your total professional experience across all trades — shown to customers on your profile.</div>
+        </div>
+        <div class="form-group"><label>Languages spoken <span class="req">*</span></label><input id="p-lang" placeholder="English, Hindi, Kannada..." name="p-lang" aria-label="English, Hindi, Kannada..."></div>
+        <div class="form-group"><label>Professional bio <span class="req">*</span></label><textarea id="p-bio" placeholder="Tell customers about yourself, your experience, and why they should choose you. Minimum 50 characters." style="min-height:110px;" name="p-bio" aria-label="Tell customers about yourself, your experience, and why they should choose you. Minimum 50 characters."></textarea></div>
+        <div class="form-group"><label>Certifications / Qualifications <span style="font-weight:400;color:var(--muted);">(optional)</span></label><input id="p-cert" placeholder="e.g. ITI Electrician Certificate, NSQ Level 4, IICT Certified..." name="p-cert" aria-label="E.g. ITI Electrician Certificate, NSQ Level 4, IICT Certified..."></div>
+      </div>
+    </div>
+    <hr class="step-divider">
+
+    <div class="fcard">
+      <h3>Step 4: Profile Photo <span style="font-weight:400;color:var(--muted);font-size:0.85rem;">(Recommended)</span></h3>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">A clear photo helps customers recognize and trust you. Use a professional headshot — no sunglasses, good lighting.</p>
+      <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">
+        <div id="p-photo-preview" style="width:90px;height:90px;border-radius:50%;background:var(--accent-light);border:2px dashed var(--border-accent);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;overflow:hidden;">
+          🧑
+        </div>
+        <div style="flex:1;">
+          <input type="file" id="p-photo" accept="image/*" style="border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:0.6rem;width:100%;font-size:0.88rem;" name="p-photo" aria-label="P photo">
+          <div style="font-size:0.8rem;color:var(--muted);margin-top:0.4rem;">JPG, PNG — max 5MB. Your face should be clearly visible.</div>
+          <div id="p-photo-err" style="font-size:0.8rem;color:#DC2626;margin-top:0.2rem;display:none;"></div>
+        </div>
+      </div>
+    </div>
+    <hr class="step-divider">
+
+    <div class="fcard">
+      <h3>Step 5: ID Verification <span class="req">*</span></h3>
+      <div class="alert alert-info" style="margin-bottom:1rem;">We verify every professional before approval. Upload clear photos/scans of your documents. Our team reviews within 24–48 hours.</div>
+
+      <div id="id-section-in" style="display:none;">
+        <p style="font-size:0.88rem;font-weight:600;margin-bottom:0.85rem;">🇮🇳 India — Aadhaar &amp; PAN are mandatory. Plus 2 supporting documents.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Aadhaar Number <span class="req">*</span></label>
+            <input id="p-aadhaar" placeholder="12-digit Aadhaar number" maxlength="14" name="p-aadhaar" aria-label="12-digit Aadhaar number">
+          </div>
+          <div class="form-group">
+            <label>PAN Number <span class="req">*</span></label>
+            <input id="p-pan" placeholder="e.g. ABCDE1234F" maxlength="10" style="text-transform:uppercase;" name="p-pan" aria-label="E.g. ABCDE1234F">
+          </div>
+        </div>
+        <p style="font-size:0.85rem;font-weight:600;margin:1rem 0 0.5rem;">Upload Documents <span class="req">*</span> <span style="font-weight:400;color:var(--muted);">(*Select a type and upload. *Two different documents required. *Each 5MB only.)</span></p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ID Proof 1 <span class="req">*</span></label>
+            <select id="p-doctype1-in" name="p-doctype1-in" aria-label="Select ID Proof Type">
+              <option value="">Select document type...</option>
+              <option>Aadhaar Card</option>
+              <option>PAN Card</option>
+              <option>Driving License</option>
+              <option>Passport</option>
+              <option>Voter ID</option>
+              <option>Bank Passbook</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Upload ID Proof 1 <span class="req">*</span></label>
+            <input type="file" id="p-doc1-in" accept="image/*,.pdf,application/pdf" style="border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:0.6rem;width:100%;font-size:0.88rem;" name="p-doc1-in" aria-label="Document 1 file">
+            <div id="p-doc1-in-preview" style="margin-top:0.3rem;font-size:0.75rem;color:var(--muted);"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ID Proof 2 <span class="req">*</span></label>
+            <select id="p-doctype2-in" name="p-doctype2-in" aria-label="Select ID Proof Type">
+              <option value="">Select document type...</option>
+              <option>Aadhaar Card</option>
+              <option>PAN Card</option>
+              <option>Driving License</option>
+              <option>Passport</option>
+              <option>Voter ID</option>
+              <option>Bank Passbook</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Upload ID Proof 2 <span class="req">*</span></label>
+            <input type="file" id="p-doc2-in" accept="image/*,.pdf,application/pdf" style="border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:0.6rem;width:100%;font-size:0.88rem;" name="p-doc2-in" aria-label="Document 2 file">
+            <div id="p-doc2-in-preview" style="margin-top:0.3rem;font-size:0.75rem;color:var(--muted);"></div>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:0.2rem;">JPG, PNG or PDF — max 5MB each. Please select two different document types.</div>
+      </div>
+
+      <div id="id-section-us" style="display:none;">
+        <p style="font-size:0.88rem;font-weight:600;margin-bottom:0.85rem;">🇺🇸 US — Government-issued photo ID required.</p>
+        <div class="form-group">
+          <label>Primary ID Type <span class="req">*</span></label>
+          <select id="p-idt-us" name="p-idt-us" aria-label="P idt us">
+            <option value="">Select ID type...</option>
+            <option>US Driver License</option>
+            <option>US Passport</option>
+            <option>State ID Card</option>
+            <option>Military ID</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ID Number <span class="req">*</span></label>
+            <input id="p-idn-us" placeholder="Enter ID number" name="p-idn-us" aria-label="Enter ID number">
+          </div>
+          <div class="form-group">
+            <label>Issuing State <span style="font-weight:400;color:var(--muted);">(DL/State ID only)</span></label>
+            <input id="p-idstate" placeholder="e.g. CO, TX, CA" maxlength="2" style="text-transform:uppercase;" name="p-idstate" aria-label="E.g. CO, TX, CA">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>SSN Last 4 digits <span class="req">*</span></label>
+            <input id="p-ssn4" placeholder="Last 4 digits only" maxlength="4" type="password" name="p-ssn4" aria-label="Last 4 digits only">
+          </div>
+        </div>
+        <p style="font-size:0.85rem;font-weight:600;margin:1rem 0 0.5rem;">Upload Document <span class="req">*</span></p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Document Type <span class="req">*</span></label>
+            <select id="p-doctype-us" name="p-doctype-us" aria-label="Document type">
+              <option value="">Select document type...</option>
+              <option>US Driver License</option>
+              <option>US Passport</option>
+              <option>State ID Card</option>
+              <option>Military ID</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Upload File <span class="req">*</span></label>
+            <input type="file" id="p-doc1-us" accept="image/*,.pdf,application/pdf" style="border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:0.6rem;width:100%;font-size:0.88rem;" name="p-doc1-us" aria-label="Upload document">
+            <div id="p-doc1-us-preview" style="margin-top:0.3rem;font-size:0.75rem;color:var(--muted);"></div>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:0.2rem;">JPG, PNG or PDF — max 5MB.</div>
+      </div>
+
+      <div id="id-section-none" class="alert alert-info">Your city/country will determine which ID documents are required. Please select your city first using the country/city selector at the top of the page.</div>
+      <div class="alert alert-info" style="font-size:0.78rem;margin-top:0.75rem;">🔒 Your documents are stored securely and only accessed by Fixerr staff for verification. Never share full SSN or banking details with anyone except Fixerr staff via official channels.</div>
+    </div>
+    <hr class="step-divider">
+
+    <div class="fcard">
+      <h3>Step 6: Fixerr Pricing Policy</h3>
+      <div class="alert alert-info" style="margin-bottom:1rem;">ℹ️ <strong>Fixerr sets the starting rates for all services.</strong> You and the customer agree on a final price over the phone before the job begins.</div>
+      <div id="per-service-pricing-display"></div>
+      <div class="alert alert-info" style="font-size:0.8rem;margin-top:0.5rem;">💡 These are starting estimates only. You always confirm final pricing with the customer before the job begins.</div>
+    </div>
+    <hr class="step-divider">
+
+    <div class="fcard">
+      <h3>Step 7: How You Get Paid</h3>
+      <div class="alert alert-success" style="margin-bottom:1rem;">✅ <strong>Customers pay Fixerr</strong> — not you directly. Fixerr transfers your earnings within 24 hours of job completion.</div>
+      <div class="form-group">
+        <label>Preferred payment method <span class="req">*</span></label>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.75rem;">Select <strong>one</strong> payment method based on your country. When you select one, enter your details below.</p>
+
+        <!-- India options: shown when country = IN -->
+        <div id="pay-opts-in" style="display:flex;flex-direction:column;gap:0.5rem;">
+          <label class="pay-cb-opt"><input type="radio" name="pay_method" value="upi" class="pay-method-pick" onclick="showPayDetail('upi')" id="pay_method_upi" aria-label="UPI Payment"> 📱 UPI (GPay / PhonePe / Paytm)</label>
+          <label class="pay-cb-opt"><input type="radio" name="pay_method" value="bank" class="pay-method-pick" onclick="showPayDetail('bank')" id="pay_method_bank_in" aria-label="Bank Transfer IN"> 🏦 Bank Transfer (NEFT/IMPS)</label>
+        </div>
+
+        <!-- US options: shown when country = US -->
+        <div id="pay-opts-us" style="display:none;flex-direction:column;gap:0.5rem;">
+          <label class="pay-cb-opt"><input type="radio" name="pay_method" value="zelle" class="pay-method-pick" onclick="showPayDetail('zelle')" id="pay_method_zelle" aria-label="Zelle Payment"> 💳 Zelle</label>
+          <label class="pay-cb-opt"><input type="radio" name="pay_method" value="venmo" class="pay-method-pick" onclick="showPayDetail('venmo')" id="pay_method_venmo" aria-label="Venmo Payment"> 💙 Venmo</label>
+          <label class="pay-cb-opt"><input type="radio" name="pay_method" value="bank" class="pay-method-pick" onclick="showPayDetail('bank')" id="pay_method_bank_us" aria-label="Bank Transfer US"> 🏦 Bank Transfer (ACH)</label>
+        </div>
+
+        <!-- Detail inputs: one shows based on selection -->
+        <div id="pay-detail-upi" class="pay-detail-box" style="display:none;margin-top:0.75rem;">
+          <div class="form-group" style="margin-bottom:0;"><label>UPI ID <span class="req">*</span></label><input id="p-upi" placeholder="yourname@okicici or 9876543210@upi" name="p-upi" aria-label="Yourname@okicici or 9876543210@upi"></div>
+        </div>
+        <div id="pay-detail-zelle" class="pay-detail-box" style="display:none;margin-top:0.75rem;">
+          <div class="form-group" style="margin-bottom:0;"><label>Zelle email or phone <span class="req">*</span></label><input id="p-zelle" placeholder="your@email.com or +1 555 000 0000" name="p-zelle" aria-label="Your@email.com or +1 555 000 0000"></div>
+        </div>
+        <div id="pay-detail-venmo" class="pay-detail-box" style="display:none;margin-top:0.75rem;">
+          <div class="form-group" style="margin-bottom:0;"><label>Venmo handle <span class="req">*</span></label><input id="p-venmo" placeholder="@your-venmo-handle" name="p-venmo" aria-label="@your-venmo-handle"></div>
+        </div>
+        <div id="pay-detail-bank" class="pay-detail-box" style="display:none;margin-top:0.75rem;">
+          <div class="form-group" style="margin-bottom:0;"><label>Bank account details <span class="req">*</span></label><input id="p-bank" placeholder="Bank name, account number, IFSC/routing code" name="p-bank" aria-label="Bank name, account number, IFSC/routing code"></div>
+        </div>
+
+      </div>
+      <div class="alert alert-info" style="font-size:0.78rem;">💡 Fixerr collects payment from customers and sends your earnings to the above account within 24 hours of job completion.</div>    </div>
+
+    <div style="text-align:center;">
+      <button id="reg-btn" onclick="submitReg()" class="btn-primary btn-lg" style="min-width:280px;padding:0.9rem 2.5rem;">Create Account &amp; Continue →</button>
+      <p style="font-size:0.76rem;color:var(--muted);margin-top:0.75rem;">By applying you agree to our <a href="#" style="color:var(--accent);">Professional Terms</a> &amp; <a href="#" style="color:var(--accent);">Code of Conduct</a></p>
+    </div>
+  </div>
+
+  <div id="reg-commission" style="display:none;"></div>
+
+  <div id="reg-done" style="display:none;">
+    <div style="text-align:center;padding:3rem 1rem;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);">
+      <div style="font-size:3.5rem;margin-bottom:0.85rem;">🎉</div>
+      <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:0.65rem;">Application Received!</h2>
+      <p style="color:var(--muted);line-height:1.7;margin-bottom:1.35rem;">Our team will review your application and call you within 24 hours to verify your ID and complete the process.</p>
+      <div class="alert alert-success" style="text-align:left;margin-bottom:1.35rem;font-size:0.83rem;">
+        ✓ <strong>What happens next:</strong><br>
+        1. Our team will contact you within 24 hours.<br>
+        2. We will verify your identity and required documents.<br>
+        3. Your application will be reviewed — you will receive approval or feedback.<br>
+        4. Once approved, you can start receiving booking requests. ✅
+      </div>
+      <a href="login.html" class="btn-primary">Log In to Your Account →</a>
+    </div>
+  </div>
+  </div>
+
+  <div>
+    <div class="card" style="padding:1.45rem;position:sticky;top:84px;">
+      <div style="font-size:0.88rem;font-weight:700;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">💰 Why join Fixerr</div>
+      <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;">You set your own price for every job. Customers come to you — no cold calling, no bidding wars. Full commission details are shown once your account is created, before your application is submitted.</div>
+      <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:0.8rem;font-size:0.76rem;color:var(--muted);line-height:1.5;">
+        ✓ Free to join<br>✓ No upfront fees<br>✓ You set your own pricing<br>✓ Payment direct from customer<br>✓ Build verified reviews<br>✓ Work across India &amp; US
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<div id="site-footer"></div>
+<script src="nav.js"></script>
+<script>
+const _layoutReady = initSharedLayout();
+
+// PAGE-SPECIFIC OVERRIDE: register-pro.html customizes several shared
+// nav.js behaviors. Re-declaring them here (after nav.js has already run)
+// replaces the shared version for this page only.
+
+// (1) FX.paint() also refreshes this page's own dynamic sections (ID
+// requirements, service pricing, city autofill, radius cards) whenever
+// currency/city changes, and uses shorter ZIP/PIN field labels.
+FX.paint = function(){
+  document.querySelectorAll("[data-p]").forEach(el=>{const s=el.getAttribute("data-p"),t=el.getAttribute("data-pt")||"b";el.textContent=this.fmt(this.price(s,t));});
+  document.querySelectorAll("[data-cf]").forEach(el=>el.textContent=this.symbol+" "+this.currency);
+  document.querySelectorAll("[data-cs]").forEach(el=>el.textContent=this.symbol);
+  document.querySelectorAll("[data-cn]").forEach(el=>el.textContent=this.city?this.city.n+(this.city.st?", "+this.city.st:""):"Select city");
+  const isIN=this.country==="IN";
+  document.querySelectorAll("[data-ph]").forEach(el=>el.placeholder=isIN?"+91 98765 43210":"+1 (555) 000-0000");
+  document.querySelectorAll("[data-zip-lbl]").forEach(el=>el.textContent=isIN?"PIN code":"ZIP code");
+  document.querySelectorAll("[data-zip-inp]").forEach(el=>{el.placeholder=isIN?"6-digit PIN":"5-digit ZIP";});
+  document.querySelectorAll("[data-street-inp]").forEach(el=>el.placeholder=isIN?"e.g. 124 MG Road, Apt 4B, Near Metro":"e.g. 124 Main St, Apt 4B");
+  document.querySelectorAll("[data-city-inp]").forEach(el=>el.placeholder=isIN?"e.g. Bengaluru":"e.g. New York");
+  const upi=document.getElementById("pay-upi");if(upi)upi.style.display=isIN?"flex":"none";
+  const navzip=document.getElementById("nav-zip");if(navzip){navzip.style.display=FX.city?"inline-block":"none";navzip.placeholder=isIN?"PIN":"ZIP";navzip.maxLength=isIN?6:10;}
+  const zel=document.getElementById("pay-zelle");if(zel)zel.style.display=isIN?"none":"flex";
+  const tier=document.getElementById("ad-tier");
+  if(tier){tier.innerHTML=isIN?`<option value="starter">Starter — Single Service Page (₹4,999/mo)</option><option value="growth">Growth — Multi-Category + Homepage (₹14,999/mo)</option><option value="enterprise">Enterprise — Full Platform Presence (₹39,999/mo)</option><option value="custom">Not sure / Custom needs</option>`:`<option value="starter">Starter — Single Service Page ($79/mo)</option><option value="growth">Growth — Multi-Category + Homepage ($199/mo)</option><option value="enterprise">Enterprise — Full Platform Presence ($499/mo)</option><option value="custom">Not sure / Custom needs</option>`;}
+  if(typeof updateIDSection==="function")updateIDSection();
+  if(typeof updateServicePricing==="function")updateServicePricing();
+  if(typeof fillProCityFromNav==="function")fillProCityFromNav();
+  if(typeof renderServiceRadiusCards==="function")renderServiceRadiusCards();
+};
+
+// (2) a simpler inline-error renderer (no auto-clear-on-input listener).
+function showErr(id,msg){const el=document.getElementById(id);if(!el)return;el.style.borderColor="#DC2626";let e=el.parentElement.querySelector(".ferr");if(!e){e=document.createElement("div");e.className="ferr";e.style.cssText="color:#DC2626;font-size:0.8rem;margin-top:0.18rem;";el.parentElement.appendChild(e);}e.textContent=msg;}
+
+// (3) clears the location-picker's red-border validation state once both
+// country and city are chosen. Unique to this page's multi-step form.
+function clearLocationErr(){
+  const c=document.getElementById("nav-country");
+  const ci=document.getElementById("nav-city-sel");
+  const cVal=c&&c.value;
+  const ciVal=ci&&ci.value&&ci.value!=="📍 Select city";
+  if(cVal&&c) c.style.borderColor="";
+  if(ciVal&&ci) ci.style.borderColor="";
+  if(cVal&&(ciVal||(window.FX&&FX.city))&&typeof clearErr==="function") clearErr();
+}
+
+// (4) onCountryChange/onCityChange also clear that validation state.
+function onCountryChange(){
+  const cc=document.getElementById("nav-country")?.value;
+  const sel=document.getElementById("nav-city-sel");
+  if(!sel) return;
+  sel.innerHTML='<option value="">📍 Select city</option>';
+  if(!cc){sel.disabled=true;return;}
+  const cities=window._CITIES.filter(c=>c.c===cc).sort((a,b)=>a.n.localeCompare(b.n));
+  cities.forEach(c=>{const o=document.createElement("option");o.value=JSON.stringify(c);o.textContent=c.f+" "+c.n+(c.st?", "+c.st:"");sel.appendChild(o);});
+  sel.disabled=false;
+  clearLocationErr();
+}
+function onCityChange(){
+  const v=document.getElementById("nav-city-sel").value;
+  if(!v || v==="📍 Select city") return;
+  try{
+    const city=JSON.parse(v);
+    FX.set(city);
+    lockCity(city);
+    clearLocationErr();
+  }catch(e){}
+}
+
+document.addEventListener("DOMContentLoaded",async()=>{await _layoutReady;updateIDSection();updateServicePricing();updateServiceExperience();renderServiceRadiusCards();
+  fillProCityFromNav();
+  // Photo preview
+  const photoInput=document.getElementById('p-photo');
+  const photoPreview=document.getElementById('p-photo-preview');
+  const photoErr=document.getElementById('p-photo-err');
+  if(photoInput){
+    photoInput.addEventListener('change',()=>{
+      const file=photoInput.files[0];
+      if(!file)return;
+      if(file.size>5*1024*1024){photoErr.textContent='Photo must be under 5MB';photoErr.style.display='block';toast('"'+file.name+'" is over 5MB. Please choose a smaller photo.','err');photoInput.value='';return;}
+      if(!file.type.startsWith('image/')){photoErr.textContent='Please upload an image file (JPG, PNG)';photoErr.style.display='block';photoInput.value='';return;}
+      photoErr.style.display='none';
+      const reader=new FileReader();
+      reader.onload=e=>{photoPreview.innerHTML=`<img src="${e.target.result}" style="width:90px;height:90px;object-fit:cover;border-radius:50%;">`;}
+      reader.readAsDataURL(file);
+    });
+  }
+  // Single-slot document uploads (Step 5: doc1-in, doc2-in, doc1-us) — each accepts one
+  // image (JPG/PNG) or PDF file, matching the FirstName_LastName_DocType naming convention
+  // used when the file is saved server-side.
+  ['p-doc1-in','p-doc2-in','p-doc1-us'].forEach(id=>{
+    const el=document.getElementById(id);
+    const prev=document.getElementById(id+'-preview');
+    if(!el||!prev)return;
+    el.addEventListener('change',()=>{
+      const f=el.files[0];
+      if(!f){prev.innerHTML='';return;}
+      const isPDF=f.type==='application/pdf'||f.name.toLowerCase().endsWith('.pdf');
+      const isImage=f.type.startsWith('image/');
+      if(!isPDF&&!isImage){
+        prev.innerHTML='<span style="color:#DC2626;">❌ Only JPG, PNG or PDF files are accepted.</span>';
+        el.value='';return;
+      }
+      if(f.size>5*1024*1024){
+        prev.innerHTML='<span style="color:#DC2626;">❌ File must be under 5MB.</span>';
+        toast('"'+f.name+'" is over 5MB. Please choose a smaller file.','err');
+        el.value='';return;
+      }
+      if(isPDF){
+        const reader=new FileReader();
+        reader.onload=e=>{
+          const bytes=new Uint8Array(e.target.result);
+          const header=String.fromCharCode(bytes[0],bytes[1],bytes[2],bytes[3]);
+          if(header!=='%PDF'){
+            prev.innerHTML=`<span style="color:#DC2626;">❌ "${f.name}" is not a valid PDF file.</span>`;
+            el.value='';
+          } else {
+            prev.innerHTML=`<span style="color:var(--accent);">✓ ${f.name} (${(f.size/1024/1024).toFixed(1)}MB)</span>`;
+          }
+        };
+        reader.readAsArrayBuffer(f.slice(0,4));
+      } else {
+        prev.innerHTML=`<span style="color:var(--accent);">✓ ${f.name} (${(f.size/1024/1024).toFixed(1)}MB)</span>`;
+      }
+    });
+  });
+});
+function fillProCityFromNav(){
+  if(!FX.city)return;
+  const c=FX.city;
+  // Show locked label
+  const lbl=document.getElementById('p-city-locked-lbl');
+  if(lbl){lbl.textContent=c.f+' '+c.n+(c.st?', '+c.st:'');}
+  document.getElementById('p-city-locked').style.display='flex';
+  // Fill city input
+  const ci=document.getElementById('p-city-inp');if(ci){ci.value=c.n;ci.readOnly=true;ci.style.background='var(--accent-light)';}
+  // Fill state
+  const si=document.getElementById('p-state');if(si&&c.st)si.value=c.st;
+  // Fill country
+  const co=document.getElementById('p-country-inp');if(co)co.value=c.c==='IN'?'India':'United States';
+}
+function unlockProCity(){
+  document.getElementById('p-city-locked').style.display='none';
+  const ci=document.getElementById('p-city-inp');if(ci){ci.readOnly=false;ci.value='';ci.style.background='';}
+  const si=document.getElementById('p-state');if(si)si.value='';
+  const co=document.getElementById('p-country-inp');if(co)co.value='';
+}
+
+const RADIUS_TIERS=[
+  {v:5,d:'🏡 My Neighborhood'},
+  {v:10,d:'🌳 My Local Area'},
+  {v:25,d:'🏙️ My City & Nearby Areas',rec:true},
+  {v:50,d:'🚗Nearby Cities & Areas'}
+];
+function renderServiceRadiusCards(){
+  const wrap=document.getElementById('p-radius-cards');
+  if(!wrap)return;
+  const unit=FX.country==='IN'?'km':'miles';
+  const hidden=document.getElementById('p-service-radius');
+  const customWrap=document.getElementById('p-radius-custom-wrap');
+  const isCustomActive=customWrap&&customWrap.style.display!=='none';
+  const current=isCustomActive?'custom':(hidden?hidden.value:'25');
+  const cardStyle=(selected)=>`cursor:pointer;border:1.5px solid ${selected?'var(--accent)':'var(--border)'};background:${selected?'var(--accent-light)':'#fff'};border-radius:var(--radius-sm);padding:0.85rem 0.7rem;text-align:center;transition:all 0.15s;position:relative;`;
+  let html=RADIUS_TIERS.map(t=>{
+    const selected=String(current)===String(t.v);
+    return `<div onclick="selectServiceRadius('${t.v}')" style="${cardStyle(selected)}">`
+      +(t.rec?`<div style="position:absolute;top:-9px;right:8px;background:var(--accent);color:#fff;font-size:0.62rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:50px;">⭐ Recommended</div>`:'')
+      +`<div style="font-size:1.3rem;font-weight:800;color:var(--text);">${t.v} <span style="font-size:0.8rem;font-weight:600;color:var(--muted);">${unit}</span></div>`
+      +`<div style="font-size:0.78rem;color:var(--muted);margin-top:0.25rem;">${t.d}</div>`
+      +`</div>`;
+  }).join('')
+  +`<div onclick="selectServiceRadius('custom')" style="${cardStyle(current==='custom')}">`
+    +`<div style="font-size:1.05rem;font-weight:800;color:var(--text);">Custom</div>`
+    +`<div style="font-size:0.78rem;color:var(--muted);margin-top:0.25rem;">🐌 Choose your own radius</div>`
+    +`</div>`;
+  wrap.innerHTML=html;
+  const unitWordEl=document.getElementById('p-radius-unit-word');
+  if(unitWordEl)unitWordEl.textContent=unit;
+}
+function selectServiceRadius(val){
+  const hidden=document.getElementById('p-service-radius');
+  const customWrap=document.getElementById('p-radius-custom-wrap');
+  if(val==='custom'){
+    if(customWrap)customWrap.style.display='block';
+    if(hidden)hidden.value='';
+  } else {
+    if(customWrap)customWrap.style.display='none';
+    const ci=document.getElementById('p-radius-custom');if(ci)ci.value='';
+    if(hidden)hidden.value=val;
+  }
+  renderServiceRadiusCards();
+}
+function onCustomRadiusInput(){
+  const ci=document.getElementById('p-radius-custom');
+  const hidden=document.getElementById('p-service-radius');
+  if(!ci||!hidden)return;
+  const cleaned=ci.value.replace(/[^0-9]/g,'');
+  if(cleaned!==ci.value)ci.value=cleaned;
+  const num=parseFloat(cleaned);
+  const isIN=FX.country==='IN';
+  hidden.value=(!isNaN(num)&&num>50&&num<=100)?String(Math.round(num)):'';
+}
+function updateIDSection(){
+  const isIN = FX.country ? FX.country==='IN' : true;
+  const idIN=document.getElementById('id-section-in');
+  const idUS=document.getElementById('id-section-us');
+  const idNone=document.getElementById('id-section-none');
+  if(idIN)idIN.style.display=isIN?'block':'none';
+  if(idUS)idUS.style.display=isIN?'none':'block';
+  if(idNone)idNone.style.display='none';
+  const payIN=document.getElementById('pay-opts-in');
+  const payUS=document.getElementById('pay-opts-us');
+  if(payIN)payIN.style.display=isIN?'flex':'none';
+  if(payUS)payUS.style.display=isIN?'none':'flex';
+  document.querySelectorAll('.pay-method-pick').forEach(r=>r.checked=false);
+  document.querySelectorAll('.pay-detail-box').forEach(b=>b.style.display='none');
+  document.querySelectorAll('.pay-cb-opt').forEach(l=>{l.style.borderColor='var(--border)';l.style.background='#fff';});
+  updateServicePricing();
+}
+const SERVICE_LABELS={plumbing:'Plumbing',electrical:'Electrician',cleaning:'Home Cleaning',appliance:'Appliance Repair',beauty:'Beauty & Spa',tutoring:'Tutoring',photography:'Photography',events:'Events',lawn:'Lawn & Garden',painting:'Painting',movers:'Movers',handyman:'Handyman'};
+const EXP_OPTIONS=['Less than 1 year','1–2 years','3–5 years','5–10 years','10+ years'];
+function updateServicePricing(){
+  const services=[...document.querySelectorAll('#service-picks input:checked')].map(c=>c.value);
+  const pc=document.getElementById('per-service-pricing-display');
+  if(!pc)return;
+  if(!services.length){
+    pc.innerHTML='<div class="alert alert-info" style="font-size:0.88rem;">Select your services above — Fixerr\'s starting rates for those services will appear here.</div>';
+    return;
+  }
+  const isIN=FX.country==='IN';
+  const sym=isIN?'₹':'$';
+  const pricesINR={plumbing:399,electrical:449,cleaning:599,appliance:499,beauty:299,tutoring:249,photography:799,events:1199,lawn:349,painting:599,movers:1199,handyman:449};
+  const pricesUSD={plumbing:49,electrical:59,cleaning:79,appliance:69,beauty:39,tutoring:30,photography:99,events:149,lawn:49,painting:79,movers:149,handyman:59};
+  const prices=isIN?pricesINR:pricesUSD;
+  const labels={plumbing:'Plumbing',electrical:'Electrician',cleaning:'Home Cleaning',appliance:'Appliance Repair',beauty:'Beauty & Spa',tutoring:'Tutoring',photography:'Photography',events:'Events',lawn:'Lawn & Garden',painting:'Painting',movers:'Movers',handyman:'Handyman'};
+  pc.innerHTML='<div style="background:var(--bg2);border-radius:var(--radius-sm);padding:0.85rem 1rem;font-size:0.85rem;">'
+    +'<div style="font-weight:700;margin-bottom:0.5rem;color:var(--text);">Fixerr starting rates for your services:</div>'
+    +services.map(s=>`<div style="display:flex;justify-content:space-between;padding:0.25rem 0;border-bottom:1px solid var(--border);">`
+      +`<span>${labels[s]||s}</span>`
+      +`<strong style="color:var(--accent);">${sym}${prices[s]||0} starting</strong>`
+      +`</div>`).join('')
+    +'<div style="font-size:0.76rem;color:var(--muted);margin-top:0.5rem;">These are the rates customers see. You and the customer agree on a final price over the phone.</div>'
+    +'</div>';
+}
+
+function updateServiceExperience(){
+  const services=[...document.querySelectorAll('#service-picks input:checked')].map(c=>c.value);
+  const ec=document.getElementById('per-service-experience');
+  if(!ec)return;
+  if(!services.length){
+    ec.innerHTML='<div class="alert alert-info">Select your services above — experience fields will appear here.</div>';
+    return;
+  }
+  const EXP_OPTIONS=['Less than 1 year','1–2 years','3–5 years','6–10 years','10+ years'];
+  const labels={plumbing:'Plumbing',electrical:'Electrician',cleaning:'Home Cleaning',appliance:'Appliance Repair',beauty:'Beauty & Spa',tutoring:'Tutoring',photography:'Photography',events:'Events',lawn:'Lawn & Garden',painting:'Painting',movers:'Movers',handyman:'Handyman'};
+  ec.innerHTML=services.map(s=>`
+    <div class="form-row" style="margin-bottom:0.65rem;">
+      <div class="form-group" style="margin-bottom:0;flex:1;">
+        <label>${labels[s]||s} — Years of experience <span class="req">*</span></label>
+        <select id="p-exp-${s}" style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 1rem;font-size:0.95rem;width:100%;background:#fff;" name="p-exp-${s}" aria-label="P exp ${s}">
+          <option value="">Select experience</option>
+          ${EXP_OPTIONS.map(o=>`<option value="${o}">${o}</option>`).join('')}
+        </select>
+      </div>
+    </div>`).join('');
+}
+
+document.addEventListener('change', e=>{
+  if(e.target.closest('#service-picks')){
+    updateServicePricing();
+    updateServiceExperience();
+  }
+});
+
+function csearch(inp, dd) {
+  if (!inp || !dd) return;
+  let timer = null;
+  inp.addEventListener('input', () => {
+    clearTimeout(timer);
+    const q = inp.value.trim();
+    if (q.length < 2) { dd.style.display = 'none'; return; }
+    timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/cities?q=${encodeURIComponent(q)}`);
+        const cities = await res.json();
+        if (!cities || !cities.length) { dd.style.display = 'none'; return; }
+        dd.innerHTML = cities.map(c => `
+          <div style="padding:10px 14px; cursor:pointer; font-size:14px; border-bottom:1px solid #f3f4f6;" onclick="selectProCityItem('${c.n}', '${c.st || ''}', '${c.c || 'US'}')">
+            ${c.f || ''} <strong>${c.n}</strong>${c.st ? ', ' + c.st : ''} <span style="color:#9ca3af; font-size:12px;">(${c.c})</span>
+          </div>
+        `).join('');
+        dd.style.display = 'block';
+      } catch(e) { dd.style.display = 'none'; }
+    }, 200);
+  });
+  document.addEventListener('click', (e) => {
+    if (!inp.contains(e.target) && !dd.contains(e.target)) dd.style.display = 'none';
+  });
+}
+
+function selectProCityItem(name, state, country) {
+  const ci = document.getElementById('p-city') || document.getElementById('p-city-inp');
+  const si = document.getElementById('p-state');
+  const dd = document.getElementById('p-city-dd');
+  if (ci) ci.value = name;
+  if (si && state) si.value = state;
+  if (dd) dd.style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  csearch(document.getElementById('p-city') || document.getElementById('p-city-inp'), document.getElementById('p-city-dd'));
+});
+let PENDING_APPLICATION=null;
+async function submitReg(){
+  clearErr();
+  const navC = document.getElementById("nav-country")?.value || (FX.city ? FX.city.c : "");
+  const navCityVal = document.getElementById("nav-city-sel")?.value || (FX.city ? FX.city.n : "");
+  if(!navC || !navCityVal || navCityVal === "📍 Select city"){
+    toast("Please select Country & City first before creating an account.", "err");
+    showErr("p-fn", "Please select Country & City from top navbar before creating an account.");
+    const cEl = document.getElementById("nav-country");
+    const ciEl = document.getElementById("nav-city-sel");
+    if(cEl) cEl.style.borderColor = "#DC2626";
+    if(ciEl) ciEl.style.borderColor = "#DC2626";
+    return;
+  }
+  const fn=v('p-fn'),ln=v('p-ln'),em=v('p-em'),ph=v('p-ph'),pw=v('p-pw'),pw2=v('p-pw2');
+  const services=[...document.querySelectorAll('#service-picks input:checked')].map(c=>c.value);
+  const bio=v('p-bio'),lang=v('p-lang');
+  const payMethodEl=document.querySelector('.pay-method-pick:checked');
+  const payMethods=payMethodEl?[payMethodEl.value]:[];
+  const cityFromNav=FX.city;
+  const manualCityName=v('p-city-inp');
+  const city=cityFromNav||(manualCityName?{n:manualCityName,st:v('p-state'),c:FX.country||'US',cur:FX.currency||'USD',f:FX.flag||'🌍'}:null);
+  const expMap={};services.forEach(s=>{const val=v('p-exp-'+s);if(val)expMap[s]=val;});
+  const totalExp=v('p-total-exp');
+  // Prices are set by Fixerr policy, not by pro - no validation needed
+  const servicePricing={};
+  const rate='';
+  const isIN=(city?.c||FX.country||'US')==='IN';
+  const aadhaar=v('p-aadhaar'),pan=v('p-pan');
+  const idt=isIN?'':v('p-idt-us');
+  const idn=isIN?'':v('p-idn-us');
+  const doctype1=isIN?v('p-doctype1-in'):v('p-doctype-us');
+  const doctype2=isIN?v('p-doctype2-in'):'';
+  const doc1=isIN?document.getElementById('p-doc1-in'):document.getElementById('p-doc1-us');
+  const doc2=isIN?document.getElementById('p-doc2-in'):null;
+  function validatePhone(ph,country){
+    if(!ph)return'Phone number is required';
+    const clean=ph.replace(/[\s\-().]/g,'');
+    if(country==='IN'){if(!/^(\+91)?[6-9]\d{9}$/.test(clean))return'Enter a valid Indian mobile number (e.g. +91 98765 43210)';}
+    else{if(!/^(\+1)?[2-9]\d{9}$/.test(clean))return'Enter a valid US phone number (e.g. +1 555 000 0000)';}
+    return null;
+  }
+  let ok=true;
+  if(!fn){showErr('p-fn','First name is required');ok=false;}
+  if(!ln){showErr('p-ln','Last name is required');ok=false;}
+  if(!em||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){showErr('p-em','Enter a valid email address');ok=false;}
+  const phErr=validatePhone(ph,city?.c||FX.country||'US');
+  if(phErr){showErr('p-ph',phErr);ok=false;}
+  if(pw.length<8){showErr('p-pw','Password must be at least 8 characters');ok=false;}
+  if(!pw2){showErr('p-pw2','Please confirm your password');ok=false;}
+  else if(pw!==pw2){showErr('p-pw2','Passwords do not match');ok=false;}
+  if(!v('p-street')||v('p-street').length<5){showErr('p-street','Please enter your street address');ok=false;}
+  if(!city){toast('Please select your city using the city selector','err');ok=false;}
+  // ZIP/PIN validation
+  const zipVal=(v('p-zip')||'').trim().replace(/[^0-9]/g,'');
+  if(isIN){
+    if(!zipVal||!/^\d{6}$/.test(zipVal)){showErr('p-zip','Please enter a valid 6-digit PIN code');ok=false;}
+  } else {
+    if(!zipVal||!/^\d{5}$/.test(zipVal)){showErr('p-zip','Please enter a valid 5-digit ZIP code');ok=false;}
+  }
+  const serviceRadius=v('p-service-radius');
+  const radiusCustomWrap=document.getElementById('p-radius-custom-wrap');
+  const radiusIsCustom=radiusCustomWrap&&radiusCustomWrap.style.display!=='none';
+  if(radiusIsCustom){
+    const customNum=parseFloat(v('p-radius-custom'));
+    if(isNaN(customNum)||customNum<=50||customNum>100){showErr('p-radius-custom',`Enter a valid custom radius greater than 50 and up to 100 ${isIN?'km':'miles'}`);ok=false;}
+  } else if(!serviceRadius){showErr('p-service-radius','Please select how far you will travel for jobs');ok=false;}
+  if(!services.length){toast('Please select at least one service category','err');ok=false;}
+  const missingExp=services.filter(s=>!v('p-exp-'+s));
+  if(missingExp.length){missingExp.forEach(s=>{const el=document.getElementById('p-exp-'+s);if(el)el.style.borderColor='#DC2626';});toast('Please select years of experience for each service','err');ok=false;}
+  const totalExpNum=parseInt(totalExp,10);
+  if(!totalExp||isNaN(totalExpNum)||totalExpNum<0||totalExpNum>60){showErr('p-total-exp','Enter your total years of experience (0–60)');ok=false;}
+  if(!lang){showErr('p-lang','Please enter the languages you speak');ok=false;}
+  if(bio.length<50){showErr('p-bio','Please write at least 50 characters about yourself');ok=false;}
+  if(isIN){
+    if(!aadhaar||!/^\d{12}$/.test(aadhaar.replace(/\s/g,''))){showErr('p-aadhaar','Enter a valid 12-digit Aadhaar number');ok=false;}
+    if(!pan||!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan.toUpperCase())){showErr('p-pan','Enter a valid PAN number (e.g. ABCDE1234F)');ok=false;}
+    if(!doctype1){showErr('p-doctype1-in','Please select the type for Document 1');ok=false;}
+    if(!doc1||!doc1.files.length){toast('Please upload Document 1 to proceed.','err');ok=false;}
+    if(!doctype2){showErr('p-doctype2-in','Please select the type for Document 2');ok=false;}
+    if(!doc2||!doc2.files.length){toast('Please upload Document 2 to proceed.','err');ok=false;}
+    if(doctype1&&doctype2&&doctype1===doctype2){toast('Please choose two different document types for Document 1 and Document 2.','err');ok=false;}
+  } else {
+    if(!idt){showErr('p-idt-us','Please select your ID type');ok=false;}
+    if(!idn){showErr('p-idn-us','ID number is required');ok=false;}
+    const ssn4=v('p-ssn4');
+    if(!ssn4||!/^\d{4}$/.test(ssn4)){showErr('p-ssn4','Enter the last 4 digits of your SSN');ok=false;}
+    if(!doctype1){showErr('p-doctype-us','Please select the document type');ok=false;}
+    if(!doc1||!doc1.files.length){toast('Please upload your government-issued ID to proceed.','err');ok=false;}
+  }
+  // No pricing validation - Fixerr sets rates
+  if(!payMethods.length){toast('Please select a payment method','err');ok=false;}
+  else {
+    // Validate detail field for selected method
+    const method=payMethods[0];
+    if(method==='upi'&&!v('p-upi')){toast('Please enter your UPI ID','err');ok=false;}
+    if(method==='zelle'&&!v('p-zelle')){toast('Please enter your Zelle email or phone','err');ok=false;}
+    if(method==='venmo'&&!v('p-venmo')){toast('Please enter your Venmo handle','err');ok=false;}
+    if(method==='bank'&&!v('p-bank')){toast('Please enter your bank account details','err');ok=false;}
+  }
+  if(!ok){window.scrollTo({top:0,behavior:'smooth'});return;}
+  const btn=document.getElementById('reg-btn');btn.textContent='Creating account...';btn.disabled=true;
+  try{
+    const d=await API.post('/api/auth/register',{firstName:fn,lastName:ln,email:em,phone:ph,password:pw,passkey:pw,role:'professional',city:city?.n||'',state:v('p-state')||city?.st||'',country:city?.c||'US',currency:city?.cur||'USD',address:v('p-street'),zip:v('p-zip')});
+    // Store token TEMPORARILY in memory only (not localStorage) for commission step
+    // This allows the pro-application API call to authenticate
+    // Token will be cleared after submission - user must login manually
+    let _tempToken = d.token;
+    const _origTok = API.tok;
+    API.tok = () => _tempToken;
+    PENDING_APPLICATION={services,bio,experience_map:expMap,years_exp:totalExp,languages:lang,certifications:v('p-cert'),id_type:idt,id_number:idn,aadhaar:isIN?aadhaar:'',pan:isIN?pan:'',pricing_map:servicePricing,starting_rate:rate,pay_methods:payMethods,upi:v('p-upi'),bank:v('p-bank'),service_radius:parseInt(v('p-service-radius'))||25,zip:v('p-zip'),doc1_type:doctype1,doc2_type:doctype2};
+    document.getElementById('reg-form').style.display='none';
+    const commissionHtml=`
+      <div class="fcard" style="border:1.5px solid var(--border-accent);background:var(--accent-light);max-width:560px;margin:0 auto;">
+        <h3 style="border:none;padding:0;margin-bottom:0.85rem;">📜 Commission Agreement <span class="req">*</span></h3>
+        <div style="background:#fff;border-radius:var(--radius-sm);padding:1rem 1.15rem;font-size:0.88rem;line-height:1.7;color:var(--text);margin-bottom:0.95rem;">
+          Fixerr connects you with customers and handles all payment collection on your behalf. <strong>Customers pay Fixerr directly</strong> — not you. For every completed job, Fixerr keeps a <strong>15% platform commission</strong> and transfers the remaining <strong>85% to you within 24 hours</strong> of job completion confirmation.
+          <br><br>
+          You never chase payments. You never handle billing disputes. Just complete the job, mark it done in your dashboard, and Fixerr handles the rest. Your payment details (UPI / Zelle / bank) will be used to transfer your 85% after every completed booking.
+        </div>
+        <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;font-size:0.84rem;margin-bottom:1rem;">
+          <input type="checkbox" id="p-agree" style="accent-color:var(--accent);margin-top:0.2rem;flex-shrink:0;" name="p-agree" aria-label="P agree">
+          <span>I understand and agree to pay Fixerr a 15% commission on each completed job, and to accurately report job amounts.</span>
+        </label>
+        <hr class="divider">
+        <h3 style="border:none;padding:0;margin-bottom:0.85rem;">🛠️ Independent Contractor &amp; Liability <span class="req">*</span></h3>
+        <div style="background:#fff;border-radius:var(--radius-sm);padding:1rem 1.15rem;font-size:0.88rem;line-height:1.7;color:var(--text);margin-bottom:0.95rem;">
+          You are registering as an independent professional, not a Fixerr employee, agent, or representative. You are solely responsible for the quality, safety, and legality of the work you perform, for any equipment or vehicle you use to get to a job, and for carrying your own insurance, licenses, or permits required for your trade in your area.
+          <br><br>
+          Fixerr is not liable for any property damage, injury, accident, loss, or legal claim arising from your work or your travel to and from a job. You agree to indemnify and hold Fixerr harmless from any such claim brought against Fixerr arising from your conduct or work.
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.65rem;margin-bottom:0.95rem;">
+          <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;font-size:0.84rem;">
+            <input type="checkbox" id="p-liability-agree" style="accent-color:var(--accent);margin-top:0.2rem;flex-shrink:0;" name="p-liability-agree" aria-label="P liability agree">
+            <span>I confirm I am an independent contractor, I am responsible for my own insurance and safety, and I agree Fixerr is not liable for any damage, injury, or claim related to my work.</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;font-size:0.84rem;">
+            <input type="checkbox" id="p-has-insurance" style="accent-color:var(--accent);margin-top:0.2rem;flex-shrink:0;" name="p-has-insurance" aria-label="P has insurance">
+            <span>I have valid liability insurance covering my work <strong>OR</strong> I accept full personal liability for any damage, injury, or loss caused during my jobs — Fixerr bears zero responsibility. <span style="color:#DC2626;font-weight:600;">(Required)</span></span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;font-size:0.84rem;">
+            <input type="checkbox" id="p-has-tools" style="accent-color:var(--accent);margin-top:0.2rem;flex-shrink:0;" name="p-has-tools" aria-label="P has tools">
+            <span>I have my own tools and equipment needed to perform the services I offer.</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;font-size:0.84rem;">
+            <input type="checkbox" id="p-conduct-agree" style="accent-color:var(--accent);margin-top:0.2rem;flex-shrink:0;" name="p-conduct-agree" aria-label="P conduct agree">
+            <span>I agree to Fixerr's Code of Conduct — treat all customers respectfully, arrive on time, complete work to a professional standard, and never solicit direct payments that bypass Fixerr.</span>
+          </label>
+        </div>
+        <button id="commission-btn" onclick="submitCommission()" class="btn-primary btn-lg" style="width:100%;margin-top:1.25rem;">Accept &amp; Submit Application →</button>
+      </div>`;
+    document.getElementById('reg-commission').innerHTML=commissionHtml;
+    document.getElementById('reg-commission').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(e){toast(e.message,'err');btn.textContent='Create Account & Continue';btn.disabled=false;}
+}
+async function submitCommission(){
+  const agreed=document.getElementById('p-agree').checked;
+  const liabilityAgreed=document.getElementById('p-liability-agree').checked;
+  if(!agreed){toast('Please accept the commission agreement to continue','err');return;}
+  if(!liabilityAgreed){toast('Please accept the independent contractor & liability terms to continue','err');return;}
+  const conductAgreed=document.getElementById('p-conduct-agree').checked;
+  if(!conductAgreed){toast('Please agree to the Fixerr Code of Conduct','err');return;}
+  const hasInsurance=document.getElementById('p-has-insurance').checked;
+  if(!hasInsurance){toast('Please accept the insurance & liability statement — this protects you and Fixerr','err');return;}
+  const hasTools=document.getElementById('p-has-tools').checked;
+  if(!hasTools){toast('Please confirm you have your own tools and equipment','err');return;}
+  const btn=document.getElementById('commission-btn');btn.textContent='Submitting...';btn.disabled=true;
+  try{
+    // Convert the profile photo + doc1/doc2 uploads to base64 for transport. The server writes
+    // these to frontend/pro_assets/<FixerrUniqueID>/... and stores the resulting file path
+    // (not the base64 data) in photo_url / doc1_url / doc2_url.
+    async function fileToBase64(inputId){
+      const inp=document.getElementById(inputId);
+      if(!inp||!inp.files||!inp.files[0])return null;
+      const f=inp.files[0];
+      return new Promise((res,rej)=>{
+        const r=new FileReader();
+        r.onload=e=>res({name:f.name,size:f.size,type:f.type,data:e.target.result.split(',')[1]});
+        r.onerror=rej;
+        r.readAsDataURL(f);
+      });
+    }
+    const isINdoc=FX.country==='IN';
+    const doc1File=await fileToBase64(isINdoc?'p-doc1-in':'p-doc1-us').catch(()=>null);
+    const doc2File=isINdoc?await fileToBase64('p-doc2-in').catch(()=>null):null;
+    const photoFile=await fileToBase64('p-photo').catch(()=>null);
+    await API.post('/api/pro-application',{...PENDING_APPLICATION,commission_agreed:true,liability_agreed:true,conduct_agreed:true,has_insurance:hasInsurance,has_tools:true,doc1:doc1File,doc2:doc2File,photo:photoFile});
+    // Clear temp token - user must login manually for security
+    API.tok = () => null;
+    localStorage.removeItem('fx_tok');
+    localStorage.removeItem('fx_usr');
+    document.getElementById('reg-commission').style.display='none';
+    document.getElementById('reg-done').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(e){toast(e.message,'err');btn.textContent='Accept & Submit Application';btn.disabled=false;}
+}
+
+// ── MOBILE NAV ──────────────────────────────────────
+function showPayDetail(method){
+  // Hide all detail boxes
+  document.querySelectorAll('.pay-detail-box').forEach(b=>b.style.display='none');
+  // Show selected
+  const box=document.getElementById('pay-detail-'+method);
+  if(box)box.style.display='block';
+  // Highlight selected radio option
+  document.querySelectorAll('.pay-cb-opt').forEach(l=>{
+    l.style.borderColor='var(--border)';
+    l.style.background='#fff';
+  });
+  const checked=document.querySelector('.pay-method-pick:checked');
+  if(checked){
+    const lbl=checked.closest('.pay-cb-opt');
+    if(lbl){lbl.style.borderColor='var(--accent)';lbl.style.background='var(--accent-light)';}
+  }
+}
+</script></body></html>

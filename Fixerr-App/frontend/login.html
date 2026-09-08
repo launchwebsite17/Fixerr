@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <title>Log In – Fixerr</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="mobile.css" />
+    <!-- PAGE-SPECIFIC OVERRIDE: login.html uses --bg (white) instead of the
+         shared --bg2, a fancier boxed/flex .ferr error style instead of the
+         shared plain-text one, and a customer/professional login tab switcher
+         (.login-tab*) that is unique to this page. -->
+    <style>
+      body{background:var(--bg);}
+      input[type="range"]{accent-color:var(--accent);width:100%;}
+      .ferr{
+        color: #dc2626;
+        font-size: 0.78rem;
+        margin-top: 0.3rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.3rem 0.5rem;
+        background: #fef2f2;
+        border-radius: 6px;
+        border-left: 3px solid #dc2626;
+      }
+      .login-tab {
+        flex: 1;
+        padding: 0.48rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.84rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .login-tab-on {
+        background: var(--accent);
+        color: #fff;
+      }
+      .login-tab-off {
+        background: transparent;
+        color: var(--muted);
+      }
+    </style>
+    <script src="common.js"></script>
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <div
+      id="login-layout"
+      style="
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding-top: 64px;
+      "
+    >
+
+
+<!--     
+      <div
+        style="
+          background: linear-gradient(160deg, #f0fbf0, #fff); 
+          border-right: 1px solid var(--border);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 4rem;
+        "
+      >
+        <div
+          style="
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+          "
+        >
+          Welcome back<br />to <span style="color: var(--accent)">Fixerr</span>
+        </div>
+        <p
+          style="
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 320px;
+            margin-bottom: 2rem;
+          "
+        >
+          Home services made simple across the US and India.
+        </p>
+      </div> -->
+
+<div class="login-visual">
+  <div style="font-size: 2.4rem; font-weight: 800; line-height: 1.15; margin-bottom: 1rem;">
+    Welcome back<br />to <span style="color: var(--accent)">Fixerr</span>
+  </div>
+  <p style="color: #374151; line-height: 1.7; max-width: 320px; margin-bottom: 2rem;">
+    Home services made simple across the US and India.
+  </p>
+</div>
+
+
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 3rem;
+        "
+      >   
+      
+
+        <div style="width: 100%; max-width: 370px">
+          <div
+            style="font-size: 1.7rem; font-weight: 800; margin-bottom: 0.38rem"
+            id="login-title"
+          >
+            Log in
+          </div>
+          <p
+            style="
+              color: var(--muted);
+              margin-bottom: 1.35rem;
+              font-size: 0.88rem;
+            "
+            id="login-subtitle"
+          >
+            New?
+            <a href="signup.html" style="color: var(--accent)"
+              >Create account →</a
+            >
+          </p>
+          <div
+            style="
+              display: flex;
+              background: var(--bg3);
+              border-radius: 50px;
+              padding: 4px;
+              margin-bottom: 1.35rem;
+            "
+            id="tab-wrap"
+          >
+            <button
+              id="tab-c"
+              onclick="setTab('c')"
+              class="login-tab login-tab-on"
+            >
+              Customer
+            </button>
+            <button
+              id="tab-p"
+              onclick="setTab('p')"
+              class="login-tab login-tab-off"
+            >
+              Professional
+            </button>
+          </div>
+          <div class="form-group">
+            <label>Email address</label>
+            <input
+              type="email"
+              id="l-em"
+              placeholder="you@email.com"
+              autocomplete="email"
+            / name="l-em" aria-label="You@email.com">
+            <div
+              class="ferr"
+              id="err-em"
+              style="
+                display: none;
+                color: #dc2626;
+                font-size: 0.74rem;
+                margin-top: 0.18rem;
+              "
+            ></div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              id="l-pw"
+              placeholder="Your password"
+              autocomplete="current-password"
+            / name="l-pw" aria-label="Your password">
+            <div
+              class="ferr"
+              id="err-pw"
+              style="
+                display: none;
+                color: #dc2626;
+                font-size: 0.74rem;
+                margin-top: 0.18rem;
+              "
+            ></div>
+          </div>
+          <div id="forgot-row" style="text-align: right; margin: -0.5rem 0 1.1rem">
+            <a
+              href="#"
+              onclick="forgotPassword()"
+              style="font-size: 0.78rem; color: var(--accent)"
+              >Forgot password?</a
+            >
+          </div>
+          <button
+            id="l-btn"
+            onclick="doLogin()"
+            class="btn-primary btn-full"
+            style="padding: 0.82rem; font-size: 0.95rem"
+          >
+            Log In →
+          </button>
+          <p id="login-terms"
+            style="
+              text-align: center;
+              font-size: 0.74rem;
+              color: var(--muted);
+              margin-top: 0.85rem;
+            "
+          >
+            By logging in you agree to our
+            <a href="terms.html" style="color: var(--accent)">Terms</a> &amp;
+            <a href="terms.html" style="color: var(--accent)">Privacy</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div id="site-footer"></div>
+    <script src="nav.js"></script>
+    <script>
+      const _layoutReady = initSharedLayout();
+
+      // PAGE-SPECIFIC OVERRIDE: login.html clears its own location-picker
+      // validation error (via clearFErr(), defined further down this same
+      // script) once both country and city are chosen.
+      function clearLocationErr() {
+        const c = document.getElementById("nav-country");
+        const ci = document.getElementById("nav-city-sel");
+        const cVal = c && c.value;
+        const ciVal = ci && ci.value && ci.value !== "📍 Select city";
+        if (cVal && c) c.style.borderColor = "";
+        if (ciVal && ci) ci.style.borderColor = "";
+        if (
+          cVal &&
+          (ciVal || (window.FX && FX.city)) &&
+          typeof clearFErr === "function"
+        )
+          clearFErr();
+      }
+      function onCountryChange() {
+        const cc = document.getElementById("nav-country")?.value;
+        const sel = document.getElementById("nav-city-sel");
+        if (!sel) return;
+        sel.innerHTML = '<option value="">📍 Select city</option>';
+        if (!cc) {
+          sel.disabled = true;
+          return;
+        }
+        const cities = window._CITIES.filter((c) => c.c === cc).sort((a, b) => a.n.localeCompare(b.n));
+        cities.forEach((c) => {
+          const o = document.createElement("option");
+          o.value = JSON.stringify(c);
+          o.textContent = c.f + " " + c.n + (c.st ? ", " + c.st : "");
+          sel.appendChild(o);
+        });
+        sel.disabled = false;
+        clearLocationErr();
+      }
+      function onCityChange() {
+        const v = document.getElementById("nav-city-sel").value;
+        if (!v || v === "📍 Select city") return;
+        try {
+          const city = JSON.parse(v);
+          FX.set(city);
+          lockCity(city);
+          clearLocationErr();
+        } catch (e) {}
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        // If already logged in, redirect to dashboard
+        const u = API.user();
+        if (u && API.tok()) {
+          const dash =
+            u.role === "admin"
+              ? "fixerr-owner-0si7erbb2ctq.html"
+              : u.role === "professional"
+                ? "dashboard-pro.html"
+                : "dashboard.html";
+          location.href = dash;
+          return;
+        }
+        await _layoutReady;
+        const lc = document.getElementById("l-country");
+        if (lc && FX.country) lc.value = FX.country;
+        onLoginCountryChange();
+        if (FX.city && FX.city.st) {
+          const ls = document.getElementById("l-state");
+          if (ls) ls.value = FX.city.st;
+        }
+      });
+
+      // Admin login now lives on its own dedicated page (admin-login.html) — this page only
+      // ever handles Customer/Professional login.
+      let activeTab = "c";
+      function setTab(t) {
+        activeTab = t;
+        document.getElementById("tab-c").className =
+          "login-tab " + (t === "c" ? "login-tab-on" : "login-tab-off");
+        document.getElementById("tab-p").className =
+          "login-tab " + (t === "p" ? "login-tab-on" : "login-tab-off");
+      }
+      function showFErr(id, msg) {
+        const el = document.getElementById("err-" + id);
+        const inp = document.getElementById("l-" + id);
+        if (el) {
+          el.textContent = msg;
+          el.style.display = "block";
+        }
+        if (inp) inp.style.borderColor = "#DC2626";
+      }
+      function clearFErr() {
+        ["em", "pw"].forEach((id) => {
+          const el = document.getElementById("err-" + id);
+          const inp = document.getElementById("l-" + id);
+          if (el) {
+            el.textContent = "";
+            el.style.display = "none";
+          }
+          if (inp) inp.style.borderColor = "";
+        });
+      }
+      function forgotPassword() {
+        const em = document.getElementById("l-em").value.trim();
+        window.location.href =
+          "forgot-password.html" +
+          (em ? "?email=" + encodeURIComponent(em) : "");
+      }
+      const LOGIN_INDIA_STATES = [
+        "Karnataka",
+        "Maharashtra",
+        "Delhi",
+        "Tamil Nadu",
+        "Telangana",
+        "Uttar Pradesh",
+        "West Bengal",
+        "Gujarat",
+        "Kerala",
+        "Punjab",
+        "Haryana",
+        "Rajasthan",
+        "Andhra Pradesh",
+        "Madhya Pradesh",
+        "Bihar",
+        "Odisha",
+        "Goa",
+        "Assam",
+      ];
+      const LOGIN_US_STATES = [
+        "California",
+        "New York",
+        "Texas",
+        "Florida",
+        "Illinois",
+        "Washington",
+        "Massachusetts",
+        "Georgia",
+        "New Jersey",
+        "Pennsylvania",
+        "Ohio",
+        "North Carolina",
+        "Virginia",
+        "Michigan",
+        "Colorado",
+        "Arizona",
+      ];
+
+      function onLoginCountryChange() {
+        const c = document.getElementById("l-country")?.value || "";
+        const stSel = document.getElementById("l-state");
+        if (stSel) {
+          if (!c) {
+            stSel.innerHTML = '<option value="">Select State</option>';
+            stSel.disabled = true;
+            return;
+          }
+          stSel.disabled = false;
+          const states = c === "IN" ? LOGIN_INDIA_STATES : LOGIN_US_STATES;
+          const currVal = stSel.value;
+          stSel.innerHTML =
+            '<option value="">Select State</option>' +
+            states.map((s) => `<option value="${s}">${s}</option>`).join("");
+          if (currVal && states.includes(currVal)) stSel.value = currVal;
+        }
+        if (c) {
+          FX.country = c;
+          FX.currency = c === "IN" ? "INR" : "USD";
+          FX.symbol = c === "IN" ? "₹" : "$";
+          const countryEl = document.getElementById("nav-country");
+          if (countryEl) {
+            countryEl.value = c;
+            onCountryChange();
+          }
+          FX.paint();
+        }
+      }
+
+      async function doLogin() {
+        clearFErr();
+        // Country & City are NOT required for login — they are auto-populated from the
+        // user's saved profile after successful authentication (BRD requirement).
+        const email = document.getElementById("l-em").value.trim();
+        const pw = document.getElementById("l-pw").value;
+        const btn = document.getElementById("l-btn");
+        let ok = true;
+        if (!email) {
+          showFErr("em", "Email address is required");
+          ok = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showFErr("em", "Enter a valid email address");
+          ok = false;
+        }
+        if (!pw) {
+          showFErr("pw", "Password is required");
+          ok = false;
+        } else if (pw.length < 6) {
+          showFErr("pw", "Password must be at least 6 characters");
+          ok = false;
+        }
+        if (!ok) return;
+        btn.disabled = true;
+        btn.innerHTML =
+          (window.FXUI ? FXUI.spinner(15, "#fff") : "") + " Logging in…";
+        try {
+          const expected_role =
+            email.toLowerCase() === "admin@getfixerr.com"
+              ? "admin"
+              : activeTab === "p"
+                ? "professional"
+                : "customer";
+          const d = await API.post("/api/auth/login", {
+            email,
+            password: pw,
+            expected_role,
+          });
+          API.save(d);
+          // Auto-populate Country & City/State from the user's saved profile in the database.
+          // The login API returns city, state, country — match against CITIES array and update FX session.
+          if (d.country && d.city) {
+            const matchCity =
+              CITIES.find(
+                (c) =>
+                  c.c === d.country &&
+                  c.n.toLowerCase() === (d.city || "").toLowerCase(),
+              ) || CITIES.find((c) => c.c === d.country);
+            if (matchCity) {
+              FX.city = matchCity;
+              FX.country = matchCity.c;
+              FX.currency = matchCity.cur;
+              FX.symbol = matchCity.sym;
+              FX.flag = matchCity.f;
+              sessionStorage.setItem("fx_c", JSON.stringify(matchCity));
+              localStorage.setItem("fx_c", JSON.stringify(matchCity));
+            }
+          } else if (d.country) {
+            FX.country = d.country;
+            FX.currency = d.country === "IN" ? "INR" : "USD";
+            FX.symbol = d.country === "IN" ? "₹" : "$";
+          }
+          toast("Welcome back, " + (d.name || "User") + "!");
+          // Keep a full-page loader on screen until the dashboard page takes over.
+          if (window.FXUI) FXUI.pageLoading(true, "Loading your dashboard…");
+          setTimeout(() => {
+            location.href =
+              d.role === "admin" ||
+              d.redirect === "/fixerr-owner-0si7erbb2ctq.html"
+                ? "fixerr-owner-0si7erbb2ctq.html"
+                : d.role === "professional"
+                  ? "dashboard-pro.html"
+                  : "dashboard.html";
+          }, 700);
+        } catch (e) {
+          toast(e.message, "err");
+          btn.innerHTML = "Log In →";
+          btn.disabled = false;
+        }
+      }
+      document.getElementById("l-pw")?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") doLogin();
+      });
+      document.getElementById("l-em")?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") document.getElementById("l-pw")?.focus();
+      });
+    </script>
+  </body>
+</html>

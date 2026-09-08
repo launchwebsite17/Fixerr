@@ -1,0 +1,86 @@
+<!-- ============================================================================
+     header.html — SHARED PUBLIC-SITE NAV BAR
+     ============================================================================
+     Fetched and injected by nav.js's initSharedLayout() into every public
+     page's <div id="site-header"></div> placeholder. This file used to be
+     copy-pasted (as a literal <nav>...</nav> block) into all 13 public
+     pages — it's now edited in exactly one place.
+
+     IMPORTANT — everything in here is wired up by nav.js, which MUST already
+     be loaded (via <script src="nav.js"></script>) before this partial is
+     injected, since:
+       - onclick="toggleMobileMenu()" / "onCountryChange()" / "onCityChange()" /
+         "unlockCity()" / "mobileChangeCity()" / "doLogout(event)" all call
+         functions defined in nav.js.
+       - #nav-right and #mobile-menu below start out with a static logged-out
+         default (Log In / Sign Up); nav.js's updateNav() immediately replaces
+         that with the correct logged-in/out state once this partial loads.
+       - #nav-country / #nav-city-sel / #nav-zip / #city-locked-label /
+         #city-select-ui / #city-locked-display / #city-change-btn are all
+         read and written by nav.js's location functions (onCountryChange,
+         onCityChange, lockCity, unlockCity, syncNavLocation, initNav).
+
+     DASHBOARDS / ADMIN PANEL are NOT part of this partial's audience — they
+     keep their own separate sidebar-style navigation and don't load this file.
+     ============================================================================ -->
+<nav>
+  <div style="display:flex;align-items:center;gap:1.65rem;">
+    <a href="index.html" style="text-decoration:none;display:inline-flex;align-items:center;"><img src="assets/logo-icon.png" alt="Fixerr" style="height:52px;width:auto;object-fit:contain;"><span style="font-family:var(--font-display,'Plus Jakarta Sans',sans-serif);font-weight:700;font-size:1.40rem;color:#092555;letter-spacing:-0.3px;margin-left:0.3rem;position:relative;top:-1px;">Fixerr</span></a>
+    <button id="ham-btn" onclick="toggleMobileMenu()" style="background:none;border:none;cursor:pointer;padding:0.4rem;flex-direction:column;gap:5px;align-items:center;justify-content:center;" aria-label="Menu">
+      <span style="display:block;width:22px;height:2px;background:var(--text);border-radius:2px;"></span>
+      <span style="display:block;width:22px;height:2px;background:var(--text);border-radius:2px;"></span>
+      <span style="display:block;width:22px;height:2px;background:var(--text);border-radius:2px;"></span>
+    </button>
+    <!-- Filled in by nav.js's updateNav() with either the logged-out (Log In / Sign Up)
+         or logged-in (Dashboard / Log Out) set of links, mirroring #nav-right below. -->
+    <div id="mobile-menu" style="display:none;position:fixed;top:56px;left:0;right:0;background:#fff;border-bottom:1px solid var(--border);padding:1rem;z-index:999;box-shadow:var(--shadow-lg);">
+      <a href="index.html" style="display:block;padding:0.6rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">Home</a>
+      <a href="how-it-works.html" style="display:block;padding:0.6rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">How It Works</a>
+      <a href="register-pro.html" style="display:block;padding:0.6rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">For Professionals</a>
+      <a href="advertise.html" style="display:block;padding:0.6rem 0;font-weight:600;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border);">Advertise</a>
+      <a href="booking.html" style="display:block;margin-top:0.75rem;" class="btn-primary">Book a Service →</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="register-pro.html">For Professionals</a></li>
+      <li><a href="advertise.html">Advertise</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <!-- Country/city picker. Starts fully hidden (both the "locked" chip and the
+         two <select> dropdowns) until nav.js's initNav() decides which state to
+         show — either a previously-chosen city (locked chip + "Change" link) or
+         the raw country/city dropdowns for a first-time visitor. -->
+    <div id="city-picker-wrap" style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+      <div id="city-locked-display" style="display:none;align-items:center;gap:0.35rem;">
+        <span id="city-locked-label" style="font-size:0.8rem;font-weight:700;color:var(--accent);background:var(--accent-light);border:1.5px solid var(--border-accent);border-radius:50px;padding:0.32rem 0.85rem;white-space:nowrap;"></span>
+      </div>
+      <!-- On phones, tapping "Change" opens the search bottom-sheet (mobileChangeCity);
+           on desktop it just re-reveals the <select> dropdowns (unlockCity). -->
+      <span onclick="window.innerWidth<=768?mobileChangeCity():unlockCity()" id="city-change-btn" style="display:none;font-size:0.7rem;color:var(--accent);cursor:pointer;text-decoration:underline;font-weight:600;white-space:nowrap;">Change</span>
+      <div id="city-select-ui" style="display:none;align-items:center;gap:0.4rem;">
+        <select id="nav-country" onchange="onCountryChange()"
+          style="border:1.5px solid var(--border);border-radius:50px;padding:0.34rem 0.75rem;font-size:0.8rem;outline:none;background:#fff;cursor:pointer;font-weight:600;" name="nav-country" aria-label="Nav country">
+          <option value="">🌍 Country</option>
+          <option value="US">United States</option>
+          <option value="IN">India</option>
+        </select>
+        <select id="nav-city-sel" onchange="onCityChange()" disabled
+          style="border:1.5px solid var(--border);border-radius:50px;padding:0.34rem 0.75rem;font-size:0.8rem;outline:none;background:#fff;cursor:pointer;min-width:140px;" name="nav-city-sel" aria-label="Nav city sel">
+          <option value="">📍 Select city</option>
+        </select>
+        <input id="nav-zip" type="text" data-zip-inp placeholder="ZIP"
+          style="border:1.5px solid var(--border);border-radius:50px;padding:0.34rem 0.6rem;font-size:0.8rem;width:68px;outline:none;display:none;" title="ZIP / PIN code" name="nav-zip" aria-label="ZIP">
+      </div>
+    </div>
+    <!-- data-cf is repainted by FX.paint() with the current currency symbol + code. -->
+    <span data-cf style="font-size:0.78rem;font-weight:700;color:var(--accent);white-space:nowrap;min-width:60px;">$ USD</span>
+    <!-- Filled in by nav.js's updateNav() — this default (logged-out) markup is
+         only what renders for the split second before updateNav() runs. -->
+    <div id="nav-right" style="display:flex;align-items:center;gap:0.6rem;">
+      <a href="login.html" class="btn-ghost btn-sm">Log In</a>
+      <a href="signup.html" class="btn-primary btn-sm">Sign Up Free</a>
+    </div>
+  </div>
+</nav>

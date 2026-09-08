@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Make Payment – Fixerr</title>
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+:root{
+  --bg:#FFFFFF; --bg2:#F7F8F5; --accent:#3D8B37; --accent-light:#E8F5E2;
+  --text:#1A1D1A; --muted:#6B7280; --border:#E5E7EB; --radius:16px; --radius-sm:10px;
+  --font-display:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-display);background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;padding:0.5rem 0.65rem 1rem;min-height:720px;}
+body.embedded{padding:0.35rem 0.75rem 0.75rem;min-height:700px;background:#fff;width:100%;min-width:680px;}
+body.embedded .page{max-width:none;width:100%;margin:0;}
+body.standalone{background:var(--bg2);padding:1.25rem 1rem 2rem;min-height:100vh;}
+.page{max-width:520px;margin:0 auto;}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:0.75rem;}
+.top-bar h1{font-size:1.15rem;font-weight:800;}
+.back-link{font-size:0.82rem;color:var(--accent);text-decoration:none;font-weight:600;}
+.back-link:hover{text-decoration:underline;}
+.card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);padding:1rem 1.1rem 1.15rem;}
+body.embedded .card{border:none;border-radius:0;padding:0;box-shadow:none;}
+.pay-summary{background:var(--bg2);border-radius:var(--radius-sm);padding:0.75rem 0.9rem;margin-bottom:0.85rem;display:flex;justify-content:space-between;align-items:center;}
+.pay-summary .lbl{font-size:0.78rem;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:0.03em;}
+.pay-summary .amt{font-size:1.5rem;font-weight:800;color:var(--accent);}
+.pay-summary .ref{font-size:0.75rem;color:var(--muted);margin-top:0.15rem;}
+#address-element,#payment-element{margin-bottom:0.75rem;}
+#payment-element{min-height:320px;}
+#pay-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:50px;padding:0.85rem;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:0.25rem;}
+#pay-btn:disabled{opacity:0.6;cursor:not-allowed;}
+#pay-msg{margin-top:0.5rem;font-size:0.88rem;text-align:center;font-weight:600;min-height:0;}
+#pay-msg.err{color:#DC2626;}
+#pay-msg.ok{color:#16A34A;}
+.loading{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:0.9rem;}
+.spinner{display:inline-block;width:22px;height:22px;border:2.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin-bottom:0.65rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="top-bar" id="top-bar" style="display:none;">
+    <h1>💳 Complete Payment</h1>
+    <a class="back-link" id="back-link" href="dashboard.html">← Back to dashboard</a>
+  </div>
+
+  <div class="card">
+    <div id="loading-state" class="loading"><div class="spinner"></div><div>Preparing secure payment form…</div></div>
+
+    <div id="checkout-form" style="display:none;">
+      <div class="pay-summary">
+        <div>
+          <div class="lbl">Amount due</div>
+          <div class="ref" id="pay-ref"></div>
+        </div>
+        <div class="amt" id="pay-amount"></div>
+      </div>
+
+      <div id="address-element"></div>
+      <div id="payment-form">
+        <div id="payment-element"></div>
+        <button id="pay-btn" type="button" name="pay-submit">Pay Now</button>
+        <div id="pay-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const bookingRef = params.get('ref');
+const IS_EMBEDDED = params.get('embedded') === '1' || window.self !== window.top;
+
+if (IS_EMBEDDED) {
+  document.body.classList.add('embedded');
+} else {
+  document.body.classList.add('standalone');
+  const topBar = document.getElementById('top-bar');
+  if (topBar) topBar.style.display = 'flex';
+}
+
+function getToken(){ try { return localStorage.getItem('fx_tok'); } catch(e){ return null; } }
+
+async function apiPost(path, body){
+  const res = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify(body || {})
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+  return data;
+}
+
+function notifyParent(status, extra){
+  window.parent.postMessage(Object.assign({ source: 'fixerr-payment', bookingRef, status }, extra || {}), '*');
+}
+
+function fmtAmount(amount, currency){
+  const c = (currency || 'USD').toUpperCase();
+  return c === 'INR' ? '₹' + Number(amount).toFixed(0) : '$' + Number(amount).toFixed(2);
+}
+
+function finishSuccess(){
+  if (IS_EMBEDDED) {
+    notifyParent('success', {});
+    return;
+  }
+  location.replace('dashboard.html?payment=success&ref=' + encodeURIComponent(bookingRef || ''));
+}
+
+function finishFailed(message){
+  if (IS_EMBEDDED) {
+    notifyParent('failed', { message: message || 'Payment could not be completed.' });
+    return;
+  }
+  location.replace('dashboard.html?payment=failed&ref=' + encodeURIComponent(bookingRef || '') + '&msg=' + encodeURIComponent(message || ''));
+}
+
+let stripe, elements, paymentIntentId, addressElement, paymentElementRef;
+
+async function buildStripeBillingPayload(){
+  const addressValue = await addressElement.getValue();
+  if (!addressValue.complete) return null;
+  const billing = { ...addressValue.value };
+  if (paymentElementRef) {
+    try {
+      const peValue = await paymentElementRef.getValue();
+      const bd = peValue?.value?.billingDetails || peValue?.billingDetails || {};
+      if (bd.email) billing.email = bd.email;
+      if (bd.phone) billing.phone = billing.phone || bd.phone;
+    } catch (_) { /* Payment Element may not expose getValue before confirm */ }
+  }
+  return billing;
+}
+
+async function init(){
+  if (params.get('redirect_status') === 'succeeded' && bookingRef) {
+    finishSuccess();
+    return;
+  }
+  if (params.get('redirect_status') === 'failed') {
+    document.getElementById('loading-state').innerHTML = '<p style="color:#DC2626;">Payment authentication failed. Please try again.</p>';
+    finishFailed('Payment authentication failed.');
+    return;
+  }
+
+  if (!bookingRef){
+    document.getElementById('loading-state').textContent = 'Missing booking reference.';
+    notifyParent('error', { message: 'Missing booking reference.' });
+    return;
+  }
+  if (!getToken()){
+    document.getElementById('loading-state').textContent = 'Please log in to complete payment.';
+    notifyParent('error', { message: 'Please log in to complete payment.' });
+    if (!IS_EMBEDDED) setTimeout(function(){ location.href = 'login.html'; }, 1200);
+    return;
+  }
+
+  try {
+    const data = await apiPost('/api/payment-gateway/create-intent', { bookingRef });
+    paymentIntentId = data.paymentIntentId;
+    stripe = Stripe(data.publishableKey);
+
+    document.getElementById('pay-ref').textContent = bookingRef;
+    document.getElementById('pay-amount').textContent = fmtAmount(data.amount, data.currency);
+
+    elements = stripe.elements({
+      clientSecret: data.clientSecret,
+      appearance: {
+        theme: 'stripe',
+        variables: {
+          colorPrimary: '#3D8B37',
+          colorBackground: '#ffffff',
+          colorText: '#1A1D1A',
+          fontFamily: "'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif",
+          borderRadius: '10px'
+        }
+      }
+    });
+
+    addressElement = elements.create('address', {
+      mode: 'billing',
+      fields: { phone: 'always' }
+    });
+    const methodOrder = (data.paymentMethodTypes && data.paymentMethodTypes.length)
+      ? data.paymentMethodTypes
+      : ['card', 'link', 'us_bank_account', 'cashapp', 'amazon_pay'];
+    const paymentElement = elements.create('payment', {
+      layout: 'tabs',
+      paymentMethodOrder: methodOrder,
+      wallets: { applePay: 'auto', googlePay: 'auto', link: 'auto' }
+    });
+    paymentElementRef = paymentElement;
+
+    let paymentReady = false;
+    function maybeShowCheckout(){
+      if(!paymentReady) return;
+      document.getElementById('loading-state').style.display = 'none';
+      document.getElementById('checkout-form').style.display = 'block';
+    }
+
+    addressElement.mount('#address-element');
+    paymentElement.mount('#payment-element');
+    paymentElement.on('ready', function(){ paymentReady = true; maybeShowCheckout(); });
+    paymentElement.on('loaderror', function(e){
+      console.error('Payment element load error', e);
+      paymentReady = true;
+      maybeShowCheckout();
+    });
+
+    setTimeout(function(){
+      if(!paymentReady){ paymentReady = true; maybeShowCheckout(); }
+    }, 6000);
+
+    document.getElementById('pay-btn').addEventListener('click', handlePaySubmit);
+  } catch (err) {
+    document.getElementById('loading-state').textContent = err.message || 'Could not load payment form.';
+    notifyParent('error', { message: err.message });
+  }
+}
+
+async function handlePaySubmit(){
+  const btn = document.getElementById('pay-btn');
+  const msg = document.getElementById('pay-msg');
+  if(btn.disabled) return;
+  btn.disabled = true;
+  btn.textContent = 'Processing…';
+  msg.textContent = '';
+  msg.className = '';
+
+  try {
+    const billing = await buildStripeBillingPayload();
+    await apiPost('/api/payment-gateway/record-attempt', {
+      paymentIntentId,
+      paymentMethodType: null,
+      billing
+    });
+  } catch (err) {
+    console.error('record-attempt failed (non-blocking):', err.message);
+  }
+
+  const returnUrl = location.origin + location.pathname + '?ref=' + encodeURIComponent(bookingRef) +
+    '&embedded=1';
+  const { error } = await stripe.confirmPayment({
+    elements,
+    confirmParams: { return_url: returnUrl },
+    redirect: 'if_required'
+  });
+
+  if (error) {
+    msg.textContent = error.message || 'Payment failed. Please try another method.';
+    msg.className = 'err';
+    btn.disabled = false;
+    btn.textContent = 'Pay Now';
+    notifyParent('failed', { message: error.message });
+    return;
+  }
+
+  try {
+    const billing = await buildStripeBillingPayload();
+    await apiPost('/api/payment-gateway/record-attempt', {
+      paymentIntentId,
+      paymentMethodType: null,
+      billing
+    });
+  } catch (err) {
+    console.error('post-success record-attempt failed (non-blocking):', err.message);
+  }
+
+  msg.textContent = '✓ Payment successful!';
+  msg.className = 'ok';
+  btn.style.display = 'none';
+  setTimeout(finishSuccess, 600);
+}
+
+init();
+</script>
+</body>
+</html>

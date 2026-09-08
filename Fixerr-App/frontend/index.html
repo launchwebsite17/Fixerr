@@ -1,0 +1,356 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Home – Fixerr</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="mobile.css">
+<!-- PAGE-SPECIFIC OVERRIDE for index.html:
+     - body uses --bg (white) instead of the shared --bg2.
+     - .section-tag/.section-title/.section-pad use a bigger, punchier
+       scale here than the shared styles.css defaults (this is the
+       homepage hero, other pages use the smaller shared sizing).
+     - .home-svc-card and friends: the homepage "browse by service"
+       image-card grid is unique to this page. -->
+<style>
+body{background:var(--bg);}
+.section-tag{font-size:0.85rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;}
+.section-title{font-size:clamp(2.1rem,3.5vw,3.2rem);font-weight:800;line-height:1.1;letter-spacing:-0.5px;margin-bottom:0.75rem;color:var(--text);}
+.section-pad{padding:3.25rem 0;}
+.home-svc-card{display:block;text-decoration:none;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all 0.2s;color:var(--text);}
+.home-svc-card:hover{border-color:var(--accent);box-shadow:0 6px 24px rgba(61,139,55,0.14);transform:translateY(-3px);}
+.home-svc-card img{width:100%;height:160px;object-fit:cover;display:block;}
+.home-svc-label{font-weight:700;font-size:0.82rem;padding:0.45rem 0.6rem 0.1rem;line-height:1.2;}
+.home-svc-price{font-size:0.75rem;color:var(--accent);font-weight:700;padding:0 0.6rem 0.5rem;}
+@media(max-width:768px){.services-grid[style]{grid-template-columns:repeat(3,1fr)!important;}.home-svc-card img{height:100px;}}
+@media(max-width:480px){.services-grid[style]{grid-template-columns:repeat(2,1fr)!important;}}
+</style>
+</head><body>
+<div id="site-header"></div>
+<div style="background:linear-gradient(155deg,#F0FBF0,#fff 60%,#F8FAF7);">
+  <div style="max-width:900px;margin:0 auto;padding:4.5rem 2rem 3.5rem;text-align:center;">
+    <p style="font-size:0.9rem;font-weight:700;color:var(--accent);margin-bottom:0.65rem;letter-spacing:1px;text-transform:uppercase;">Trusted Home Services · US &amp; India</p>
+    <h1 style="font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:800;line-height:1.1;letter-spacing:-1.5px;margin-bottom:1rem;">Home services,<br><span style="color:var(--accent);">trusted professionals,</span><br>at your doorstep</h1>
+    <p style="color:var(--muted);font-size:1.05rem;max-width:540px;margin:0 auto 2rem;line-height:1.8;">Verified, background-checked professionals for plumbing, electrical, cleaning &amp; more. We call you within 2 hours to confirm. Pay only after the job is done — no upfront fees, ever.</p>
+    <div style="display:flex;gap:0.85rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.25rem;">
+      <a href="booking.html" class="btn-primary btn-lg" style="padding:0.85rem 2rem;font-size:1rem;">Book a Service →</a>
+      <a href="register-pro.html" class="btn-outline btn-lg" style="padding:0.85rem 2rem;font-size:1rem;">Join as Professional</a>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:2rem;">🛡️ <strong>Fixerr Happiness Guarantee</strong> — Not satisfied with the job? We'll make it right at no extra cost.</p>
+    <!-- Services above fold - most important for first impression -->
+    <div style="max-width:960px;margin:0 auto;width:100%;">
+      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;text-align:center;">Starting prices shown — select your city for local rates</p>
+      <div class="services-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;max-width:900px;margin:0 auto;width:100%;">
+        <a href="booking.html?s=plumbing" class="home-svc-card"><img src="https://images.pexels.com/photos/6419128/pexels-photo-6419128.jpeg?w=400&h=200&fit=crop" alt="Plumbing" loading="lazy"><div class="home-svc-label">Plumbing</div><div class="home-svc-price svc-price" data-price-inr="₹399" data-price-usd="$49">$49</div></a>
+        <a href="booking.html?s=electrical" class="home-svc-card"><img src="https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?w=400&h=200&fit=crop" alt="Electrician" loading="lazy"><div class="home-svc-label">Electrician</div><div class="home-svc-price svc-price" data-price-inr="₹449" data-price-usd="$59">$59</div></a>
+        <a href="booking.html?s=cleaning" class="home-svc-card"><img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400&h=200&fit=crop" alt="Home Cleaning" loading="lazy"><div class="home-svc-label">Home Cleaning</div><div class="home-svc-price svc-price" data-price-inr="₹599" data-price-usd="$79">$79</div></a>
+        <a href="booking.html?s=appliance" class="home-svc-card"><img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=400&h=200&fit=crop&q=80" alt="Appliance Repair" loading="lazy"><div class="home-svc-label">Appliance Repair</div><div class="home-svc-price svc-price" data-price-inr="₹499" data-price-usd="$69">$69</div></a>
+        <a href="booking.html?s=handyman" class="home-svc-card"><img src="https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?w=400&h=200&fit=crop" alt="Handyman" loading="lazy"><div class="home-svc-label">Handyman</div><div class="home-svc-price svc-price" data-price-inr="₹449" data-price-usd="$59">$59</div></a>
+        <a href="booking.html?s=painting" class="home-svc-card"><img src="https://images.pexels.com/photos/1669754/pexels-photo-1669754.jpeg?w=400&h=200&fit=crop" alt="Painting" loading="lazy"><div class="home-svc-label">Painting</div><div class="home-svc-price svc-price" data-price-inr="₹599" data-price-usd="$79">$79</div></a>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1.5rem;max-width:900px;margin:2rem auto 0;padding:1.25rem 1.5rem;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <div style="text-align:center;"><div id="stat-jobs" style="font-size:1.6rem;font-weight:800;color:var(--accent);">—</div><div style="font-size:0.8rem;color:var(--muted);margin-top:0.2rem;">Total Services Rendered</div></div>
+      <div style="text-align:center;"><div id="stat-customers" style="font-size:1.6rem;font-weight:800;color:var(--accent);">—</div><div style="font-size:0.8rem;color:var(--muted);margin-top:0.2rem;">Total Customers</div></div>
+      <div style="text-align:center;"><div id="stat-pros" style="font-size:1.6rem;font-weight:800;color:var(--accent);">—</div><div style="font-size:0.8rem;color:var(--muted);margin-top:0.2rem;">Total Professionals</div></div>
+      <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:800;color:var(--accent);">2hrs</div><div style="font-size:0.8rem;color:var(--muted);margin-top:0.2rem;">Callback</div></div>
+      <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:800;color:var(--accent);">Free</div><div style="font-size:0.8rem;color:var(--muted);margin-top:0.2rem;">No Upfront Fee</div></div>
+    </div>
+  </div>
+</div>
+<section class="section-pad" style="padding:3.25rem 0;background:var(--bg2);"><div class="container">
+  <div class="section-tag">Why Fixerr</div><h2 style="font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:800;line-height:1.1;letter-spacing:-1.5px;margin-bottom:0.75rem;color:var(--text);">Built differently,<br>on purpose</h2>
+  <p style="color:var(--muted);margin-bottom:1.75rem;max-width:620px;">Most service marketplaces sell your phone number to several pros at once, so you get flooded with calls before you've even decided. We do it the other way around.</p>
+  <div class="why-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;">
+    <div class="card" style="padding:1.5rem;min-height:160px;">
+      <div style="font-size:1.6rem;margin-bottom:0.6rem;">📞</div>
+      <div style="font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;">One human call, not five sales pitches</div>
+      <div style="font-size:0.82rem;color:var(--muted);line-height:1.6;">No bidding wars, no being chased by competing pros. Our team calls you once, confirms everything, and you're done deciding.</div>
+    </div>
+    <div class="card" style="padding:1.5rem;min-height:160px;">
+      <div style="font-size:1.6rem;margin-bottom:0.6rem;">💰</div>
+      <div style="font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;">Zero upfront payment, ever</div>
+      <div style="font-size:0.82rem;color:var(--muted);line-height:1.6;">You don't pay a deposit, a booking fee, or anything until the work is actually done and you're happy with it.</div>
+    </div>
+    <div class="card" style="padding:1.5rem;min-height:160px;">
+      <div style="font-size:1.6rem;margin-bottom:0.6rem;">🤝</div>
+      <div style="font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;">Fair to professionals too</div>
+      <div style="font-size:0.82rem;color:var(--muted);line-height:1.6;">Pros aren't charged just to be considered for a job. They only pay a small fee once work is actually completed and paid for.</div>
+    </div>
+  </div>
+</div></section>
+
+<section id="all-services" class="section-pad" style="padding:3.25rem 0;background:var(--bg2);"><div class="container">
+  <div class="section-tag">All Services</div>
+  <h2 class="section-title">What do you need?</h2>
+  <p style="color:var(--muted);font-size:0.95rem;margin-bottom:1.5rem;">All 12 categories — <span data-cf>$</span> prices based on your city</p>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;" class="all-svc-grid">
+    <a href="booking.html?s=plumbing" class="home-svc-card"><img src="https://images.pexels.com/photos/6419128/pexels-photo-6419128.jpeg?w=400&h=200&fit=crop" alt="Plumbing" loading="lazy"><div class="home-svc-label">Plumbing</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Leak repairs, drain unblocking, pipe fitting</div><div class="home-svc-price svc-price" data-price-inr="₹399" data-price-usd="$49">$49</div></a>
+    <a href="booking.html?s=electrical" class="home-svc-card"><img src="https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?w=400&h=200&fit=crop" alt="Electrician" loading="lazy"><div class="home-svc-label">Electrician</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Wiring, switchboard, EV charger install</div><div class="home-svc-price svc-price" data-price-inr="₹449" data-price-usd="$59">$59</div></a>
+    <a href="booking.html?s=cleaning" class="home-svc-card"><img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=200&fit=crop&q=80" alt="Cleaning" loading="lazy"><div class="home-svc-label">Home Cleaning</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Deep clean, sofa & carpet, kitchen & bathroom</div><div class="home-svc-price svc-price" data-price-inr="₹599" data-price-usd="$79">$79</div></a>
+    <a href="booking.html?s=appliance" class="home-svc-card"><img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=400&h=200&fit=crop&q=80" alt="Appliance" loading="lazy"><div class="home-svc-label">Appliance Repair</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Washing machine, fridge, AC, microwave</div><div class="home-svc-price svc-price" data-price-inr="₹499" data-price-usd="$69">$69</div></a>
+    <a href="booking.html?s=handyman" class="home-svc-card"><img src="https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?w=400&h=200&fit=crop" alt="Handyman" loading="lazy"><div class="home-svc-label">Handyman</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Furniture assembly, TV mounting, repairs</div><div class="home-svc-price svc-price" data-price-inr="₹449" data-price-usd="$59">$59</div></a>
+    <a href="booking.html?s=painting" class="home-svc-card"><img src="https://images.pexels.com/photos/1669754/pexels-photo-1669754.jpeg?w=400&h=200&fit=crop" alt="Painting" loading="lazy"><div class="home-svc-label">Painting</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Interior, exterior, accent walls, waterproofing</div><div class="home-svc-price svc-price" data-price-inr="₹599" data-price-usd="$79">$79</div></a>
+    <a href="booking.html?s=lawn" class="home-svc-card"><img src="https://images.pexels.com/photos/1453499/pexels-photo-1453499.jpeg?auto=compress&w=400&h=200&fit=crop" alt="Lawn" loading="lazy"><div class="home-svc-label">Lawn & Garden</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Mowing, landscaping, tree trimming</div><div class="home-svc-price svc-price" data-price-inr="₹349" data-price-usd="$49">$49</div></a>
+    <a href="booking.html?s=movers" class="home-svc-card"><img src="https://images.pexels.com/photos/4246120/pexels-photo-4246120.jpeg?w=400&h=200&fit=crop" alt="Movers" loading="lazy"><div class="home-svc-label">Movers</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Home shifting, relocation, packing</div><div class="home-svc-price svc-price" data-price-inr="₹1199" data-price-usd="$149">$149</div></a>
+    <a href="booking.html?s=beauty" class="home-svc-card"><img src="https://images.pexels.com/photos/2253832/pexels-photo-2253832.jpeg?auto=compress&w=400&h=200&fit=crop" alt="Beauty" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=180&fit=crop'"><div class="home-svc-label">Beauty & Spa</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Haircut, waxing, facial, massage at home</div><div class="home-svc-price svc-price" data-price-inr="₹299" data-price-usd="$39">$39</div></a>
+    <a href="booking.html?s=tutoring" class="home-svc-card"><img src="https://images.pexels.com/photos/301926/pexels-photo-301926.jpeg?w=400&h=200&fit=crop" alt="Tutoring" loading="lazy"><div class="home-svc-label">Tutoring</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">All subjects, IIT/JEE, NEET, coding</div><div class="home-svc-price svc-price" data-price-inr="₹249" data-price-usd="$30">$30</div></a>
+    <a href="booking.html?s=photography" class="home-svc-card"><img src="https://images.pexels.com/photos/1983037/pexels-photo-1983037.jpeg?w=400&h=200&fit=crop" alt="Photography" loading="lazy"><div class="home-svc-label">Photography</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Wedding, portrait, product, real estate</div><div class="home-svc-price svc-price" data-price-inr="₹799" data-price-usd="$99">$99</div></a>
+    <a href="booking.html?s=events" class="home-svc-card"><img src="https://images.pexels.com/photos/1857157/pexels-photo-1857157.jpeg?w=400&h=200&fit=crop" alt="Events" loading="lazy"><div class="home-svc-label">Events</div><div style="font-size:0.75rem;color:var(--muted);padding:0 0.6rem 0.3rem;">Party planning, decoration, event setup</div><div class="home-svc-price svc-price" data-price-inr="₹1199" data-price-usd="$149">$149</div></a>
+  </div>
+  <!-- Custom request card -->
+  <div style="margin-top:1rem;background:var(--accent-light);border:2px dashed var(--border-accent);border-radius:var(--radius);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem;">
+    <div style="font-size:2rem;">➕</div>
+    <div style="flex:1;">
+      <div style="font-weight:700;font-size:1rem;color:var(--accent);margin-bottom:0.2rem;">Don't see your service?</div>
+      <div style="font-size:0.85rem;color:#1F5020;">Describe any service — our team finds the right professional within 24 hours</div>
+    </div>
+    <a href="booking.html?s=other" class="btn-primary" style="white-space:nowrap;">Get Custom Quote →</a>
+  </div>
+</div></section>
+<section class="section-pad" style="padding:3.25rem 0;background:var(--bg2);"><div class="container">
+  <div class="section-tag">Customer Stories</div>
+  <h2 class="section-title">Loved by homeowners everywhere</h2>
+  <p style="color:var(--muted);margin-bottom:2rem;max-width:540px;">Real reviews from verified customers after service completion.</p>
+  <div id="featured-reviews-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;">
+    <!-- Populated dynamically from /api/reviews/featured -->
+    <div class="card" style="padding:1.5rem;"><div style="color:#F59E0B;font-size:1.1rem;margin-bottom:0.4rem;">★★★★★</div><p style="font-size:0.9rem;color:var(--text);margin-bottom:1rem;line-height:1.6;">&quot;Exceeded expectations! Arrived on time and solved my plumbing issue quickly.&quot;</p><div style="font-weight:700;font-size:0.85rem;">Rahul M. <span style="font-weight:400;color:var(--muted);font-size:0.75rem;">· Bengaluru</span></div></div>
+    <div class="card" style="padding:1.5rem;"><div style="color:#F59E0B;font-size:1.1rem;margin-bottom:0.4rem;">★★★★★</div><p style="font-size:0.9rem;color:var(--text);margin-bottom:1rem;line-height:1.6;">&quot;Fantastic electrician. Clean work, verified credentials, very polite.&quot;</p><div style="font-weight:700;font-size:0.85rem;">Sarah K. <span style="font-weight:400;color:var(--muted);font-size:0.75rem;">· New York</span></div></div>
+    <div class="card" style="padding:1.5rem;"><div style="color:#F59E0B;font-size:1.1rem;margin-bottom:0.4rem;">★★★★★</div><p style="font-size:0.9rem;color:var(--text);margin-bottom:1rem;line-height:1.6;">&quot;Deep cleaning team was super efficient. House looks brand new!&quot;</p><div style="font-weight:700;font-size:0.85rem;">Priya S. <span style="font-weight:400;color:var(--muted);font-size:0.75rem;">· Mumbai</span></div></div>
+  </div>
+</div></section>
+<div id="site-footer"></div>
+<script src="nav.js"></script>
+<script>
+const _layoutReady = initSharedLayout();
+
+// PAGE-SPECIFIC OVERRIDE: index.html customizes two shared nav.js behaviors.
+// Re-declaring them here (after nav.js has already run) replaces the shared
+// version for this page only — everywhere else keeps the nav.js version.
+
+// (1) also paints the .svc-price elements used by the homepage service cards.
+FX.paint = function(){
+  document.querySelectorAll("[data-p]").forEach(el=>{const s=el.getAttribute("data-p"),t=el.getAttribute("data-pt")||"b";el.textContent=this.fmt(this.price(s,t));});
+  document.querySelectorAll("[data-cf]").forEach(el=>el.textContent=this.symbol+" "+this.currency);
+  document.querySelectorAll(".svc-price").forEach(el=>{el.textContent=this.country==="IN"?(el.dataset.priceInr||""):(el.dataset.priceUsd||"");});
+  document.querySelectorAll("[data-cs]").forEach(el=>el.textContent=this.symbol);
+  document.querySelectorAll("[data-cn]").forEach(el=>el.textContent=this.city?this.city.n+(this.city.st?", "+this.city.st:""):"Select city");
+  const isIN=this.country==="IN";
+  document.querySelectorAll("[data-ph]").forEach(el=>el.placeholder=isIN?"+91 98765 43210":"+1 (555) 000-0000");
+  document.querySelectorAll("[data-zip-lbl]").forEach(el=>el.textContent=isIN?"PIN code (optional)":"ZIP code (optional)");
+  document.querySelectorAll("[data-zip-inp]").forEach(el=>{el.placeholder=isIN?"6-digit PIN":"5-digit ZIP";});
+  document.querySelectorAll("[data-street-inp]").forEach(el=>el.placeholder=isIN?"e.g. 124 MG Road, Apt 4B, Near Metro":"e.g. 124 Main St, Apt 4B");
+  document.querySelectorAll("[data-city-inp]").forEach(el=>el.placeholder=isIN?"e.g. Bengaluru":"e.g. New York");
+  const upi=document.getElementById("pay-upi");if(upi)upi.style.display=isIN?"flex":"none";
+  const navzip=document.getElementById("nav-zip");if(navzip){navzip.style.display=FX.city?"inline-block":"none";navzip.placeholder=isIN?"PIN":"ZIP";navzip.maxLength=isIN?6:10;}
+  const zel=document.getElementById("pay-zelle");if(zel)zel.style.display=isIN?"none":"flex";
+  const tier=document.getElementById("ad-tier");
+  if(tier){tier.innerHTML=isIN?`<option value="starter">Starter — Single Service Page (₹4,999/mo)</option><option value="growth">Growth — Multi-Category + Homepage (₹14,999/mo)</option><option value="enterprise">Enterprise — Full Platform Presence (₹39,999/mo)</option><option value="custom">Not sure / Custom needs</option>`:`<option value="starter">Starter — Single Service Page ($79/mo)</option><option value="growth">Growth — Multi-Category + Homepage ($199/mo)</option><option value="enterprise">Enterprise — Full Platform Presence ($499/mo)</option><option value="custom">Not sure / Custom needs</option>`;}
+  loadFeaturedReviews();
+};
+
+// Customer Stories: pulled from /api/reviews/featured (top-rated, most recent, DB-backed).
+// Re-fetched whenever FX.paint() runs with a different country/city than last time — i.e.
+// whenever the visitor picks or changes their location in the nav — so the section reflects
+// reviews from bookings made in that location once one is selected.
+let _reviewsFetchKey = null;
+function loadFeaturedReviews(){
+  const country = FX.country || "";
+  const city = FX.city ? FX.city.n : "";
+  const key = country + "|" + city;
+  if (_reviewsFetchKey === key) return;
+  _reviewsFetchKey = key;
+  const qs = new URLSearchParams();
+  if (country) qs.set("country", country);
+  if (city) qs.set("city", city);
+  fetch('/api/reviews/featured?' + qs.toString())
+    .then(r => r.json())
+    .then(renderFeaturedReviews)
+    .catch(()=>{});
+}
+function renderFeaturedReviews(reviews){
+  const grid = document.getElementById('featured-reviews-grid');
+  if(!grid || !reviews || !reviews.length) return;
+  grid.innerHTML = reviews.map(r => {
+    const name = (r.customer_first || 'Customer') + (r.customer_last ? ' ' + r.customer_last[0] + '.' : '');
+    const reviewedOn = r.created ? new Date(r.created).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}) : '';
+    return `
+    <div class="card" style="padding:1.5rem;">
+      <div style="color:#F59E0B;font-size:1.1rem;margin-bottom:0.4rem;">${'★'.repeat(r.rating || 5)}${'☆'.repeat(5 - (r.rating || 5))}</div>
+      <p style="font-size:0.9rem;color:var(--text);margin-bottom:1rem;line-height:1.6;">"${r.comment || 'Great service!'}"</p>
+      <div style="font-weight:700;font-size:0.85rem;">
+        ${name}
+        <span style="font-weight:400;color:var(--muted);font-size:0.75rem;">· ${r.customer_city || 'Verified User'}</span>
+      </div>
+      ${reviewedOn ? `<div style="font-size:0.72rem;color:var(--muted);margin-top:0.6rem;">Reviewed on: ${reviewedOn}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// (2) fresh visitors with no saved city get their currency auto-detected
+// (timezone/locale, then IP-refined) instead of nav.js hard-coding USD.
+function initNav(){
+  const s=sessionStorage.getItem("fx_c") || localStorage.getItem("fx_c");
+  const u=API.user();
+  let cityObj=null;
+  if(s){ try{ cityObj=JSON.parse(s); }catch(e){} }
+  if(!cityObj && u && u.country){
+    const userCityName=u.city || (u.country==="IN"?"Bengaluru":"New York");
+    cityObj=window._CITIES.find(c=>c.c===u.country && c.n.toLowerCase()===userCityName.toLowerCase()) ||
+            window._CITIES.find(c=>c.c===u.country);
+  }
+  if(cityObj){
+    FX.city=cityObj;
+    FX.country=cityObj.c;
+    FX.currency=cityObj.cur;
+    FX.symbol=cityObj.sym;
+    FX.flag=cityObj.f;
+    sessionStorage.setItem("fx_c", JSON.stringify(cityObj));
+    localStorage.setItem("fx_c", JSON.stringify(cityObj));
+    lockCity(cityObj);
+    FX.paint();
+  } else {
+    FX.city = null;
+    FX.detectCurrency();
+    const ui=document.getElementById("city-select-ui");
+    const ld=document.getElementById("city-locked-display");
+    const cb=document.getElementById("city-change-btn");
+    if(ui) ui.style.display="flex";
+    if(ld) ld.style.display="none";
+    if(cb) cb.style.display="none";
+    FX.paint();
+    FX.detectCurrencyByIP();
+  }
+  updateNav();
+}
+
+document.addEventListener("DOMContentLoaded",async()=>{await _layoutReady;
+  // Load public stats
+  fetch('/api/stats/public').then(r=>r.json()).then(s=>{
+    const c=document.getElementById('stat-customers');
+    const p=document.getElementById('stat-pros');
+    const j=document.getElementById('stat-jobs');
+    if(c)c.textContent=s.customers>0?s.customers+'+':'0';
+    if(p)p.textContent=s.pros>0?s.pros+'+':'0';
+    if(j)j.textContent=s.jobs>0?s.jobs+'+':'0';
+  }).catch(()=>{});
+
+});
+
+function showCityPrompt(){
+  if(document.getElementById('city-prompt-modal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'city-prompt-modal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem;';
+  modal.innerHTML=`
+    <div style="background:#fff;border-radius:var(--radius);max-width:460px;width:100%;padding:2rem;box-shadow:0 24px 64px rgba(0,0,0,0.18);">
+      <div style="text-align:center;margin-bottom:1.25rem;">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">📍</div>
+        <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:0.4rem;">Where do you need a service?</h2>
+        <p style="color:var(--muted);font-size:0.87rem;">Select your city to see local professionals, accurate pricing, and available services in your area.</p>
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:0.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:0.4rem;">SELECT COUNTRY</label>
+        <select id="cp-country" style="width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.6rem 0.85rem;font-size:0.9rem;margin-bottom:0.75rem;" name="cp-country" aria-label="Cp country">
+          <option value="US">United States</option>
+          <option value="IN">India</option>
+        </select>
+        <label style="font-size:0.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:0.4rem;">SELECT CITY</label>
+        <div style="position:relative;">
+          <input id="cp-city-inp" type="text" placeholder="Type your city..." autocomplete="off"
+            style="width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.6rem 0.85rem;font-size:0.9rem;box-sizing:border-box;" name="cp-city-inp" aria-label="Type your city...">
+          <div id="cp-city-dd" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);max-height:200px;overflow-y:auto;z-index:10;display:none;box-shadow:var(--shadow-lg);"></div>
+        </div>
+      </div>
+      <button onclick="skipCityPrompt()" style="width:100%;background:transparent;border:none;color:var(--muted);font-size:0.8rem;cursor:pointer;padding:0.5rem;text-decoration:underline;">Skip for now — browse all services</button>
+    </div>`;
+  document.body.appendChild(modal);
+
+  // Wire up city search
+  const CITIES = window._CITIES||[];
+  const inp = document.getElementById('cp-city-inp');
+  const dd = document.getElementById('cp-city-dd');
+  const countryEl = document.getElementById('cp-country');
+
+  window._promptMatches = [];
+  inp.addEventListener('input', ()=>{
+    const q = inp.value.toLowerCase();
+    const country = countryEl.value;
+    if(q.length < 1){dd.style.display='none';return;}
+    window._promptMatches = CITIES.filter(c=>c.c===country&&(c.n.toLowerCase().includes(q)||(c.st||'').toLowerCase().includes(q))).slice(0,8);
+    if(!window._promptMatches.length){dd.style.display='none';return;}
+    dd.innerHTML = window._promptMatches.map((c,i)=>`<div onclick="selectCityByIndex(${i})" style="padding:0.6rem 0.85rem;cursor:pointer;font-size:0.87rem;border-bottom:1px solid var(--border);">${c.n}${c.st?', '+c.st:''} <span style="color:var(--muted);font-size:0.75rem;">${c.c==='IN'?'India':'US'}</span></div>`).join('');
+    dd.style.display='block';
+  });
+
+  countryEl.addEventListener('change',()=>{inp.value='';dd.style.display='none';});
+}
+
+function selectCityByIndex(i){
+  const city = window._promptMatches&&window._promptMatches[i];
+  if(!city)return;
+  FX.set(city);
+  const modal=document.getElementById('city-prompt-modal');
+  if(modal)modal.remove();
+  updateNav();
+}
+function selectCityFromPrompt(cityJson){
+  try{
+    const city = JSON.parse(cityJson);
+    FX.set(city);
+    const modal = document.getElementById('city-prompt-modal');
+    if(modal) modal.remove();
+    // Update nav
+    updateNav();
+  }catch(e){}
+}
+
+function skipCityPrompt(){
+  const modal = document.getElementById('city-prompt-modal');
+  if(modal) modal.remove();
+  // Mark as seen so it doesn't show again this session
+  sessionStorage.setItem('city_prompt_shown','1');
+}
+
+// ── MOBILE NAV ──────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function(){
+  fetch('/api/stats/public')
+    .then(res => res.json())
+    .then(data => {
+      if(document.getElementById('stat-jobs')) document.getElementById('stat-jobs').innerText = data.jobs || 0;
+      if(document.getElementById('stat-customers')) document.getElementById('stat-customers').innerText = data.customers || 0;
+      if(document.getElementById('stat-pros')) document.getElementById('stat-pros').innerText = data.pros || 0;
+    }).catch(()=>{});
+  // Customer Stories are loaded by loadFeaturedReviews() (see FX.paint override above),
+  // which fires as soon as FX resolves the visitor's country/city.
+});
+
+</script>
+<script>
+// Browse-services back button: shown only when the visitor arrived at the All Services section
+// (URL hash #all-services, e.g. from the customer "Browse Services" link) or via the
+// Professional dashboard "View Site" button (?back=pro). It returns to the right dashboard.
+(function(){
+  var params = new URLSearchParams(location.search);
+  var fromPro = params.get('back') === 'pro';
+  var atServices = location.hash === '#all-services';
+  if (!fromPro && !atServices) return;
+  var target = fromPro ? 'dashboard-pro.html' : (function(){
+    try { var u = JSON.parse(localStorage.getItem('fx_usr') || 'null');
+      return u && u.role === 'professional' ? 'dashboard-pro.html'
+           : u && u.role === 'admin' ? 'fixerr-owner-0si7erbb2ctq.html'
+           : 'dashboard.html';
+    } catch(e){ return 'dashboard.html'; }
+  })();
+  var btn = document.createElement('a');
+  btn.href = target;
+  btn.setAttribute('aria-label', 'Back to Dashboard');
+  btn.innerHTML = '← Back to Dashboard';
+  btn.style.cssText = 'position:fixed;top:78px;left:16px;z-index:900;background:var(--accent,#3D8B37);color:#fff;padding:0.55rem 1.15rem;border-radius:50px;font-weight:700;font-size:0.85rem;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,0.2);display:inline-flex;align-items:center;gap:0.4rem;';
+  document.body.appendChild(btn);
+})();
+</script></body></html>
