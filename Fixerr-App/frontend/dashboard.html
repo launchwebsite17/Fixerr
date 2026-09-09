@@ -1534,6 +1534,11 @@ window.addEventListener('message', function(e){
   const billCard = document.getElementById('payment-bill-card');
 
   if(e.data.status === 'success'){
+    // Same "Confirming your payment…" overlay used for the Razorpay flow. The Stripe iframe has
+    // already confirmed the charge with Stripe itself by this point, but without this the screen
+    // jumped straight from the tiny iframe to the result card with no visible transition — easy
+    // to mistake for the click not having done anything. Kept up while we refresh the booking list.
+    showPaymentConfirmOverlay();
     billCard.style.display = 'none';
     iframeCard.style.display = 'none';
     resultCard.style.display = 'block';
@@ -1543,7 +1548,7 @@ window.addEventListener('message', function(e){
       '<div style="color:var(--muted);font-size:0.88rem;margin-bottom:1.25rem;">Booking ' + (e.data.bookingRef||'') + ' has been paid. A receipt has been emailed to you.</div>' +
       '<button onclick="show(\'bookings\')" class="btn-primary btn-sm">← Back to My Bookings</button>';
     toast('Payment successful!');
-    loadData();
+    loadData().finally(hidePaymentConfirmOverlay);
   } else if(e.data.status === 'failed' || e.data.status === 'error'){
     toast(e.data.message || 'Payment could not be completed.', 'err');
   }

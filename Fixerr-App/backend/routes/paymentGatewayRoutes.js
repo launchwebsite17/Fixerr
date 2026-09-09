@@ -6,6 +6,7 @@ const { auth } = require('../middleware/auth');
 
 router.get('/payment-gateway/bill-preview/:bookingRef', auth, paymentGatewayController.getBillPreview);
 router.post('/payment-gateway/create-intent', auth, paymentGatewayController.createIntent);
+router.post('/payment-gateway/confirm-intent', auth, paymentGatewayController.confirmIntent);
 router.post('/payment-gateway/create-order', auth, paymentGatewayController.createOrder);
 router.post('/payment-gateway/verify-payment', auth, paymentGatewayController.verifyPayment);
 router.post('/payment-gateway/record-razorpay-failure', auth, paymentGatewayController.recordRazorpayFailure);

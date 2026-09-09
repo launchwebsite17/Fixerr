@@ -271,6 +271,21 @@ async function handlePaySubmit(){
     console.error('post-success record-attempt failed (non-blocking):', err.message);
   }
 
+  // Stripe has confirmed the charge at this point, but the booking itself isn't marked paid
+  // until something updates the database — normally the Stripe webhook, but that only reaches
+  // us if Stripe can deliver it (never true from localhost, and can lag in production). Confirm
+  // synchronously here so the dashboard shows "PAID" and hides the Pay button immediately,
+  // instead of only whenever (or if) the webhook shows up.
+  msg.textContent = 'Confirming payment…';
+  try {
+    await apiPost('/api/payment-gateway/confirm-intent', { bookingRef, paymentIntentId });
+  } catch (err) {
+    // The card was already charged by Stripe — telling the customer it "failed" here would be
+    // wrong and could prompt a double charge. Log it and still report success; the webhook (or
+    // an admin) can catch this up if it never lands.
+    console.error('confirm-intent failed (charge already succeeded at Stripe):', err.message);
+  }
+
   msg.textContent = '✓ Payment successful!';
   msg.className = 'ok';
   btn.style.display = 'none';
