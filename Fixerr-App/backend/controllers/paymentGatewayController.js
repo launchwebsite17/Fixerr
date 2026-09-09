@@ -224,6 +224,61 @@ exports.recordAttempt = async (req, res) => {
   }
 };
 
+// Called by payment-checkout.html right after stripe.confirmPayment() succeeds client-side.
+// The Stripe webhook (stripeWebhook below) is the system of record for marking a booking paid,
+// but it only reaches us if Stripe can actually deliver it to this server (unreachable from a
+// local/dev machine without a tunnel, and can simply be delayed in production) — without this,
+// the customer sees "Payment successful!" while the booking still shows "Not Paid" and the "Make
+// Payment" button stays enabled, since nothing else in the request updated the database. This
+// re-checks the PaymentIntent directly with Stripe and applies the same update the webhook would,
+// so the booking flips to paid immediately regardless of whether the webhook shows up at all.
+exports.confirmIntent = async (req, res) => {
+  try {
+    const { bookingRef, paymentIntentId } = req.body;
+    if (!bookingRef || !paymentIntentId) {
+      return res.status(400).json({ error: 'bookingRef and paymentIntentId are required.' });
+    }
+
+    const { booking, error } = await loadPayableBookingOrAnyStatus(bookingRef, req.user);
+    if (error) return res.status(error.status).json({ error: error.message });
+
+    // If the webhook already beat us here, don't send a second receipt email below.
+    const before = await gw.getPaymentStatus(bookingRef);
+    const alreadyCompleted = before && before.status === 'completed';
+
+    const full = await gw.stripe.paymentIntents.retrieve(paymentIntentId, { expand: ['latest_charge'] });
+    if (full.metadata?.bookingRef !== bookingRef) {
+      return res.status(400).json({ error: 'This payment does not match the given booking.' });
+    }
+
+    const outcome = await gw.recordPaymentOutcome(full);
+    if (!outcome.isSuccess) {
+      return res.status(400).json({ error: 'Payment was not successful.' });
+    }
+
+    if (!alreadyCompleted && booking?.customer_email) {
+      try {
+        const { subject, html } = EMAIL.paymentReceipt({
+          bookingRef: outcome.bookingRef,
+          customerName: booking.customer_name,
+          amount: outcome.amount,
+          currency: outcome.currency,
+          cardBrand: outcome.cardBrand,
+          cardLast4: outcome.cardLast4
+        });
+        await sendEmail(booking.customer_email, subject, html, 'payment_receipt');
+      } catch (emailErr) {
+        console.error('[paymentGateway] confirmIntent receipt email failed:', emailErr.message);
+      }
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[paymentGateway] confirmIntent error:', err.message);
+    res.status(500).json({ error: 'Could not confirm payment status.' });
+  }
+};
+
 exports.getSessionStatus = async (req, res) => {
   try {
     const sessionId = req.query.session_id;
@@ -307,11 +362,18 @@ exports.stripeWebhook = async (req, res) => {
         })().catch((emailErr) => console.error('[paymentGateway] Receipt email failed (payment itself still succeeded):', emailErr.message));
       }
     } else if (event.type === 'payment_intent.succeeded' || event.type === 'payment_intent.payment_failed') {
+      // The client's own confirm-intent call (paymentGatewayController.confirmIntent, fired right
+      // after stripe.confirmPayment() succeeds) usually beats this webhook to marking the booking
+      // paid — check first so a webhook that arrives afterward doesn't send a second receipt email.
+      const bookingRefFromIntent = event.data.object.metadata?.bookingRef;
+      const before = bookingRefFromIntent ? await gw.getPaymentStatus(bookingRefFromIntent) : null;
+      const alreadyCompleted = before && before.status === 'completed';
+
       // Re-retrieve with the charge expanded so card brand/last4/expiry are available.
       const full = await gw.stripe.paymentIntents.retrieve(event.data.object.id, { expand: ['latest_charge'] });
       const outcome = await gw.recordPaymentOutcome(full);
 
-      if (outcome.isSuccess && outcome.bookingRef) {
+      if (!alreadyCompleted && outcome.isSuccess && outcome.bookingRef) {
         (async () => {
           const bkRes = await query('SELECT customer_name, customer_email FROM requests WHERE ref=$1', [outcome.bookingRef]);
           const booking = bkRes.rows[0];

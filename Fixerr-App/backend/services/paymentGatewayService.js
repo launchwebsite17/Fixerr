@@ -5,6 +5,7 @@
 const Stripe = require('stripe');
 const env = require('../config/env');
 const { query } = require('../db');
+const { getInvoiceIfExists } = require('./invoiceService');
 
 const stripe = Stripe(env.STRIPE_SECRET_KEY);
 const GATEWAY_LABEL = 'Stripe-Elements';
@@ -60,6 +61,30 @@ async function saveBillingOnPayment(sessionId, session) {
       billing.state, billing.postal_code, billing.country, sessionId
     ]
   );
+}
+
+// Mirrors the same step in services/paymentService.js (the Razorpay path) — the dashboard's
+// bookings list reads its "PAID" badge from invoices.payment_status (COALESCE'd to 'notpaid' in
+// bookingController.js), not from requests.payment_method, so a successful Stripe payment must
+// update the invoice too or the UI silently keeps showing "Not Paid" even though the booking's
+// own payment_method was updated correctly. Invoices only exist once the pro marks the job
+// "Completed" (proController.js), so this only updates one if it's already there.
+async function markInvoicePaid(bookingRef) {
+  try {
+    const invoice = await getInvoiceIfExists(bookingRef);
+    if (!invoice) return;
+    const updated = await query(
+      `UPDATE invoices SET payment_method='online_paid', payment_status='paid' WHERE booking_ref=$1 RETURNING *`,
+      [bookingRef]
+    );
+    const inv = updated.rows[0] || invoice;
+    await query(
+      `UPDATE payments SET invoice_number=$1 WHERE booking_ref=$2 AND status='completed'`,
+      [inv.invoice_number, bookingRef]
+    );
+  } catch (err) {
+    console.error('[paymentGatewayService] markInvoicePaid error:', err.message);
+  }
 }
 
 async function cancelStaleCheckoutSessions(bookingRef) {
@@ -269,6 +294,7 @@ async function recordCheckoutSessionCompleted(session) {
   const bookingRef = fullSession.metadata?.bookingRef;
   if (isSuccess && bookingRef) {
     await query(`UPDATE requests SET payment_method='online_paid', updated_at=now() WHERE ref=$1`, [bookingRef]);
+    await markInvoicePaid(bookingRef);
     const payRow = await query('SELECT amount, currency FROM payments WHERE payment_id=$1', [fullSession.id]);
     return {
       isSuccess: true,
@@ -366,6 +392,7 @@ async function recordPaymentOutcome(paymentIntent) {
 
   if (isSuccess && bookingRef) {
     await query(`UPDATE requests SET payment_method='online_paid', updated_at=now() WHERE ref=$1`, [bookingRef]);
+    await markInvoicePaid(bookingRef);
     const payRow = await query(
       'SELECT amount, currency FROM payments WHERE booking_ref=$1 ORDER BY created_at DESC LIMIT 1',
       [bookingRef]
