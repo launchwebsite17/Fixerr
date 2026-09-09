@@ -1533,12 +1533,13 @@ window.addEventListener('message', function(e){
   const iframeCard = document.getElementById('payment-iframe-card');
   const billCard = document.getElementById('payment-bill-card');
 
-  if(e.data.status === 'success'){
-    // Same "Confirming your payment…" overlay used for the Razorpay flow. The Stripe iframe has
-    // already confirmed the charge with Stripe itself by this point, but without this the screen
-    // jumped straight from the tiny iframe to the result card with no visible transition — easy
-    // to mistake for the click not having done anything. Kept up while we refresh the booking list.
+  if(e.data.status === 'processing'){
+    // Sent by payment-checkout.html the instant the customer clicks Pay — i.e. right as the
+    // actual charge + our own confirm-intent call are in flight, which is the window we actually
+    // need to warn them not to refresh/close during. (Showing this only once we already know the
+    // outcome, as before, was too late to protect anything — by then the charge was done.)
     showPaymentConfirmOverlay();
+  } else if(e.data.status === 'success'){
     billCard.style.display = 'none';
     iframeCard.style.display = 'none';
     resultCard.style.display = 'block';
@@ -1550,6 +1551,7 @@ window.addEventListener('message', function(e){
     toast('Payment successful!');
     loadData().finally(hidePaymentConfirmOverlay);
   } else if(e.data.status === 'failed' || e.data.status === 'error'){
+    hidePaymentConfirmOverlay();
     toast(e.data.message || 'Payment could not be completed.', 'err');
   }
 });
