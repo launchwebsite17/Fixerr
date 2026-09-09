@@ -232,6 +232,11 @@ async function handlePaySubmit(){
   msg.textContent = '';
   msg.className = '';
 
+  // Tell the parent dashboard page right now, before the actual charge even starts — this is
+  // the window where a refresh/close could actually cause a problem (the customer might be
+  // charged with no confirmation ever reaching us), not after we already know the outcome.
+  notifyParent('processing', {});
+
   try {
     const billing = await buildStripeBillingPayload();
     await apiPost('/api/payment-gateway/record-attempt', {
