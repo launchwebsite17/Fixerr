@@ -120,7 +120,8 @@ exports.getBookings = async (req, res) => {
       return res.json(r.rows);
     }
     const r = await query(
-      `SELECT r.*, COALESCE(inv.payment_status, 'notpaid') as payment_status
+      `SELECT r.*, COALESCE(inv.payment_status, 'notpaid') as payment_status,
+         inv.payment_method as invoice_payment_method
        FROM requests r
        LEFT JOIN invoices inv ON inv.booking_ref = r.ref
        WHERE r.user_id=$1 ORDER BY r.created_at DESC`,

@@ -155,7 +155,9 @@ exports.updateCustomRequest = async (req, res) => {
 
 exports.getStats = async (req, res) => {
   try {
-    const users = await query('SELECT COUNT(*) FROM users');
+    // The dashboard card is "Total Registered Customers", so exclude professional and admin
+    // accounts that also live in the users table.
+    const users = await query("SELECT COUNT(*) FROM users WHERE role='customer'");
     const prosTotal = await query('SELECT COUNT(*) FROM pros');
     const prosPending = await query("SELECT COUNT(*) FROM pros WHERE status='pending'");
     const prosApproved = await query("SELECT COUNT(*) FROM pros WHERE status='approved'");
