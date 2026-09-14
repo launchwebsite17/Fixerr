@@ -413,17 +413,16 @@ async function verifyPayment(payload = {}) {
     }
   }
 
-  // ── Confirm booking & mark as paid online (canonical marker used by the UI) ──
+  // ── Confirm the booking, if it isn't already ──
+  // requests.payment_method is the customer's own selection at booking time (e.g. "cash") and is
+  // never touched here — invoices (below) is the single source of truth for "is this paid". A
+  // payment arriving before the pro has marked the job completed does still auto-confirm the
+  // booking, though, since that's a genuine status transition, not a payment marker.
   const bkStatusRes = await query('SELECT status, customer_name, customer_email FROM requests WHERE ref=$1', [bookingRef]);
   const bkRow = bkStatusRes.rows[0] || {};
-  if (bkRow.status === 'completed') {
+  if (bkRow.status !== 'completed') {
     await query(
-      `UPDATE requests SET payment_method='online_paid', updated_at=now() WHERE ref=$1`,
-      [bookingRef]
-    );
-  } else {
-    await query(
-      `UPDATE requests SET status='confirmed', payment_method='online_paid', updated_at=now() WHERE ref=$1`,
+      `UPDATE requests SET status='confirmed', updated_at=now() WHERE ref=$1`,
       [bookingRef]
     );
   }

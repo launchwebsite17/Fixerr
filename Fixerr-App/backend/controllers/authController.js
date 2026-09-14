@@ -30,15 +30,6 @@ exports.register = async (req, res) => {
     // Self-registration — the account is its own creator, referencing this same users.id.
     await query('UPDATE users SET created_by = $1 WHERE id = $1', [u.id]).catch(() => {});
 
-    if ((!lat || !lng) && (city || zip || address)) {
-      try {
-        const geo = await geocodePlace({ city, state, country, zip, street: address });
-        if (geo && geo.lat && geo.lng) {
-          await query('UPDATE users SET lat=$1, lng=$2 WHERE id=$3', [geo.lat, geo.lng, u.id]);
-        }
-      } catch (geoErr) {}
-    }
-
     const token = jwt.sign({ id: u.id, email, role: u.role }, env.JWT_SECRET, { expiresIn: '30d' });
     await query('INSERT INTO notifs (type,msg) VALUES ($1,$2)', [
       'welcome', `New ${u.role} registered: ${u.first} (${email})`
@@ -61,6 +52,22 @@ exports.register = async (req, res) => {
       cp_unique_id: u.cp_unique_id,
       welcome: `Welcome to Fixerr, ${u.first}! Your account is ready.`
     });
+
+    // Geocoding is optional profile enrichment. Run it only after sending the registration
+    // response so slow or throttled Nominatim requests (especially from hosted environments)
+    // cannot leave the customer form stuck on "Creating…".
+    if ((!lat || !lng) && (city || zip || address)) {
+      setImmediate(async () => {
+        try {
+          const geo = await geocodePlace({ city, state, country, zip, street: address });
+          if (geo && geo.lat && geo.lng) {
+            await query('UPDATE users SET lat=$1, lng=$2 WHERE id=$3', [geo.lat, geo.lng, u.id]);
+          }
+        } catch (geoErr) {
+          console.error('Post-registration geocoding failed:', geoErr.message);
+        }
+      });
+    }
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Registration failed. Please try again.' });

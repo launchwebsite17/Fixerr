@@ -1043,7 +1043,7 @@ async function loadBookings(){
             <div><span style="color:var(--muted);font-size:0.7rem;">FIXERR ESTIMATE 📝</span><br><strong style="color:var(--accent);font-size:1rem;">${sym}${b.estimate||0}</strong></div>
             <div><span style="color:var(--muted);font-size:0.7rem;">YOUR QUOTE 👨🏻‍💼</span><br><strong style="color:#1D4ED8;font-size:1rem;">${b.proposed_price?sym+Number(b.proposed_price).toFixed(2):'—'}</strong></div>
             <div><span style="color:var(--muted);font-size:0.7rem;">FINAL PRICE AGREED 🤝</span><br><strong style="color:var(--accent);font-size:1rem;">${b.confirmed_price?sym+b.confirmed_price:'—'}</strong></div>
-            <div><span style="color:var(--muted);font-size:0.7rem;">PAYMENT 💳</span><br>${b.payment_status==='paid'?'PAID':'Not Paid'}</div>
+            <div><span style="color:var(--muted);font-size:0.7rem;">PAYMENT 💳</span><br><span style="font-weight:600;">${b.payment_status==='paid'?'✅ PAID':'Not Paid'}</span></div>
           </div>
           ${b.access_notes?'<div style="margin-top:0.5rem;font-size:0.78rem;color:var(--muted);">📝 '+b.access_notes+'</div>':''}
         </div>
@@ -1052,7 +1052,7 @@ async function loadBookings(){
           ${canStart?'<button onclick="proUpdateBooking(\''+b.ref+'\',\'in_progress\')" style="background:#DBEAFE;color:#1D4ED8;border:none;border-radius:50px;padding:0.35rem 0.9rem;font-size:0.78rem;font-weight:600;cursor:pointer;">🔧 Mark Started</button>':''}
           ${canComplete?'<button onclick="proCompleteJob(\''+b.ref+'\')" style="background:#DCFCE7;color:#166534;border:none;border-radius:50px;padding:0.35rem 0.9rem;font-size:0.78rem;font-weight:600;cursor:pointer;">✅ Mark Complete</button>':''}
           <a href="chat.html" style="font-size:0.78rem;background:var(--bg3);color:var(--text);padding:0.35rem 0.9rem;border-radius:50px;text-decoration:none;font-weight:600;">💬 Message</a>
-          ${['confirmed','completed'].includes(b.status) || b.payment_method==='online_paid'?`<a href="#" onclick="FXUI.openInvoice('${b.ref}',event)" style="font-size:0.78rem;background:#F3F4F6;color:#374151;border:1px solid #D1D5DB;padding:0.35rem 0.85rem;border-radius:50px;text-decoration:none;font-weight:600;">📄 Invoice</a>`:''}
+          ${['confirmed','completed'].includes(b.status) || b.payment_status==='paid'?`<a href="#" onclick="FXUI.openInvoice('${b.ref}',event)" style="font-size:0.78rem;background:#F3F4F6;color:#374151;border:1px solid #D1D5DB;padding:0.35rem 0.85rem;border-radius:50px;text-decoration:none;font-weight:600;">📄 Invoice</a>`:''}
         </div>
       </div>`;
     };

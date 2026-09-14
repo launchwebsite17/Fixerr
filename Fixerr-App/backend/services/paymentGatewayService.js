@@ -293,7 +293,8 @@ async function recordCheckoutSessionCompleted(session) {
 
   const bookingRef = fullSession.metadata?.bookingRef;
   if (isSuccess && bookingRef) {
-    await query(`UPDATE requests SET payment_method='online_paid', updated_at=now() WHERE ref=$1`, [bookingRef]);
+    // requests.payment_method is the customer's own selection at booking time (e.g. "cash") and
+    // is never touched here — invoices is the single source of truth for "is this paid".
     await markInvoicePaid(bookingRef);
     const payRow = await query('SELECT amount, currency FROM payments WHERE payment_id=$1', [fullSession.id]);
     return {
@@ -391,7 +392,8 @@ async function recordPaymentOutcome(paymentIntent) {
   }
 
   if (isSuccess && bookingRef) {
-    await query(`UPDATE requests SET payment_method='online_paid', updated_at=now() WHERE ref=$1`, [bookingRef]);
+    // requests.payment_method is the customer's own selection at booking time (e.g. "cash") and
+    // is never touched here — invoices is the single source of truth for "is this paid".
     await markInvoicePaid(bookingRef);
     const payRow = await query(
       'SELECT amount, currency FROM payments WHERE booking_ref=$1 ORDER BY created_at DESC LIMIT 1',
