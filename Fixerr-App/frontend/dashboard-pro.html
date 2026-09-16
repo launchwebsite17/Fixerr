@@ -1031,6 +1031,7 @@ async function loadBookings(){
             <div style="font-weight:700;font-size:0.95rem;margin-top:0.3rem;">${(b.service_key||'').charAt(0).toUpperCase()+(b.service_key||'').slice(1)} ${b.sub_service?'→ '+b.sub_service:''}</div>
             <div style="font-size:0.8rem;color:var(--muted);">📅 ${b.preferred_date||'Flexible'} ${b.preferred_time?'at '+b.preferred_time:''}</div>
           </div>
+          ${b.status==='pending'?'<div style="align-self:center;background:#DBEAFE;color:#1D4ED8;border:1px solid #BFDBFE;border-radius:50px;padding:0.3rem 0.8rem;font-size:0.76rem;font-weight:700;white-space:nowrap;">🆕 New Request</div>':''}
           <div style="text-align:right;font-size:0.82rem;">
             <div style="font-size:0.68rem;font-weight:400;color:var(--muted2,#9CA3AF);margin-bottom:0.15rem;">CUSTOMER DETAILS</div>
             <div style="font-weight:600;">${b.customer_name||'Customer'}${b.customer_unique_id?'('+b.customer_unique_id+')':''}</div>
