@@ -69,16 +69,22 @@ exports.createBooking = async (req, res) => {
       } catch (e) {}
     }
 
-    await query(
+    const bookingResult = await query(
       `INSERT INTO requests (ref,user_id,service_key,sub_service,custom_desc,quantity,preferred_pro,preferred_pro_id,
          payment_method,preferred_date,preferred_time,address,city,state,zip,country,currency,
          customer_name,customer_phone,customer_email,access_notes,terms_agreed,estimate,commission,pro_earns,lat,lng,status,created_by)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,'pending',$28)`,
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,'pending',$28)
+       RETURNING *`,
       [reference, req.user?.id || null, serviceKey, subService || null, customDesc || null, qty, preferredPro || null,
        preferredProId || null, paymentMethod || 'cash', date || null, time || null, address || '', city || '', state || '',
        zip || '', country || 'US', currency || 'USD', name, phone, email || null, notes || null, true, est, comm, proEarns,
        geo?.lat || null, geo?.lng || null, req.user?.id || null]
     );
+    const booking = bookingResult.rows[0] || {
+      ref: reference, service_key: serviceKey, sub_service: subService, preferred_pro_id: preferredProId,
+      preferred_date: date, created_at: new Date(), customer_name: name, customer_phone: phone,
+      address, city, state, zip, country
+    };
 
     const custEmail = email || (req.user?.id ? (await query('SELECT email FROM users WHERE id=$1', [req.user.id]).catch(() => ({ rows: [] }))).rows[0]?.email : null);
     // Fire-and-forget — the booking is already saved above; don't delay the response on email.
@@ -87,6 +93,39 @@ exports.createBooking = async (req, res) => {
       sendEmail(custEmail, tpl.subject, tpl.html, 'booking_confirmed')
         .catch((mailErr) => console.error('Booking-confirmed email dispatch error (non-fatal):', mailErr.message));
     }
+
+    // Notify the customer's selected professional. The lookup is only for the recipient's
+    // account name/email; every booking detail in the message comes from the saved request row.
+    if (booking.preferred_pro_id) {
+      const proResult = await query(
+        `SELECT first, last, email FROM users
+         WHERE id=$1 AND role='professional'`,
+        [booking.preferred_pro_id]
+      ).catch(() => ({ rows: [] }));
+      const pro = proResult.rows[0];
+      if (pro?.email) {
+        const serviceName = [booking.service_key, booking.sub_service].filter(Boolean)
+          .map((value) => String(value).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
+          .join(' — ');
+        const bookingDate = booking.preferred_date || new Date(booking.created_at).toLocaleDateString();
+        const serviceAddress = [
+          booking.address, booking.city, booking.state, booking.zip,
+          booking.country === 'IN' ? 'India' : 'United States'
+        ].filter(Boolean).join(', ');
+        const tpl = EMAIL.newBookingRequest(
+          [pro.first, pro.last].filter(Boolean).join(' ') || booking.preferred_pro || 'Professional',
+          serviceName || 'Service',
+          booking.ref,
+          bookingDate,
+          booking.customer_name,
+          booking.customer_phone,
+          serviceAddress || 'Address not provided'
+        );
+        sendEmail(pro.email, tpl.subject, tpl.html, 'new_booking_request')
+          .catch((mailErr) => console.error('Professional booking email dispatch error (non-fatal):', mailErr.message));
+      }
+    }
+
     sendEmail('support@getfixerr.com', `New Booking: ${serviceKey} — ${name}`,
       `<p>New booking received.<br>Service: <b>${serviceKey}</b><br>Customer: <b>${name}</b> (${phone})<br>Ref: <b>${reference}</b><br>Estimate: <b>${isIndia ? '₹' : '$'}${est}</b></p>`,
       'booking_admin'

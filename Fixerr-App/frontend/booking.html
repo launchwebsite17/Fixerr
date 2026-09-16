@@ -130,7 +130,7 @@
   <div class="step-panel" id="s3">
     <div class="form-card">
       <h3>👤 Choose your professional</h3>
-      <p style="color:var(--muted);font-size:0.84rem;margin-bottom:1rem;">These professionals are shown for demo purposes during our soft launch — our team will confirm actual availability and pricing when they call you.</p>
+      <!-- <p style="color:var(--muted);font-size:0.84rem;margin-bottom:1rem;">These professionals are shown for demo purposes during our soft launch — our team will confirm actual availability and pricing when they call you.</p> -->
       <div id="pro-list-cont"></div>
     </div>
     <div class="step-nav"><button onclick="gStep(2)" class="btn-outline">← Back</button><button onclick="gStep(4)" class="btn-primary">Next: Schedule →</button></div>
@@ -414,9 +414,11 @@ async function renderPros(){
   }
   cont.innerHTML='<div style="text-align:center;padding:2rem 1.5rem;color:var(--muted);font-size:0.86rem;">'+(window.FXUI?FXUI.spinner(26,'var(--accent)'):'')+'<div style="margin-top:0.6rem;">Finding professionals near you…</div></div>';
   let realPros=[], custLat=null, custLng=null, locSource='';
+  let customerCountry=FX.country||FX.city?.c||'US';
   try{
     await loadCustomerProfile();
     const profile = window._custProfile;
+    if(profile?.country) customerCountry=profile.country;
     if(profile && profile.lat != null && profile.lng != null){
       custLat = parseFloat(profile.lat);
       custLng = parseFloat(profile.lng);
@@ -471,7 +473,8 @@ async function renderPros(){
   // Build location context banner (before any early-return so it's always available)
   let locBanner='';
   if(locSource==='profile'){
-    locBanner='<div class="alert alert-info" style="font-size:0.78rem;margin-bottom:0.75rem;">📍 <strong>Based on your saved account location</strong> — showing professionals within 25km, sorted by proximity.</div>';
+    const radiusUnit=String(customerCountry).toUpperCase()==='IN'?'km':'miles';
+    locBanner='<div class="alert alert-info" style="font-size:0.78rem;margin-bottom:0.75rem;">📍 <strong>Based on your saved account location</strong> — showing professionals within 25 '+radiusUnit+', sorted by proximity.</div>';
   } else if(FX.city){
     locBanner='<div class="alert alert-info" style="font-size:0.78rem;margin-bottom:0.75rem;">📍 Showing professionals in <strong>'+FX.city.n+(FX.city.st?', '+FX.city.st:'')+'</strong>.</div>';
   }
