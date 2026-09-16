@@ -253,6 +253,32 @@ const EMAIL = {
       </div>
     `)
   }),
+  newBookingRequest: (professionalName, serviceName, bookingReference, bookingDate, customerName, customerPhone, serviceAddress) => ({
+    subject: 'New Booking Request Received 📅',
+    html: wrapEmail(`
+      <h2 style="color:#15803d;margin-top:0;">Hello ${professionalName},</h2>
+      <p style="color:#374151;font-size:15px;line-height:1.6;">You have received a new <strong>${serviceName}</strong> booking request from Fixerr.</p>
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin:20px 0;">
+        <p style="margin:4px 0;color:#166534;"><strong>Booking Reference #:</strong> ${bookingReference}</p>
+        <p style="margin:4px 0;color:#166534;"><strong>Booking Date:</strong> ${bookingDate}</p>
+        <p style="margin:14px 0 4px;color:#166534;"><strong>Customer:</strong> ${customerName}</p>
+        <p style="margin:4px 0;color:#166534;"><strong>Phone:</strong> ${customerPhone}</p>
+        <p style="margin:14px 0 4px;color:#166534;"><strong>Service Address:</strong><br>${serviceAddress}</p>
+      </div>
+      <p style="color:#374151;font-size:14px;line-height:1.6;">Fixerr has a default service price for this service category. Please contact the customer to understand the work required.</p>
+      <div style="color:#4b5563;font-size:14px;line-height:1.7;">
+        <p>👉 If the work falls within the Fixerr default service category, you may accept the request and proceed.</p>
+        <p>👉 If the work is outside the default service, please discuss the requirements and price with the customer and contact Fixerr to update the agreed price.</p>
+        <p>👉 Once Fixerr updates the price, you will receive an email notification, and the updated price will also be available in your dashboard.</p>
+        <p>👉 Please start the work only after the applicable price has been confirmed.</p>
+        <p>👉 Once the service is completed, follow the Fixerr process to complete the booking and collect payment from the customer.</p>
+      </div>
+      <p style="color:#374151;font-size:15px;line-height:1.6;margin-top:22px;">Thank you for providing your services through Fixerr!</p>
+      <div style="text-align:center;margin:24px 0 8px;">
+        <a href="${appUrl('dashboard-pro.html')}" style="background:#15803d;color:#fff;padding:12px 24px;border-radius:50px;text-decoration:none;display:inline-block;font-weight:700;">View Booking Request →</a>
+      </div>
+    `)
+  }),
   technicianOnTheWay: (name, proName, proPhone, address, bookingReference) => ({
     subject: `Technician is on your way 🚗`,
     html: wrapEmail(`
