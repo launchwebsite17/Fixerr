@@ -10,6 +10,7 @@ const fs = require('fs');
 const env = require('./config/env');
 const { pool, query } = require('./db');
 const { buildCpUniqueId } = require('./services/identityService');
+const { isLocalAssetStorage } = require('./services/proAssetService');
 
 // Middleware
 const { generalLimiter } = require('./middleware/rateLimiter');
@@ -51,6 +52,13 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Security Headers & Directory Listing Protection
 app.use(securityHeaders);
 app.use(blockDirectoryListing);
+
+// Hosted professional assets live in private R2 storage and are exposed only through
+// authorized API responses as short-lived presigned URLs. Keep the legacy static path solely
+// for localhost development.
+if (!isLocalAssetStorage()) {
+  app.use('/pro_assets', (req, res) => res.status(404).json({ error: 'Not found.' }));
+}
 
 // Serve static frontend files safely
 app.use(express.static(path.join(__dirname, '../frontend'), {

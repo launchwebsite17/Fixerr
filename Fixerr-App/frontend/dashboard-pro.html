@@ -508,7 +508,7 @@ nav [data-cf]{display:none !important;}
     <div id="sec-overview">
       <div id="status-banner" class="alert alert-info" style="margin-bottom:1.25rem;">Checking your application status...</div>
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-lbl">Application</div><div class="stat-val" id="st-app" style="font-size:1.1rem;">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">Your Rewards</div><div class="stat-val" id="st-rewards" style="color:var(--accent);">—</div></div>
         <div class="stat-card"><div class="stat-lbl">Jobs Completed</div><div class="stat-val" id="st-jobs">0</div></div>
         <div class="stat-card"><div class="stat-lbl">Jobs Pending</div><div class="stat-val" id="st-jobs-pending" style="color:#F59E0B;">0</div></div>
         <div class="stat-card"><div class="stat-lbl">Jobs In Progress</div><div class="stat-val" id="st-jobs-inprogress" style="color:#1D4ED8;">0</div></div>
@@ -897,16 +897,29 @@ const u=API.user();
 document.getElementById('pro-greeting').textContent='Hi, '+u.name+' 👋';
 function show(s){['overview','bookings','profile','earnings','reports'].forEach(x=>{const el=document.getElementById('sec-'+x);if(el)el.style.display=x===s?'block':'none';});document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('act'));if(event&&event.target)event.target.classList.add('act');if(s==='bookings')loadBookings();if(s==='earnings')loadEarnings();}
 
+function bookingReward(booking){
+  if(booking.pro_earns!==null&&booking.pro_earns!==undefined&&booking.pro_earns!==''){
+    const stored=Number(booking.pro_earns);
+    if(Number.isFinite(stored))return stored;
+  }
+  return Math.round((Number(booking.confirmed_price||booking.estimate)||0)*0.85);
+}
+
+function isEarnedBooking(booking){
+  return booking.status==='completed'&&booking.payment_status==='paid'&&booking.payment_completed===true;
+}
+
 async function loadEarnings(){
   try{
     const bookings=await API.get('/api/pro/bookings');
     const me=await API.get('/api/auth/me');
     const u2=API.user();const sym=FX.symbol||(u2&&u2.country==='US'?'$':'₹');
     const completed=bookings.filter(b=>b.status==='completed');
-    const inProgress=bookings.filter(b=>['confirmed','in_progress'].includes(b.status));
-    const totalEarned=completed.reduce((s,b)=>s+(b.pro_earns||Math.round((b.confirmed_price||b.estimate||0)*0.85)),0);
-    const pending=inProgress.reduce((s,b)=>s+(b.pro_earns||Math.round((b.confirmed_price||b.estimate||0)*0.85)),0);
-    const avg=completed.length?Math.round(totalEarned/completed.length):0;
+    const earnedBookings=completed.filter(isEarnedBooking);
+    const awaitingPayment=bookings.filter(b=>['confirmed','in_progress'].includes(b.status)||(b.status==='completed'&&!isEarnedBooking(b)));
+    const totalEarned=earnedBookings.reduce((s,b)=>s+bookingReward(b),0);
+    const pending=awaitingPayment.reduce((s,b)=>s+bookingReward(b),0);
+    const avg=earnedBookings.length?Math.round(totalEarned/earnedBookings.length):0;
 
     document.getElementById('earn-total').textContent=sym+totalEarned.toLocaleString();
     document.getElementById('earn-jobs').textContent=completed.length;
@@ -924,9 +937,9 @@ async function loadEarnings(){
 
     // Completed jobs list
     const jl=document.getElementById('earn-jobs-list');
-    if(!completed.length){jl.innerHTML='<div style="color:var(--muted);padding:1rem;text-align:center;">No completed jobs yet.</div>';return;}
-    jl.innerHTML=completed.map(b=>{
-      const earned=b.pro_earns||Math.round((b.confirmed_price||b.estimate||0)*0.85);
+    if(!earnedBookings.length){jl.innerHTML='<div style="color:var(--muted);padding:1rem;text-align:center;">No paid completed jobs yet.</div>';return;}
+    jl.innerHTML=earnedBookings.map(b=>{
+      const earned=bookingReward(b);
       return `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.85rem;">
         <div>
           <div style="font-weight:600;">${(b.service_key||'').charAt(0).toUpperCase()+(b.service_key||'').slice(1)} ${b.sub_service?'→ '+b.sub_service:''}</div>
@@ -970,24 +983,17 @@ async function loadPro(){
     document.getElementById('pro-greeting').textContent='Hi, '+me.first+' 👋';
     document.getElementById('pro-status-msg').textContent=me.role==='professional'?'Professional account':'Customer account';
     document.getElementById('pro-unique-id').innerHTML=me.cp_unique_id?'<span style="color:#4B5563;">Your Unique Fixerr ID is : </span><span style="color:var(--accent);">'+FXUI.esc(me.cp_unique_id)+'</span>':'';
-    document.getElementById('st-app').textContent=me.role==='professional'?'Professional':'Customer';
-    document.getElementById('st-jobs').textContent='0';
-    document.getElementById('st-jobs-pending').textContent='0';
-    document.getElementById('st-jobs-inprogress').textContent='0';
     if(me.role==='professional'){
       const ps=me.pro_status||'pending';
       if(ps==='approved'){
         banner.className='alert alert-success';
         banner.textContent='✅ Your application is approved — you can now receive bookings from customers in your area!';
-        document.getElementById('st-app').textContent='Approved ✅';
       } else if(ps==='rejected'){
         banner.className='alert alert-error';
         banner.textContent='❌ Your application was not approved. Please contact support at support@getfixerr.com for more information.';
-        document.getElementById('st-app').textContent='Rejected';
       } else {
         banner.className='alert alert-info';
         banner.textContent='⏳ Your application is under review. We\'ll notify you by email once approved — usually within 24 hours.';
-        document.getElementById('st-app').textContent='Pending Review';
       }
     }
     renderProProfile(me);
@@ -1010,7 +1016,12 @@ async function loadBookings(){
     const bookings=await API.get('/api/pro/bookings');
     const cont=document.getElementById('pro-bookings');
     const contOv=document.getElementById('pro-bookings-overview');
-    document.getElementById('st-jobs').textContent=bookings.filter(b=>b.status==='completed').length;
+    const completedBookings=bookings.filter(b=>b.status==='completed');
+    const earnedBookings=completedBookings.filter(isEarnedBooking);
+    const u2=API.user();const sym=FX.symbol||(u2&&u2.country==='US'?'$':'₹');
+    const totalRewards=earnedBookings.reduce((sum,b)=>sum+bookingReward(b),0);
+    document.getElementById('st-rewards').textContent=sym+totalRewards.toLocaleString();
+    document.getElementById('st-jobs').textContent=completedBookings.length;
     const pending=bookings.filter(b=>['pending','price_proposed'].includes(b.status)).length;
     document.getElementById('st-jobs-pending').textContent=pending;
     document.getElementById('st-jobs-inprogress').textContent=bookings.filter(b=>b.status==='in_progress').length;
@@ -1018,7 +1029,6 @@ async function loadBookings(){
     // if(badge){badge.textContent=pending;badge.style.display=pending>0?'inline':'none';}
     const emptyHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No bookings yet.</div>';
     if(!bookings.length){if(cont)cont.innerHTML=emptyHTML;if(contOv)contOv.innerHTML=emptyHTML;return;}
-    const u2=API.user();const sym=FX.symbol||(u2&&u2.country==='US'?'$':'₹');
     const renderCard=(b)=>{
       const canAccept=b.status==='pending'||b.status==='price_proposed';
       const canStart=b.status==='confirmed'||b.status==='accepted';

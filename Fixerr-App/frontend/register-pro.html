@@ -808,9 +808,9 @@ async function submitCommission(){
   if(!hasTools){toast('Please confirm you have your own tools and equipment','err');return;}
   const btn=document.getElementById('commission-btn');btn.textContent='Submitting...';btn.disabled=true;
   try{
-    // Convert the profile photo + doc1/doc2 uploads to base64 for transport. The server writes
-    // these to frontend/pro_assets/<FixerrUniqueID>/... and stores the resulting file path
-    // (not the base64 data) in photo_url / doc1_url / doc2_url.
+    // Convert the profile photo + doc1/doc2 uploads to base64 for the existing JSON transport.
+    // The server stores the files locally during localhost development or in private R2 when
+    // hosted, and persists only the resulting path/object key in PostgreSQL.
     async function fileToBase64(inputId){
       const inp=document.getElementById(inputId);
       if(!inp||!inp.files||!inp.files[0])return null;

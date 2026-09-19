@@ -4,7 +4,11 @@ const { sendEmail, EMAIL } = require("../services/emailService");
 const { getOrCreateInvoice } = require("../services/invoiceService");
 const { geocodePlace } = require("../services/geocodeService");
 const { encrypt } = require("../services/cryptoService");
-const { saveProUpload } = require("../services/proAssetService");
+const {
+  saveProUpload,
+  rollbackProAssets,
+  ProAssetError,
+} = require("../services/proAssetService");
 
 exports.getPros = async (req, res) => {
   try {
@@ -116,77 +120,110 @@ exports.applyPro = async (req, res) => {
     // cp_unique_id was already generated at signup (/api/auth/register), before this call
     // ever happens — the file-naming convention below relies on it already existing.
     const userRes = await query(
-      "SELECT first, last, email, city, state, country, zip, cp_unique_id FROM users WHERE id=$1",
+      "SELECT first, last, email, role, city, state, country, zip, cp_unique_id FROM users WHERE id=$1",
       [req.user.id],
     );
     const proUserRow = userRes.rows[0] || {};
+    if (proUserRow.role !== "professional")
+      return res.status(403).json({ error: "Professionals only." });
+
+    // Prevent a repeat submission from overwriting deterministic asset keys belonging to an
+    // existing application. A future replacement workflow can handle that explicitly.
+    const existingPro = await query(
+      "SELECT id FROM pros WHERE user_id=$1 LIMIT 1",
+      [req.user.id],
+    );
+    if (existingPro.rows[0])
+      return res.status(409).json({
+        error:
+          "A professional application already exists for this account. Please contact support to update it.",
+      });
+
     const cpUniqueId = proUserRow.cp_unique_id || null;
 
-    // Photo and ID documents are written to frontend/pro_assets/<cpUniqueId>/... and only the
-    // resulting file path is stored in the DB — no base64 data is persisted.
-    const photoUrl = saveProUpload({
-      cpUniqueId,
-      file: b.photo || null,
-    });
-    const doc1Url = saveProUpload({
-      cpUniqueId,
-      firstName: proUserRow.first,
-      lastName: proUserRow.last,
-      label: b.doc1_type || "",
-      file: b.doc1 || null,
-    });
-    const doc2Url = saveProUpload({
-      cpUniqueId,
-      firstName: proUserRow.first,
-      lastName: proUserRow.last,
-      label: b.doc2_type || "",
-      file: b.doc2 || null,
-    });
+    // The existing JSON/base64 request contract is retained. The storage service writes local
+    // files on localhost and private R2 objects when hosted, returning only DB-safe paths/keys.
+    const uploadedAssets = [];
+    let photoUrl = null;
+    let doc1Url = null;
+    let doc2Url = null;
+    try {
+      photoUrl = await saveProUpload({
+        cpUniqueId,
+        file: b.photo || null,
+      });
+      if (photoUrl) uploadedAssets.push(photoUrl);
+      doc1Url = await saveProUpload({
+        cpUniqueId,
+        firstName: proUserRow.first,
+        lastName: proUserRow.last,
+        label: b.doc1_type || "",
+        file: b.doc1 || null,
+      });
+      if (doc1Url) uploadedAssets.push(doc1Url);
+      doc2Url = await saveProUpload({
+        cpUniqueId,
+        firstName: proUserRow.first,
+        lastName: proUserRow.last,
+        label: b.doc2_type || "",
+        file: b.doc2 || null,
+      });
+      if (doc2Url) uploadedAssets.push(doc2Url);
+    } catch (uploadError) {
+      await rollbackProAssets(uploadedAssets);
+      throw uploadError;
+    }
 
     // Aadhaar/PAN are stored as plain text (no longer encrypted); bank details still are.
     const encBank = b.bank ? encrypt(b.bank) : null;
 
-    const r = await query(
-      `INSERT INTO pros (user_id,services,experience_map,years_exp,languages,bio,certifications,photo_url,id_type,id_number,
+    let r;
+    try {
+      r = await query(
+        `INSERT INTO pros (user_id,services,experience_map,years_exp,languages,bio,certifications,photo_url,id_type,id_number,
          aadhaar,pan,pricing_map,rate_inr,rate_usd,upi,zelle,venmo,bank,pay_methods,commission_agreed,liability_agreed,
          conduct_agreed,has_insurance,has_tools,documents,service_radius,doc1_type,doc1_url,doc2_type,doc2_url,status,created_by)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,'pending',$32)
        RETURNING id`,
-      [
-        req.user.id,
-        JSON.stringify(b.services || []),
-        JSON.stringify(b.experience_map || {}),
-        b.years_exp || "",
-        b.languages || "",
-        b.bio || "",
-        b.certifications || "",
-        photoUrl,
-        b.id_type || "",
-        b.id_number || "",
-        b.aadhaar || null,
-        b.pan || null,
-        JSON.stringify(b.pricing_map || {}),
-        parseFloat(b.starting_rate) || 0,
-        parseFloat(b.starting_rate) || 0,
-        b.upi || null,
-        b.zelle || null,
-        b.venmo || null,
-        encBank,
-        JSON.stringify(b.pay_methods || []),
-        true,
-        true,
-        !!b.conduct_agreed,
-        !!b.has_insurance,
-        !!b.has_tools,
-        JSON.stringify([]),
-        parseInt(b.service_radius) || 25,
-        b.doc1_type || null,
-        doc1Url,
-        b.doc2_type || null,
-        doc2Url,
-        req.user.id,
-      ],
-    );
+        [
+          req.user.id,
+          JSON.stringify(b.services || []),
+          JSON.stringify(b.experience_map || {}),
+          b.years_exp || "",
+          b.languages || "",
+          b.bio || "",
+          b.certifications || "",
+          photoUrl,
+          b.id_type || "",
+          b.id_number || "",
+          b.aadhaar || null,
+          b.pan || null,
+          JSON.stringify(b.pricing_map || {}),
+          parseFloat(b.starting_rate) || 0,
+          parseFloat(b.starting_rate) || 0,
+          b.upi || null,
+          b.zelle || null,
+          b.venmo || null,
+          encBank,
+          JSON.stringify(b.pay_methods || []),
+          true,
+          true,
+          !!b.conduct_agreed,
+          !!b.has_insurance,
+          !!b.has_tools,
+          JSON.stringify([]),
+          parseInt(b.service_radius) || 25,
+          b.doc1_type || null,
+          doc1Url,
+          b.doc2_type || null,
+          doc2Url,
+          req.user.id,
+        ],
+      );
+    } catch (dbError) {
+      await rollbackProAssets(uploadedAssets);
+      throw dbError;
+    }
 
     if (proUserRow.city) {
       const zip = b.zip || proUserRow.zip || "";
@@ -221,9 +258,11 @@ exports.applyPro = async (req, res) => {
     res.json({ success: true, id: r.rows[0].id });
   } catch (e) {
     console.error(e);
-    res
-      .status(500)
-      .json({ error: "Could not submit application. " + e.message });
+    if (e instanceof ProAssetError)
+      return res.status(e.statusCode).json({ error: e.publicMessage });
+    res.status(500).json({
+      error: "Could not submit application. Please try again.",
+    });
   }
 };
 
@@ -244,6 +283,10 @@ exports.getProBookings = async (req, res) => {
     const r = await query(
       `SELECT r.*,
          COALESCE(inv.payment_status, 'notpaid') AS payment_status,
+         EXISTS (
+           SELECT 1 FROM payments pay
+           WHERE pay.booking_ref = r.ref AND pay.status = 'completed'
+         ) AS payment_completed,
          cu.cp_unique_id AS customer_unique_id
        FROM requests r
        LEFT JOIN users cu ON cu.id = r.user_id

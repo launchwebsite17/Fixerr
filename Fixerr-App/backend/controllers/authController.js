@@ -6,6 +6,7 @@ const { query } = require('../db');
 const { sendEmail, EMAIL } = require('../services/emailService');
 const { geocodePlace } = require('../services/geocodeService');
 const { buildCpUniqueId } = require('../services/identityService');
+const { resolveProAssetUrl } = require('../services/proAssetService');
 
 exports.register = async (req, res) => {
   try {
@@ -191,6 +192,7 @@ exports.me = async (req, res) => {
          FROM pros WHERE user_id=$1`, [u.id]
       );
       const pro = pr.rows[0];
+      if (pro?.photo_url) pro.photo_url = await resolveProAssetUrl(pro.photo_url);
       safe.pro_status = pro ? pro.status : 'pending';
       safe.pro_available = pro ? !!pro.available : false;
       safe.pro = pro || null; // full professional profile for the dashboard
