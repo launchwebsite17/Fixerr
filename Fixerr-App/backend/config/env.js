@@ -17,6 +17,10 @@ const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY || '';
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_mock_fixerr_key';
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'mock_fixerr_razorpay_secret';
+const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID || '';
+const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID || '';
+const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY || '';
+const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME || '';
 
 // A gateway is considered "live" when real (non-placeholder) credentials are supplied
 // via environment variables. The literal string "mock" in any default key marks it as a
@@ -47,6 +51,10 @@ module.exports = {
   STRIPE_WEBHOOK_SECRET,
   RAZORPAY_KEY_ID,
   RAZORPAY_KEY_SECRET,
+  R2_ACCOUNT_ID,
+  R2_ACCESS_KEY_ID,
+  R2_SECRET_ACCESS_KEY,
+  R2_BUCKET_NAME,
   STRIPE_LIVE,
   RAZORPAY_LIVE
 };

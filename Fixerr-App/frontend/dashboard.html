@@ -402,6 +402,36 @@ input[type=range]{accent-color:var(--accent);width:100%;}
 .stat-sub{font-size:0.7rem;color:var(--accent);margin-top:0.12rem;}
 .dash-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);padding:1.3rem;box-shadow:var(--shadow);margin-bottom:1.15rem;}
 .dash-card-title{font-size:0.93rem;font-weight:700;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;}
+.customer-summary-grid{grid-template-columns:minmax(160px,0.65fr) minmax(260px,1.25fr) minmax(240px,1.1fr);grid-template-rows:repeat(3,minmax(58px,auto));align-items:stretch;gap:0.65rem;}
+.customer-summary-grid>.stat-card,.customer-summary-grid>.dash-card{min-width:0;margin-bottom:0;}
+.customer-summary-grid>.stat-card{padding:0.55rem 0.85rem;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;}
+.customer-summary-grid>.stat-card .stat-lbl{font-size:0.72rem;line-height:1.25;margin-bottom:0.1rem;}
+.customer-summary-grid>.stat-card .stat-val{font-size:1.25rem;line-height:1.2;}
+.customer-summary-grid>.stat-card .stat-sub{font-size:0.64rem;line-height:1.25;margin-top:0.1rem;}
+.customer-summary-grid>.dash-card{padding:1rem;}
+.customer-summary-grid>.dash-card .dash-card-title{font-size:0.82rem;margin-bottom:0.75rem;}
+.customer-summary-grid>:nth-child(1){grid-column:1;grid-row:1;}
+.customer-summary-grid>:nth-child(2){grid-column:1;grid-row:2;}
+.customer-summary-grid>:nth-child(3){grid-column:1;grid-row:3;}
+.customer-summary-grid>:nth-child(4){grid-column:2;grid-row:1/4;}
+.customer-summary-grid>:nth-child(5){grid-column:3;grid-row:1/4;}
+.summary-section-title{font-size:0.78rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.7rem;}
+.spending-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0.3rem 0.5rem;margin-bottom:0.7rem;font-size:0.72rem;}
+.spending-row:last-child{margin-bottom:0;}
+.spending-name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.spending-track{grid-column:1/-1;height:7px;background:var(--bg3);border-radius:50px;overflow:hidden;}
+.spending-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-mid));border-radius:50px;min-width:4px;}
+.spending-amount{font-weight:700;color:var(--text);text-align:right;white-space:nowrap;}
+.upcoming-service-name{font-size:1.05rem;font-weight:800;color:var(--text);}
+.upcoming-sub-service{font-size:0.82rem;color:var(--muted);margin-top:0.1rem;}
+.upcoming-divider{height:1px;background:var(--border);margin:1rem 0;}
+.upcoming-meta-label{font-size:0.68rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:0.15rem;}
+.upcoming-meta-value{font-size:0.82rem;font-weight:600;color:var(--text);}
+@media (max-width:900px){
+  .customer-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto;}
+  .customer-summary-grid>*{grid-column:auto!important;grid-row:auto!important;align-self:stretch!important;}
+}
+@media (max-width:640px){.customer-summary-grid{grid-template-columns:1fr;}}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem;}
 .modal-box{background:#fff;border-radius:var(--radius);padding:1.85rem;width:100%;max-width:530px;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);}
 .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;}
@@ -513,14 +543,23 @@ input[type=range]{accent-color:var(--accent);width:100%;}
   <div class="dash-main">
     <div id="dash-summary-header">
       <div style="margin-bottom:1.35rem;display:flex;justify-content:space-between;align-items:flex-start;">
-        <div><div style="font-size:1.35rem;font-weight:800;margin-bottom:0.15rem;" id="dash-greeting">My Dashboard</div><div style="color:var(--muted);font-size:0.86rem;">Track your booking requests</div></div>
+        <!-- <div><div style="font-size:1.35rem;font-weight:800;margin-bottom:0.15rem;" id="dash-greeting">My Dashboard</div><div style="color:var(--muted);font-size:0.86rem;">Track your booking requests</div></div> -->
+        <div><div style="font-size:1.35rem;font-weight:800;margin-bottom:0.15rem;" id="dash-greeting">My Dashboard</div><div style="color:var(--muted);font-size:0.86rem;">Here's what's happening with your home services.</div></div>
         <a href="booking.html" class="btn-primary">+ New Booking</a>
       </div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-lbl">Total Requests</div><div class="stat-val" id="st-total">0</div></div>
-        <div class="stat-card"><div class="stat-lbl">Pending</div><div class="stat-val" id="st-pending" style="color:#F59E0B;">0</div></div>
-        <div class="stat-card"><div class="stat-lbl">Confirmed</div><div class="stat-val" id="st-confirmed" style="color:var(--accent);">0</div></div>
-        <div class="stat-card"><div class="stat-lbl">Completed</div><div class="stat-val" id="st-done">0</div></div>
+      <div class="summary-section-title">Quick Summary</div>
+      <div class="stats-grid customer-summary-grid">
+        <div class="stat-card"><div class="stat-lbl">Active Requests</div><div class="stat-val" id="st-active">0</div><div class="stat-sub">In progress or awaiting action</div></div>
+        <div class="stat-card"><div class="stat-lbl">Upcoming Services</div><div class="stat-val" id="st-upcoming" style="color:#1D4ED8;">0</div><div class="stat-sub">Pending or accepted services</div></div>
+        <div class="stat-card"><div class="stat-lbl">Total Spent</div><div class="stat-val" id="st-spent" style="color:var(--accent);">—</div><div class="stat-sub" id="st-spent-period">Paid this year</div></div>
+        <div class="dash-card" style="margin-bottom:0;">
+          <div class="dash-card-title">📊 Your Service Spending</div>
+          <div id="service-spending-chart"><div style="color:var(--muted);font-size:0.82rem;padding:1rem 0;text-align:center;">Loading spending…</div></div>
+        </div>
+        <div class="dash-card" style="margin-bottom:0;">
+          <div class="dash-card-title">📅 Upcoming Service</div>
+          <div id="upcoming-service-card"><div style="color:var(--muted);font-size:0.82rem;padding:1rem 0;text-align:center;">Loading upcoming service…</div></div>
+        </div>
       </div>
     </div>
     <div id="sec-bookings">
@@ -1156,6 +1195,84 @@ function renderCustomerProfile(me){
   pc.innerHTML=(img?'<div style="text-align:center;margin-bottom:1rem;"><img src="'+FXUI.esc(img)+'" alt="Profile" style="width:84px;height:84px;border-radius:50%;object-fit:cover;border:2px solid var(--border);"></div>':'')+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">'+fields+'</div><div class="alert alert-info" style="margin-top:0.75rem;">Your profile is synced from your account. Contact support to update these details.</div>';
 }
 
+function customerDashboardDate(value){
+  if(!value)return null;
+  const parsed=new Date(value);
+  if(Number.isNaN(parsed.getTime()))return null;
+  parsed.setHours(0,0,0,0);
+  return parsed;
+}
+
+function customerDashboardServiceName(value){
+  return String(value||'Service').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+}
+
+function renderCustomerDashboardSummary(requests){
+  const activeStatuses=new Set(['pending','accepted','price_proposed','confirmed','in_progress']);
+  const upcomingStatuses=new Set(['pending','accepted','confirmed']);
+  const today=new Date();today.setHours(
+    0,0,0,0);
+  const currentYear=today.getFullYear();
+  const upcoming=requests
+    .filter(r=>upcomingStatuses.has(r.status))
+    .sort((a,b)=>(customerDashboardDate(a.preferred_date)?.getTime()??Number.MAX_SAFE_INTEGER)-
+      (customerDashboardDate(b.preferred_date)?.getTime()??Number.MAX_SAFE_INTEGER));
+  const paidThisYear=requests.filter(r=>{
+    const invoiceDate=customerDashboardDate(r.invoice_created_at);
+    return r.payment_status==='paid'&&r.payment_completed===true&&invoiceDate&&invoiceDate.getFullYear()===currentYear;
+  });
+  const totalSpent=paidThisYear.reduce((sum,r)=>sum+(Number(r.invoice_total_amount)||0),0);
+  const currency=resolvePayCurrency(USER_COUNTRY||(requests[0]&&requests[0].country),USER_CURRENCY);
+  const money=new Intl.NumberFormat(currency==='INR'?'en-IN':'en-US',{
+    style:'currency',currency,maximumFractionDigits:currency==='INR'?0:2
+  });
+
+  document.getElementById('st-active').textContent=requests.filter(r=>activeStatuses.has(r.status)).length;
+  document.getElementById('st-upcoming').textContent=upcoming.length;
+  document.getElementById('st-spent').textContent=money.format(totalSpent);
+  document.getElementById('st-spent-period').textContent='Paid in '+currentYear;
+
+  const spendingByService={};
+  paidThisYear.forEach(r=>{
+    const category=customerDashboardServiceName(r.service_key);
+    spendingByService[category]=(spendingByService[category]||0)+(Number(r.invoice_total_amount)||0);
+  });
+  const spendingRows=Object.entries(spendingByService).sort((a,b)=>b[1]-a[1]);
+  const spendingEl=document.getElementById('service-spending-chart');
+  if(!spendingRows.length){
+    spendingEl.innerHTML='<div style="color:var(--muted);font-size:0.82rem;padding:1.2rem 0;text-align:center;">No paid service spending in '+currentYear+'.</div>';
+  }else{
+    const maxAmount=Math.max(...spendingRows.map(row=>row[1]),1);
+    spendingEl.innerHTML=spendingRows.map(([category,amount])=>
+      '<div class="spending-row">'+
+        '<div class="spending-name" title="'+FXUI.esc(category)+'">'+FXUI.esc(category)+'</div>'+
+        '<div class="spending-track" aria-label="'+FXUI.esc(category)+' spending"><div class="spending-bar" style="width:'+Math.max(2,(amount/maxAmount)*100).toFixed(1)+'%;"></div></div>'+
+        '<div class="spending-amount">'+money.format(amount)+'</div>'+
+      '</div>'
+    ).join('');
+  }
+
+  const upcomingEl=document.getElementById('upcoming-service-card');
+  const next=upcoming[0];
+  if(!next){
+    upcomingEl.innerHTML='<div style="color:var(--muted);font-size:0.86rem;padding:1.5rem 0;text-align:center;">No upcoming services</div>';
+  }else{
+    const serviceDate=customerDashboardDate(next.preferred_date);
+    const dateLabel=serviceDate?serviceDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'Date to be confirmed';
+    const professional=next.assigned_pro_name||next.preferred_pro||'To be assigned';
+    upcomingEl.innerHTML=
+      '<div class="upcoming-service-name">'+FXUI.esc(customerDashboardServiceName(next.service_key))+'</div>'+
+      '<div class="upcoming-sub-service">'+FXUI.esc(next.sub_service||'Service details to be confirmed')+'</div>'+
+      '<div class="upcoming-divider"></div>'+
+      '<div class="upcoming-meta-label">Date & Time</div>'+
+      '<div class="upcoming-meta-value">'+FXUI.esc(dateLabel)+'</div>'+
+      '<div class="upcoming-meta-value" style="margin-top:0.15rem;">'+FXUI.esc(next.preferred_time||'Time to be confirmed')+'</div>'+
+      '<div class="upcoming-divider"></div>'+
+      '<div class="upcoming-meta-label">Professional</div>'+
+      '<div class="upcoming-meta-value">'+FXUI.esc(professional)+'</div>';
+  }
+}
+
 async function loadData(){
   try{
     const meEarly=await API.get('/api/auth/me');
@@ -1163,10 +1280,7 @@ async function loadData(){
     const _bl=document.getElementById('bk-list'); if(_bl&&!DATA.length)_bl.innerHTML='<div style="text-align:center;padding:2.5rem;color:var(--muted);">'+FXUI.spinner(24,'var(--accent)')+'<div style="margin-top:.6rem;">Loading your bookings…</div></div>';
     const requests=await API.get('/api/requests');
     DATA=requests;
-    document.getElementById('st-total').textContent=requests.length;
-    document.getElementById('st-pending').textContent=requests.filter(r=>r.status==='pending').length;
-    document.getElementById('st-confirmed').textContent=requests.filter(r=>r.status==='confirmed').length;
-    document.getElementById('st-done').textContent=requests.filter(r=>r.status==='completed').length;
+    renderCustomerDashboardSummary(requests);
     if(!requests.length){document.getElementById('bk-list').innerHTML='<div style="text-align:center;padding:2.5rem;"><div style="font-size:2.5rem;margin-bottom:0.75rem;">📋</div><div style="font-weight:700;margin-bottom:0.35rem;">No bookings yet</div><p style="color:var(--muted);margin-bottom:1.25rem;">Book a service to get started. Make sure you are logged in before booking so your bookings appear here.</p><a href="booking.html" class="btn-primary">Book a Service →</a></div>';return;}
     const _pg=FXUI.paginate(DATA,custPage,10); custPage=_pg.page;
     const _pgc=custPager(); if(_pgc) FXUI.renderPagination(_pgc,_pg,function(p){ custPage=p; loadData(); });

@@ -2,6 +2,7 @@
 const { query } = require('../db');
 const { sendEmail, EMAIL } = require('../services/emailService');
 const { geocodeCity } = require('../services/geocodeService');
+const { resolveProAssetUrl } = require('../services/proAssetService');
 
 exports.getPros = async (req, res) => {
   try {
@@ -14,7 +15,13 @@ exports.getPros = async (req, res) => {
     if (status) { params.push(status); sql += ` WHERE p.status=$1`; }
     sql += ' ORDER BY p.created_at DESC';
     const r = await query(sql, params);
-    res.json(r.rows);
+    const rows = await Promise.all(r.rows.map(async (pro) => ({
+      ...pro,
+      photo_url: await resolveProAssetUrl(pro.photo_url),
+      doc1_url: await resolveProAssetUrl(pro.doc1_url),
+      doc2_url: await resolveProAssetUrl(pro.doc2_url),
+    })));
+    res.json(rows);
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Could not load professionals.' });
