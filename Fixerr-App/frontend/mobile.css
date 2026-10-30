@@ -86,6 +86,7 @@
 
 /* KEPT HERE — shared with admin-login.html.
    Footer Fixerr logo sizing/color-treatment — applies at every viewport. */
+/* Old Logo settings
 footer img[alt="Fixerr"] {
   background: transparent;
   border-radius: 8px;
@@ -93,6 +94,12 @@ footer img[alt="Fixerr"] {
   width: auto !important;
   max-width: none !important;
   filter: blur(0.6px) brightness(1.2) contrast(1.2) drop-shadow(1px 1px 2px #00FFFF);
+}
+*/
+footer img[alt="Fixerr"] {
+  height: 52px !important;
+  width: auto !important;
+  max-width: none !important;
 }
 
 /* KEPT HERE — shared with admin-login.html.
@@ -171,11 +178,12 @@ nav a img[alt="Fixerr"]:hover {
     gap: 0.4rem !important;
     flex-wrap: nowrap !important;
   }
-  #nav-right .btn-sm,
-  #nav-right .btn-ghost,
-  #nav-right .btn-primary,
-  #nav-right a,
-  #nav-right button {
+  /* Direct children only — do not restyle links inside the Log In / Sign Up capsule. */
+  #nav-right > .btn-sm,
+  #nav-right > .btn-ghost,
+  #nav-right > .btn-primary,
+  #nav-right > a,
+  #nav-right > button {
     white-space: nowrap !important;
     padding: 0.4rem 0.75rem !important;
     font-size: 0.8rem !important;
@@ -229,9 +237,10 @@ nav a img[alt="Fixerr"]:hover {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 1rem !important;
   }
+  /* Logo + 4 menu columns (Services, Company, Customers, Professionals). */
   .footer-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 1.5rem !important;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr !important;
+    gap: 0.85rem !important;
   }
   .content-grid {
     grid-template-columns: 1fr !important;
@@ -714,7 +723,12 @@ nav a img[alt="Fixerr"]:hover {
   /* Hide the "Hi, {name}" identity pill on phones — the greeting + avatar take too much
      room and the same Dashboard / Log Out actions live in the hamburger menu. The remaining
      Dashboard/Log Out (or Log In/Sign Up) buttons then fit on one line without wrapping. */
+  /* Old selector hid ANY first div in #nav-right, including the new Log In / Sign Up capsule:
   #nav-right > div:first-child {
+    display: none !important;
+  }
+  */
+  #nav-right .nav-user-chip {
     display: none !important;
   }
   #nav-right .btn-primary,
@@ -724,6 +738,14 @@ nav a img[alt="Fixerr"]:hover {
     height: 32px !important;
     min-height: 32px !important;
     white-space: nowrap !important;
+  }
+  .nav-auth-capsule {
+    height: 32px !important;
+  }
+  .nav-auth-login,
+  .nav-auth-signup {
+    font-size: 0.72rem !important;
+    padding: 0 0.7rem !important;
   }
 
   /* Chat page — stack the conversation list above the message area on mobile
@@ -779,6 +801,7 @@ nav a img[alt="Fixerr"]:hover {
 /* KEPT HERE — shared with admin-login.html AND login.html (both use the split-screen
    login layout below). Not viewport-conditional, but moving it to styles.css would mean
    admin-login.html (out of scope, no styles.css link) loses its background image entirely. */
+/* Old Logo settings
 footer img[alt="Fixerr"] {
   transition: transform 0.2s ease;
   transform-origin: center center;
@@ -786,6 +809,7 @@ footer img[alt="Fixerr"] {
 footer img[alt="Fixerr"]:hover {
   transform: scale(1.15);
 }
+*/
 
 .login-visual {
   position: relative;

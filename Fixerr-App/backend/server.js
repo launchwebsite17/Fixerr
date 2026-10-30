@@ -32,6 +32,7 @@ const statRoutes = require('./routes/statRoutes');
 const walletRoutes = require('./routes/walletRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const paymentGatewayRoutes = require('./routes/paymentGatewayRoutes');
+const trackRoutes = require('./routes/trackRoutes');
 const paymentGatewayController = require('./controllers/paymentGatewayController');
 
 const app = express();
@@ -85,6 +86,7 @@ app.use('/api', statRoutes);
 app.use('/api', walletRoutes);
 app.use('/api', contactRoutes);
 app.use('/api', paymentGatewayRoutes);
+app.use('/api', trackRoutes);
 
 
 // 404 handler for unknown API endpoints

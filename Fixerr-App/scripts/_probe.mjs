@@ -1,0 +1,17 @@
+﻿import { writeFile } from "node:fs/promises";
+const SITE = "https://www.urbancompany.com", API = "https://www.urbanclap.com/api/v2";
+const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36";
+const r0 = await fetch(`${SITE}/chennai`, { headers: { "User-Agent": UA } });
+const H = { "User-Agent": UA, Accept: "application/json, text/plain, */*", "Content-Type": "application/json", "X-device-os": "desktop_web", "X-device-id": `v-${Math.floor(Date.now() / 1000)}`, "X-version-name": "web_v4.273.58", "X-version-code": "4.273.58", "X-brand-key": "urbanCompany", "x-preferred-language": "english", "react-bundle-version": "890", "X-Session-ID": crypto.randomUUID(), Origin: SITE, Referer: `${SITE}/chennai`, Cookie: r0.headers.getSetCookie().map((c) => c.split(";")[0]).join("; ") };
+const rg = async (latitude, longitude, a = 1) => { try { const r = await fetch(API + "/growth/locations/reverseGeoCode", { method: "POST", headers: H, body: JSON.stringify({ coordinate: { latitude, longitude } }) }); if (!r.ok) throw new Error(r.status); return (await r.json()).success?.data; } catch (e) { if (a > 3) return { err: String(e) }; await new Promise((s) => setTimeout(s, 1500 * a)); return rg(latitude, longitude, a + 1); } };
+const pts = []; const STEP = 0.04;
+for (let la = 12.30; la <= 13.70; la += STEP) for (let lo = 79.40; lo <= 80.36; lo += STEP) pts.push([+la.toFixed(3), +lo.toFixed(3)]);
+console.log(pts.length, "points");
+const out = new Array(pts.length); let next = 0, done = 0;
+await Promise.all(Array.from({ length: 5 }, async () => { while (next < pts.length) { const i = next++; const [la, lo] = pts[i]; const d = await rg(la, lo); const L = d?.location;
+  const comp = (t) => L?.address_components?.find((c) => c.types.includes(t))?.long_name ?? "";
+  out[i] = { lat: la, lng: lo, live: d?.isUcLive ?? "", cityKey: L?.cityKey ?? "", pincode: L?.postalCode || comp("postal_code"), district: comp("administrative_area_level_2") || comp("administrative_area_level_3"), locality: L?.locality || comp("locality"), address: L?.formattedAddress ?? "", err: d?.err ?? (d?.isUcLive ? "" : d?.error?.errorMessage?.heading ?? "") };
+  if (++done % 100 === 0) console.log(done); } }));
+const cols = Object.keys(out[0]); const esc = (v) => { const s = String(v ?? ""); return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+await writeFile("scripts/output/_uc-chennai-grid.csv", "\uFEFF" + [cols.join(","), ...out.map((r) => cols.map((c) => esc(r[c])).join(","))].join("\r\n"), "utf8");
+const by = {}; for (const r of out) { const k = `${r.live}|${r.cityKey}`; by[k] = (by[k] ?? 0) + 1; } console.log(by);

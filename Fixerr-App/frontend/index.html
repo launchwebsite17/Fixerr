@@ -3,9 +3,14 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<!-- old css styles
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+-->
+<link rel="stylesheet" href="fonts.css">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" href="assets/Fixerr-Favicon.png">
+<link rel="apple-touch-icon" href="assets/Fixerr-Favicon.png">
 <title>Home – Fixerr</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="mobile.css">
@@ -26,6 +31,8 @@ body{background:var(--bg);}
 .home-svc-card img{width:100%;height:160px;object-fit:cover;display:block;}
 .home-svc-label{font-weight:700;font-size:0.82rem;padding:0.45rem 0.6rem 0.1rem;line-height:1.2;}
 .home-svc-price{font-size:0.75rem;color:var(--accent);font-weight:700;padding:0 0.6rem 0.5rem;}
+.why-card-icon{width:56px;height:56px;margin-bottom:0.6rem;}
+.why-card-icon img{width:100%;height:100%;object-fit:contain;display:block;}
 @media(max-width:768px){.services-grid[style]{grid-template-columns:repeat(3,1fr)!important;}.home-svc-card img{height:100px;}}
 @media(max-width:480px){.services-grid[style]{grid-template-columns:repeat(2,1fr)!important;}}
 </style>
@@ -34,7 +41,7 @@ body{background:var(--bg);}
 <div style="background:linear-gradient(155deg,#F0FBF0,#fff 60%,#F8FAF7);">
   <div style="max-width:900px;margin:0 auto;padding:4.5rem 2rem 3.5rem;text-align:center;">
     <p style="font-size:0.9rem;font-weight:700;color:var(--accent);margin-bottom:0.65rem;letter-spacing:1px;text-transform:uppercase;">Trusted Home Services · US &amp; India</p>
-    <h1 style="font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:800;line-height:1.1;letter-spacing:-1.5px;margin-bottom:1rem;">Home services,<br><span style="color:var(--accent);">trusted professionals,</span><br>at your doorstep</h1>
+    <h1 style="font-size:clamp(2.25rem,4.5vw,3.25rem);font-weight:800;line-height:1.1;letter-spacing:-1.5px;margin-bottom:1rem;">Home services,<br><span style="color:var(--accent);">experienced professionals,</span><br>at your doorstep</h1>
     <p style="color:var(--muted);font-size:1.05rem;max-width:540px;margin:0 auto 2rem;line-height:1.8;">Verified, background-checked professionals for plumbing, electrical, cleaning &amp; more. We call you within 2 hours to confirm. Pay only after the job is done — no upfront fees, ever.</p>
     <div style="display:flex;gap:0.85rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.25rem;">
       <a href="booking.html" class="btn-primary btn-lg" style="padding:0.85rem 2rem;font-size:1rem;">Book a Service →</a>
@@ -67,19 +74,23 @@ body{background:var(--bg);}
   <p style="color:var(--muted);margin-bottom:1.75rem;max-width:620px;">Most service marketplaces sell your phone number to several pros at once, so you get flooded with calls before you've even decided. We do it the other way around.</p>
   <div class="why-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;">
     <div class="card" style="padding:1.5rem;min-height:160px;">
-      <div style="font-size:1.6rem;margin-bottom:0.6rem;">📞</div>
-      <div style="font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;">One human call, not five sales pitches</div>
-      <div style="font-size:0.82rem;color:var(--muted);line-height:1.6;">No bidding wars, no being chased by competing pros. Our team calls you once, confirms everything, and you're done deciding.</div>
+      <!-- old css styles <div style="font-size:1.6rem;margin-bottom:0.6rem;">📞</div> -->
+      <div class="why-card-icon"><img src="assets/index_one-call.png" alt=""></div>
+      <div style="font-weight:700;/* old css styles font-size:0.95rem; */font-size:1.0625rem;margin-bottom:0.4rem;">One human call, and it’s sorted</div>
+      <div style="/* old css styles font-size:0.82rem; */font-size:1rem;color:var(--muted);line-height:1.6;">We call once, confirm everything, and send the right professional. No bidding wars, no spam calls.</div>
     </div>
     <div class="card" style="padding:1.5rem;min-height:160px;">
-      <div style="font-size:1.6rem;margin-bottom:0.6rem;">💰</div>
-      <div style="font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;">Zero upfront payment, ever</div>
-      <div style="font-size:0.82rem;color:var(--muted);line-height:1.6;">You don't pay a deposit, a booking fee, or anything until the work is actually done and you're happy with it.</div>
+      <!-- old css styles <div style="font-size:1.6rem;margin-bottom:0.6rem;">💰</div> -->
+      <div class="why-card-icon"><img src="assets/index_no-upfront.png" alt=""></div>
+      <!-- <div style="font-weight:700;/* old css styles font-size:0.95rem; */font-size:1.0625rem;margin-bottom:0.4rem;">Zero upfront payment, ever</div> -->
+       <div style="font-weight:700;/* old css styles font-size:0.95rem; */font-size:1.0625rem;margin-bottom:0.4rem;">Pay only when job is done</div>
+      <div style="/* old css styles font-size:0.82rem; */font-size:1rem;color:var(--muted);line-height:1.6;">You don't pay a deposit, a booking fee, or anything until the work is actually done and you're happy with it.</div>
     </div>
     <div class="card" style="padding:1.5rem;min-height:160px;">
-      <div style="font-size:1.6rem;margin-bottom:0.6rem;">🤝</div>
-      <div style="font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;">Fair to professionals too</div>
-      <div style="font-size:0.82rem;color:var(--muted);line-height:1.6;">Pros aren't charged just to be considered for a job. They only pay a small fee once work is actually completed and paid for.</div>
+      <!-- old css styles <div style="font-size:1.6rem;margin-bottom:0.6rem;">🤝</div> -->
+      <div class="why-card-icon"><img src="assets/index_fair-to-pros.png" alt=""></div>
+      <div style="font-weight:700;/* old css styles font-size:0.95rem; */font-size:1.0625rem;margin-bottom:0.4rem;">Fair to professionals too</div>
+      <div style="/* old css styles font-size:0.82rem; */font-size:1rem;color:var(--muted);line-height:1.6;">We never charge for leads or listings. Our small fee comes out of completed jobs only, so we succeed when you do.</div>
     </div>
   </div>
 </div></section>
@@ -124,34 +135,18 @@ body{background:var(--bg);}
   </div>
 </div></section>
 <div id="site-footer"></div>
+<script src="countries-config.js"></script>
 <script src="nav.js"></script>
 <script>
 const _layoutReady = initSharedLayout();
 
-// PAGE-SPECIFIC OVERRIDE: index.html customizes two shared nav.js behaviors.
-// Re-declaring them here (after nav.js has already run) replaces the shared
-// version for this page only — everywhere else keeps the nav.js version.
-
-// (1) also paints the .svc-price elements used by the homepage service cards.
-FX.paint = function(){
-  document.querySelectorAll("[data-p]").forEach(el=>{const s=el.getAttribute("data-p"),t=el.getAttribute("data-pt")||"b";el.textContent=this.fmt(this.price(s,t));});
-  document.querySelectorAll("[data-cf]").forEach(el=>el.textContent=this.symbol+" "+this.currency);
-  document.querySelectorAll(".svc-price").forEach(el=>{el.textContent=this.country==="IN"?(el.dataset.priceInr||""):(el.dataset.priceUsd||"");});
-  document.querySelectorAll("[data-cs]").forEach(el=>el.textContent=this.symbol);
-  document.querySelectorAll("[data-cn]").forEach(el=>el.textContent=this.city?this.city.n+(this.city.st?", "+this.city.st:""):"Select city");
-  const isIN=this.country==="IN";
-  document.querySelectorAll("[data-ph]").forEach(el=>el.placeholder=isIN?"+91 98765 43210":"+1 (555) 000-0000");
-  document.querySelectorAll("[data-zip-lbl]").forEach(el=>el.textContent=isIN?"PIN code (optional)":"ZIP code (optional)");
-  document.querySelectorAll("[data-zip-inp]").forEach(el=>{el.placeholder=isIN?"6-digit PIN":"5-digit ZIP";});
-  document.querySelectorAll("[data-street-inp]").forEach(el=>el.placeholder=isIN?"e.g. 124 MG Road, Apt 4B, Near Metro":"e.g. 124 Main St, Apt 4B");
-  document.querySelectorAll("[data-city-inp]").forEach(el=>el.placeholder=isIN?"e.g. Bengaluru":"e.g. New York");
-  const upi=document.getElementById("pay-upi");if(upi)upi.style.display=isIN?"flex":"none";
-  const navzip=document.getElementById("nav-zip");if(navzip){navzip.style.display=FX.city?"inline-block":"none";navzip.placeholder=isIN?"PIN":"ZIP";navzip.maxLength=isIN?6:10;}
-  const zel=document.getElementById("pay-zelle");if(zel)zel.style.display=isIN?"none":"flex";
-  const tier=document.getElementById("ad-tier");
-  if(tier){tier.innerHTML=isIN?`<option value="starter">Starter — Single Service Page (₹4,999/mo)</option><option value="growth">Growth — Multi-Category + Homepage (₹14,999/mo)</option><option value="enterprise">Enterprise — Full Platform Presence (₹39,999/mo)</option><option value="custom">Not sure / Custom needs</option>`:`<option value="starter">Starter — Single Service Page ($79/mo)</option><option value="growth">Growth — Multi-Category + Homepage ($199/mo)</option><option value="enterprise">Enterprise — Full Platform Presence ($499/mo)</option><option value="custom">Not sure / Custom needs</option>`;}
+// Homepage extras after shared FX.paint() (countries_config labels live in nav.js).
+function fxOnPaint(){
+  document.querySelectorAll(".svc-price").forEach(el=>{
+    el.textContent=FX.currency==="INR"?(el.dataset.priceInr||""):(el.dataset.priceUsd||"");
+  });
   loadFeaturedReviews();
-};
+}
 
 // Customer Stories: pulled from /api/reviews/featured (top-rated, most recent, DB-backed).
 // Re-fetched whenever FX.paint() runs with a different country/city than last time — i.e.
@@ -193,29 +188,36 @@ function renderFeaturedReviews(reviews){
 
 // (2) fresh visitors with no saved city get their currency auto-detected
 // (timezone/locale, then IP-refined) instead of nav.js hard-coding USD.
-function initNav(){
+async function initNav(){
   const s=sessionStorage.getItem("fx_c") || localStorage.getItem("fx_c");
   const u=API.user();
   let cityObj=null;
   if(s){ try{ cityObj=JSON.parse(s); }catch(e){} }
   if(!cityObj && u && u.country){
+    if(typeof loadCitiesForCountry==="function") await loadCitiesForCountry(u.country);
     const userCityName=u.city || (u.country==="IN"?"Bengaluru":"New York");
-    cityObj=window._CITIES.find(c=>c.c===u.country && c.n.toLowerCase()===userCityName.toLowerCase()) ||
-            window._CITIES.find(c=>c.c===u.country);
+    cityObj=(typeof fxMatchListedCity==="function"?fxMatchListedCity(u.country, userCityName):null) ||
+            (window._CITIES||[]).find(c=>c.c===u.country);
   }
   if(cityObj){
     FX.city=cityObj;
-    FX.country=cityObj.c;
-    FX.currency=cityObj.cur;
-    FX.symbol=cityObj.sym;
-    FX.flag=cityObj.f;
+    if(typeof fxApplyCountryCfg==="function"&&fxCountryCfg(cityObj.c)) fxApplyCountryCfg(cityObj.c);
+    else {
+      FX.country=cityObj.c;
+      FX.currency=cityObj.cur;
+      FX.symbol=cityObj.sym;
+      FX.flag=cityObj.f;
+    }
     sessionStorage.setItem("fx_c", JSON.stringify(cityObj));
     localStorage.setItem("fx_c", JSON.stringify(cityObj));
-    lockCity(cityObj);
+    await lockCity(cityObj);
     FX.paint();
   } else {
     FX.city = null;
     FX.detectCurrency();
+    const countryEl=document.getElementById("nav-country");
+    if(countryEl&&FX.country) countryEl.value=FX.country;
+    if(typeof fillNavCities==="function") await fillNavCities();
     const ui=document.getElementById("city-select-ui");
     const ld=document.getElementById("city-locked-display");
     const cb=document.getElementById("city-change-btn");
@@ -223,7 +225,9 @@ function initNav(){
     if(ld) ld.style.display="none";
     if(cb) cb.style.display="none";
     FX.paint();
-    FX.detectCurrencyByIP();
+    // GPS first (country + city from cities table). If denied, IP. Manual country still fills from API.
+    const r=await FX.detectBrowserLocation();
+    if(r!=="city"&&r!=="saved") await FX.detectCurrencyByIP();
   }
   updateNav();
 }
@@ -287,7 +291,12 @@ function showCityPrompt(){
     dd.style.display='block';
   });
 
-  countryEl.addEventListener('change',()=>{inp.value='';dd.style.display='none';});
+  countryEl.addEventListener('change',async ()=>{
+    inp.value='';
+    dd.style.display='none';
+    if(typeof loadCitiesForCountry==="function") await loadCitiesForCountry(countryEl.value);
+  });
+  if(typeof loadCitiesForCountry==="function") loadCitiesForCountry(countryEl.value);
 }
 
 function selectCityByIndex(i){

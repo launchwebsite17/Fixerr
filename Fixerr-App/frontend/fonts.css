@@ -1,0 +1,35 @@
+/* ============================================================================
+   fonts.css — GLOBAL FONT SETTINGS (public + dashboards + admin + payment)
+   ============================================================================
+   Load this stylesheet on every page, BEFORE styles.css or page-level <style>.
+   Change the Google Fonts URL and the two CSS variables below to restyle the
+   whole site. Do not set color, size, weight, or spacing here.
+   ============================================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
+
+:root {
+  --font-display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+html,
+body {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}

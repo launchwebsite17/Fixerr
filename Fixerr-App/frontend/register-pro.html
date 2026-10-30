@@ -3,9 +3,14 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<!-- old css styles
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+-->
+<link rel="stylesheet" href="fonts.css">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" href="assets/Fixerr-Favicon.png">
+<link rel="apple-touch-icon" href="assets/Fixerr-Favicon.png">
 <title>Join as Professional – Fixerr</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="mobile.css">
@@ -325,38 +330,18 @@ hr.step-divider{border:none;border-top:1px solid var(--accent);margin:1.25rem 0;
   </div>
 </div>
 <div id="site-footer"></div>
+<script src="countries-config.js"></script>
 <script src="nav.js"></script>
 <script>
 const _layoutReady = initSharedLayout();
 
-// PAGE-SPECIFIC OVERRIDE: register-pro.html customizes several shared
-// nav.js behaviors. Re-declaring them here (after nav.js has already run)
-// replaces the shared version for this page only.
-
-// (1) FX.paint() also refreshes this page's own dynamic sections (ID
-// requirements, service pricing, city autofill, radius cards) whenever
-// currency/city changes, and uses shorter ZIP/PIN field labels.
-FX.paint = function(){
-  document.querySelectorAll("[data-p]").forEach(el=>{const s=el.getAttribute("data-p"),t=el.getAttribute("data-pt")||"b";el.textContent=this.fmt(this.price(s,t));});
-  document.querySelectorAll("[data-cf]").forEach(el=>el.textContent=this.symbol+" "+this.currency);
-  document.querySelectorAll("[data-cs]").forEach(el=>el.textContent=this.symbol);
-  document.querySelectorAll("[data-cn]").forEach(el=>el.textContent=this.city?this.city.n+(this.city.st?", "+this.city.st:""):"Select city");
-  const isIN=this.country==="IN";
-  document.querySelectorAll("[data-ph]").forEach(el=>el.placeholder=isIN?"+91 98765 43210":"+1 (555) 000-0000");
-  document.querySelectorAll("[data-zip-lbl]").forEach(el=>el.textContent=isIN?"PIN code":"ZIP code");
-  document.querySelectorAll("[data-zip-inp]").forEach(el=>{el.placeholder=isIN?"6-digit PIN":"5-digit ZIP";});
-  document.querySelectorAll("[data-street-inp]").forEach(el=>el.placeholder=isIN?"e.g. 124 MG Road, Apt 4B, Near Metro":"e.g. 124 Main St, Apt 4B");
-  document.querySelectorAll("[data-city-inp]").forEach(el=>el.placeholder=isIN?"e.g. Bengaluru":"e.g. New York");
-  const upi=document.getElementById("pay-upi");if(upi)upi.style.display=isIN?"flex":"none";
-  const navzip=document.getElementById("nav-zip");if(navzip){navzip.style.display=FX.city?"inline-block":"none";navzip.placeholder=isIN?"PIN":"ZIP";navzip.maxLength=isIN?6:10;}
-  const zel=document.getElementById("pay-zelle");if(zel)zel.style.display=isIN?"none":"flex";
-  const tier=document.getElementById("ad-tier");
-  if(tier){tier.innerHTML=isIN?`<option value="starter">Starter — Single Service Page (₹4,999/mo)</option><option value="growth">Growth — Multi-Category + Homepage (₹14,999/mo)</option><option value="enterprise">Enterprise — Full Platform Presence (₹39,999/mo)</option><option value="custom">Not sure / Custom needs</option>`:`<option value="starter">Starter — Single Service Page ($79/mo)</option><option value="growth">Growth — Multi-Category + Homepage ($199/mo)</option><option value="enterprise">Enterprise — Full Platform Presence ($499/mo)</option><option value="custom">Not sure / Custom needs</option>`;}
+// Page extras after shared FX.paint() — ID/pay sections stay country-keyed.
+function fxOnPaint(){
   if(typeof updateIDSection==="function")updateIDSection();
   if(typeof updateServicePricing==="function")updateServicePricing();
   if(typeof fillProCityFromNav==="function")fillProCityFromNav();
   if(typeof renderServiceRadiusCards==="function")renderServiceRadiusCards();
-};
+}
 
 // (2) a simpler inline-error renderer (no auto-clear-on-input listener).
 function showErr(id,msg){const el=document.getElementById(id);if(!el)return;el.style.borderColor="#DC2626";let e=el.parentElement.querySelector(".ferr");if(!e){e=document.createElement("div");e.className="ferr";e.style.cssText="color:#DC2626;font-size:0.8rem;margin-top:0.18rem;";el.parentElement.appendChild(e);}e.textContent=msg;}
@@ -374,15 +359,9 @@ function clearLocationErr(){
 }
 
 // (4) onCountryChange/onCityChange also clear that validation state.
-function onCountryChange(){
-  const cc=document.getElementById("nav-country")?.value;
-  const sel=document.getElementById("nav-city-sel");
-  if(!sel) return;
-  sel.innerHTML='<option value="">📍 Select city</option>';
-  if(!cc){sel.disabled=true;return;}
-  const cities=window._CITIES.filter(c=>c.c===cc).sort((a,b)=>a.n.localeCompare(b.n));
-  cities.forEach(c=>{const o=document.createElement("option");o.value=JSON.stringify(c);o.textContent=c.f+" "+c.n+(c.st?", "+c.st:"");sel.appendChild(o);});
-  sel.disabled=false;
+async function onCountryChange(){
+  // Old: filtered window._CITIES (hardcoded JSON) for this country.
+  if(typeof fillNavCities==="function") await fillNavCities();
   clearLocationErr();
 }
 function onCityChange(){
@@ -557,10 +536,10 @@ function updateServicePricing(){
     return;
   }
   const isIN=FX.country==='IN';
-  const sym=isIN?'₹':'$';
+  const sym=FX.symbol||(fxCountryCfg(FX.country)||{}).currency_symbol||'';
   const pricesINR={plumbing:399,electrical:449,cleaning:599,appliance:499,beauty:299,tutoring:249,photography:799,events:1199,lawn:349,painting:599,movers:1199,handyman:449};
   const pricesUSD={plumbing:49,electrical:59,cleaning:79,appliance:69,beauty:39,tutoring:30,photography:99,events:149,lawn:49,painting:79,movers:149,handyman:59};
-  const prices=isIN?pricesINR:pricesUSD;
+  const prices=FX.currency==='INR'?pricesINR:pricesUSD;
   const labels={plumbing:'Plumbing',electrical:'Electrician',cleaning:'Home Cleaning',appliance:'Appliance Repair',beauty:'Beauty & Spa',tutoring:'Tutoring',photography:'Photography',events:'Events',lawn:'Lawn & Garden',painting:'Painting',movers:'Movers',handyman:'Handyman'};
   pc.innerHTML='<div style="background:var(--bg2);border-radius:var(--radius-sm);padding:0.85rem 1rem;font-size:0.85rem;">'
     +'<div style="font-weight:700;margin-bottom:0.5rem;color:var(--text);">Fixerr starting rates for your services:</div>'
@@ -675,11 +654,7 @@ async function submitReg(){
   const doc1=isIN?document.getElementById('p-doc1-in'):document.getElementById('p-doc1-us');
   const doc2=isIN?document.getElementById('p-doc2-in'):null;
   function validatePhone(ph,country){
-    if(!ph)return'Phone number is required';
-    const clean=ph.replace(/[\s\-().]/g,'');
-    if(country==='IN'){if(!/^(\+91)?[6-9]\d{9}$/.test(clean))return'Enter a valid Indian mobile number (e.g. +91 98765 43210)';}
-    else{if(!/^(\+1)?[2-9]\d{9}$/.test(clean))return'Enter a valid US phone number (e.g. +1 555 000 0000)';}
-    return null;
+    return fxPhoneErr(ph, country);
   }
   let ok=true;
   if(!fn){showErr('p-fn','First name is required');ok=false;}
@@ -693,18 +668,15 @@ async function submitReg(){
   if(!v('p-street')||v('p-street').length<5){showErr('p-street','Please enter your street address');ok=false;}
   if(!city){toast('Please select your city using the city selector','err');ok=false;}
   // ZIP/PIN validation
-  const zipVal=(v('p-zip')||'').trim().replace(/[^0-9]/g,'');
-  if(isIN){
-    if(!zipVal||!/^\d{6}$/.test(zipVal)){showErr('p-zip','Please enter a valid 6-digit PIN code');ok=false;}
-  } else {
-    if(!zipVal||!/^\d{5}$/.test(zipVal)){showErr('p-zip','Please enter a valid 5-digit ZIP code');ok=false;}
-  }
+  const zipVal=(v('p-zip')||'').trim();
+  const zipErr=fxPostalErr(zipVal, city?.c||FX.country, true);
+  if(zipErr){showErr('p-zip',zipErr);ok=false;}
   const serviceRadius=v('p-service-radius');
   const radiusCustomWrap=document.getElementById('p-radius-custom-wrap');
   const radiusIsCustom=radiusCustomWrap&&radiusCustomWrap.style.display!=='none';
   if(radiusIsCustom){
     const customNum=parseFloat(v('p-radius-custom'));
-    if(isNaN(customNum)||customNum<=50||customNum>100){showErr('p-radius-custom',`Enter a valid custom radius greater than 50 and up to 100 ${isIN?'km':'miles'}`);ok=false;}
+    if(isNaN(customNum)||customNum<=50||customNum>100){showErr('p-radius-custom',`Enter a valid custom radius greater than 50 and up to 100 ${fxDistanceWord(city?.c||FX.country)}`);ok=false;}
   } else if(!serviceRadius){showErr('p-service-radius','Please select how far you will travel for jobs');ok=false;}
   if(!services.length){toast('Please select at least one service category','err');ok=false;}
   const missingExp=services.filter(s=>!v('p-exp-'+s));

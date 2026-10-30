@@ -3,9 +3,14 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<!-- old css styles
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+-->
+<link rel="stylesheet" href="fonts.css">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" href="assets/Fixerr-Favicon.png">
+<link rel="apple-touch-icon" href="assets/Fixerr-Favicon.png">
 <title>Book a Service – Fixerr</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="mobile.css">
@@ -179,7 +184,7 @@
           <label>City <span class="req">*</span></label>
           <input type="text" id="f-city" data-city-inp placeholder="e.g. Bengaluru / New York" name="f-city" aria-label="E.g. Bengaluru / New York">
         </div>
-        <div class="form-group" style="margin-bottom:0;"><label id="lbl-zip" data-zip-lbl>ZIP / PIN code (optional)</label><input type="text" id="f-zip" data-zip-inp placeholder="ZIP or PIN code" name="f-zip" aria-label="ZIP or PIN code"></div>
+        <div class="form-group" style="margin-bottom:0;"><label id="lbl-zip" data-zip-lbl data-zip-optional>ZIP / PIN code (optional)</label><input type="text" id="f-zip" data-zip-inp placeholder="ZIP or PIN code" name="f-zip" aria-label="ZIP or PIN code"></div>
       </div>
       <div style="margin-bottom:0.95rem;"></div>
       <div class="form-group"><label>Access notes (optional)</label><textarea id="f-notes" placeholder="3rd floor, ring bell twice, gate code 1234..." style="min-height:60px;" name="f-notes" aria-label="3rd floor, ring bell twice, gate code 1234..."></textarea></div>
@@ -275,6 +280,7 @@
   </div>
 </div>
 <div id="site-footer"></div>
+<script src="countries-config.js"></script>
 <script src="nav.js"></script>
 <script>
 const _layoutReady = initSharedLayout();
@@ -600,15 +606,14 @@ async function gStep(n){
       if(!city||city.length<2){showErr("f-city","Please enter your city name");addrOk=false;}
       else if(!/^[a-zA-Z\s.\-]+$/.test(city)){showErr("f-city","City name should only contain letters");addrOk=false;}
       if(zip){
-        if(FX.country==="IN"&&!/^\d{6}$/.test(zip)){showErr("f-zip","Indian PIN code must be exactly 6 digits");addrOk=false;}
-        if(FX.country==="US"&&!/^\d{5}(-\d{4})?$/.test(zip)){showErr("f-zip","US ZIP code must be 5 digits (e.g. 10001)");addrOk=false;}
+        const zipErr=fxPostalErr(zip, FX.country, false);
+        if(zipErr){showErr("f-zip",zipErr);addrOk=false;}
       }
       if(!nm){showErr("f-name","Your name is required");addrOk=false;}
       if(!ph&&!em){showErr("f-phone","Phone number is required so we can call you");addrOk=false;}
       if(ph){
-        const clean=ph.replace(/[\s\-().]/g,'');
-        if(FX.country==="IN"&&!/^(\+91)?[6-9]\d{9}$/.test(clean)){showErr("f-phone","Enter a valid Indian mobile number (e.g. +91 98765 43210)");addrOk=false;}
-        if(FX.country==="US"&&!/^(\+1)?[2-9]\d{9}$/.test(clean)){showErr("f-phone","Enter a valid US phone number (e.g. +1 555 000 0000)");addrOk=false;}
+        const phErr=fxPhoneErr(ph, FX.country);
+        if(phErr){showErr("f-phone",phErr);addrOk=false;}
       }
       if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){showErr("f-email","Enter a valid email address");addrOk=false;}
       if(!document.getElementById('f-adult18')?.checked){toast('Please confirm that an adult (18+) will be present during the visit','err');return;}
@@ -837,11 +842,8 @@ function onBkCountryChange(){
     stSel.innerHTML = '<option value="">Select State</option>' + states.map(s=>`<option value="${s}">${s}</option>`).join("");
     if(currVal && states.includes(currVal)) stSel.value = currVal;
   }
-  const zipLbl = document.getElementById("lbl-zip");
-  if(zipLbl) zipLbl.textContent = c === "IN" ? "PIN code (optional)" : "ZIP code (optional)";
-  FX.country = c;
-  FX.currency = c === "IN" ? "INR" : "USD";
-  FX.symbol = c === "IN" ? "₹" : "$";
+  if(typeof fxApplyCountryCfg==="function") fxApplyCountryCfg(c);
+  else FX.country = c;
   FX.paint();
   updateOrder();
   if(BK.step===6) renderPaymentOptions();

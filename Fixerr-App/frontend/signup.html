@@ -8,13 +8,17 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <!-- old css styles
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+    -->
+    <link rel="stylesheet" href="fonts.css" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" href="assets/Fixerr-Favicon.png" />
+    <link rel="apple-touch-icon" href="assets/Fixerr-Favicon.png" />
     <title>Sign Up – Fixerr</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="mobile.css" />
@@ -26,6 +30,18 @@
     <style>
       body{background:var(--bg);}
       input[type="range"]{accent-color:var(--accent);width:100%;}
+      .signup-benefit-icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+      .signup-benefit-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+      /* Old footer settings — disabled so signup uses the common footer styles in styles.css
       footer {
         background: var(--text);
         color: #fff;
@@ -67,6 +83,7 @@
         font-size: 0.8rem;
         color: #6b7280;
       }
+      */
     </style>
     <script src="common.js"></script>
   </head>
@@ -108,8 +125,9 @@
             margin-bottom: 1.5rem;
           "
         >
-          Whether you need a service or offer one — join thousands using Fixerr
-          across the US and India.
+          <!-- Whether you need a service or offer one — join thousands using Fixerr
+          across the US and India. -->
+          Home services made simple, for customers and professionals in the US and India.
         </p>
         <div style="display: flex; flex-direction: column; gap: 0.65rem">
           <div
@@ -117,103 +135,69 @@
               display: flex;
               align-items: center;
               gap: 0.65rem;
-              font-size: 0.88rem;
+              font-size: 1.10rem;
             "
           >
-            <div
-              style="
-                width: 26px;
-                height: 26px;
-                border-radius: 50%;
-                background: var(--accent-light);
-                color: var(--accent);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 0.78rem;
-              "
-            >
-              🆓
-            </div>
-            Free to join
+          <div class="signup-benefit-icon">
+            <!-- old css styles 🆓 / <img src="assets/Free-Signup-User-Icon.png"> -->
+            <!-- old css styles <img src="assets/signup_free-to-join.svg"> -->
+            <img src="assets/signup_free-to-join.png" alt="">
           </div>
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              gap: 0.65rem;
-              font-size: 0.88rem;
-            "
-          >
-            <div
-              style="
-                width: 26px;
-                height: 26px;
-                border-radius: 50%;
-                background: var(--accent-light);
-                color: var(--accent);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 0.78rem;
-              "
-            >
-              ⚡
-            </div>
-            Under 3 minutes
+          Free to sign up
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            /* old css styles font-size: 0.88rem; */
+            font-size: 1.10rem;
+          "
+        >
+          <!-- old css styles 36px holder, overflow hidden, width/height + inline size -->
+          <div class="signup-benefit-icon">
+            <!-- old css styles ⚡ -->
+            <!-- old css styles <img src="assets/signup_under-3-minutes.svg"> -->
+            <img src="assets/signup_under-3-minutes.png" alt="">
           </div>
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              gap: 0.65rem;
-              font-size: 0.88rem;
-            "
-          >
-            <div
-              style="
-                width: 26px;
-                height: 26px;
-                border-radius: 50%;
-                background: var(--accent-light);
-                color: var(--accent);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 0.78rem;
-              "
-            >
-              🌍
-            </div>
-            India (₹) and US ($)
+          Ready in under 3 minutes
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            /* old css styles font-size: 0.88rem; */
+            font-size: 1.10rem;
+          "
+        >
+          <!-- old css styles 36px holder, overflow hidden, width/height + inline size -->
+          <div class="signup-benefit-icon">
+            <!-- old css styles 🌍 -->
+            <!-- old css styles <img src="assets/signup_india-us.svg"> -->
+            <img src="assets/signup_india-us.png" alt="">
           </div>
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              gap: 0.65rem;
-              font-size: 0.88rem;
-            "
-          >
-            <div
-              style="
-                width: 26px;
-                height: 26px;
-                border-radius: 50%;
-                background: var(--accent-light);
-                color: var(--accent);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 0.78rem;
-              "
-            >
-              💰
-            </div>
-            Pay only after job done
+          Available in India (₹) and the US ($)
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            /* old css styles font-size: 0.88rem; */
+            font-size: 1.10rem;
+          "
+        >
+          <!-- old css styles 36px holder, overflow hidden, width/height + inline size -->
+          <div class="signup-benefit-icon">
+            <!-- old css styles 💰 -->
+            <!-- old css styles <img src="assets/signup_pay-after-job.svg"> -->
+            <img src="assets/signup_pay-after-job.png" alt="">
           </div>
+          Pay only when the job is done
         </div>
       </div>
+    </div>
       <div
         style="
           display: flex;
@@ -410,6 +394,7 @@
       </div>
     </div>
     <div id="site-footer"></div>
+    <script src="countries-config.js"></script>
     <script src="nav.js"></script>
     <script>
       const _layoutReady = initSharedLayout();
@@ -430,23 +415,9 @@
         )
           clearErr();
       }
-      function onCountryChange() {
-        const cc = document.getElementById("nav-country")?.value;
-        const sel = document.getElementById("nav-city-sel");
-        if (!sel) return;
-        sel.innerHTML = '<option value="">📍 Select city</option>';
-        if (!cc) {
-          sel.disabled = true;
-          return;
-        }
-        const cities = window._CITIES.filter((c) => c.c === cc).sort((a, b) => a.n.localeCompare(b.n));
-        cities.forEach((c) => {
-          const o = document.createElement("option");
-          o.value = JSON.stringify(c);
-          o.textContent = c.f + " " + c.n + (c.st ? ", " + c.st : "");
-          sel.appendChild(o);
-        });
-        sel.disabled = false;
+      async function onCountryChange() {
+        // Old: filtered window._CITIES (hardcoded JSON) for this country.
+        if (typeof fillNavCities === "function") await fillNavCities();
         clearLocationErr();
       }
       function onCityChange() {
@@ -560,9 +531,8 @@
             states.map((s) => `<option value="${s}">${s}</option>`).join("");
           if (currVal && states.includes(currVal)) stSel.value = currVal;
         }
-        FX.country = c;
-        FX.currency = c === "IN" ? "INR" : "USD";
-        FX.symbol = c === "IN" ? "₹" : "$";
+        if (typeof fxApplyCountryCfg === "function") fxApplyCountryCfg(c);
+        else FX.country = c;
         const countryEl = document.getElementById("nav-country");
         if (countryEl) {
           countryEl.value = c;
@@ -606,18 +576,7 @@
         }
       });
       function validatePhone(ph, country) {
-        if (!ph) return "Phone number is required";
-        const clean = ph.replace(/[\s\-().]/g, "");
-        if (country === "IN") {
-          // Accept +91XXXXXXXXXX or 10-digit starting with 6-9
-          if (!/^(\+91)?[6-9]\d{9}$/.test(clean))
-            return "Enter a valid Indian mobile number (e.g. +91 98765 43210)";
-        } else {
-          // US: +1XXXXXXXXXX or 10-digit
-          if (!/^(\+1)?[2-9]\d{9}$/.test(clean))
-            return "Enter a valid US phone number (e.g. +1 555 000 0000)";
-        }
-        return null;
+        return fxPhoneErr(ph, country);
       }
       async function doSignup() {
         clearErr();
@@ -671,19 +630,12 @@
         }
         if (!ok) return;
         // ZIP/PIN validation
-        const zipVal = (v("su-zip") || "").trim().replace(/[^0-9]/g, "");
+        const zipVal = (v("su-zip") || "").trim();
         const cityObj = FX.city;
-        const isINzip = (cityObj && cityObj.c === "IN") || FX.country === "IN";
-        if (isINzip) {
-          if (!zipVal || !/^\d{6}$/.test(zipVal)) {
-            showErr("su-zip", "Please enter a valid 6-digit PIN code");
-            ok = false;
-          }
-        } else {
-          if (!zipVal || !/^\d{5}$/.test(zipVal)) {
-            showErr("su-zip", "Please enter a valid 5-digit ZIP code");
-            ok = false;
-          }
+        const zipErr = fxPostalErr(zipVal, (cityObj && cityObj.c) || FX.country, true);
+        if (zipErr) {
+          showErr("su-zip", zipErr);
+          ok = false;
         }
         if (!ok) return;
         const city = FX.city;
