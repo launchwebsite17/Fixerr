@@ -3,9 +3,14 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<!-- old css styles
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+-->
+<link rel="stylesheet" href="fonts.css">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" href="assets/Fixerr-Favicon.png">
+<link rel="apple-touch-icon" href="assets/Fixerr-Favicon.png">
 <title>Advertise with Fixerr – Fixerr</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="mobile.css">
@@ -161,6 +166,7 @@
   </div>
 </div>
 <div id="site-footer"></div>
+<script src="countries-config.js"></script>
 <script src="nav.js"></script>
 <script>
 
@@ -210,7 +216,7 @@ async function submitAd(){
   if(!ok)return;
   const btn=document.getElementById('ad-btn');btn.textContent='Sending...';btn.disabled=true;
   try{
-    await API.post('/api/ads/inquire',{company:co,name:nm,email:em,phone:v('ad-ph'),tier:v('ad-tier'),category:v('ad-cat'),message:v('ad-msg'),country:FX.country||'US',currency:FX.currency||'USD'});
+    await API.post('/api/ads/inquire',{company:co,name:nm,email:em,phone:v('ad-ph'),tier:v('ad-tier'),category:v('ad-cat'),message:v('ad-msg'),country:FX.country||fxDefaultCountry(),currency:FX.currency||(fxCountryCfg(FX.country||fxDefaultCountry())||{}).currency_code});
     document.getElementById('ad-done').style.display='block';
     btn.style.display='none';
     toast('Inquiry submitted! We will contact you within 24 hours.');

@@ -7,6 +7,17 @@ const { sendEmail, EMAIL } = require('../services/emailService');
 const { geocodePlace } = require('../services/geocodeService');
 const { buildCpUniqueId } = require('../services/identityService');
 const { resolveProAssetUrl } = require('../services/proAssetService');
+const { linkVisitorToUser } = require('../services/visitorTrackingService');
+
+// Attaches the browser's anonymous visit history (nav.js sends visitor_uid) to the account.
+// Fire-and-forget: tracking must never delay or fail signup/login.
+function linkVisitorAfterAuth(visitorUid, userId, role) {
+  if (!visitorUid) return;
+  setImmediate(() => {
+    linkVisitorToUser(visitorUid, userId, role)
+      .catch((err) => console.error('Visitor link failed (non-fatal):', err.message));
+  });
+}
 
 exports.register = async (req, res) => {
   try {
@@ -53,6 +64,7 @@ exports.register = async (req, res) => {
       cp_unique_id: u.cp_unique_id,
       welcome: `Welcome to Fixerr, ${u.first}! Your account is ready.`
     });
+    linkVisitorAfterAuth(req.body.visitor_uid, u.id, u.role);
 
     // Geocoding is optional profile enrichment. Run it only after sending the registration
     // response so slow or throttled Nominatim requests (especially from hosted environments)
@@ -118,6 +130,7 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign({ id: u.id, email: u.email, role: u.role }, env.JWT_SECRET, { expiresIn: '30d' });
     res.json({ success: true, token, userId: u.id, role: u.role, name: u.first, currency: u.currency, country: u.country, city: u.city, state: u.state, cp_unique_id: u.cp_unique_id, redirect: u.role === 'admin' ? '/fixerr-owner-0si7erbb2ctq.html' : null });
+    linkVisitorAfterAuth(req.body.visitor_uid, u.id, u.role);
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Login failed. Please try again.' });

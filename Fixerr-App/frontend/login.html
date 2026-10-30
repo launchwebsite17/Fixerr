@@ -8,13 +8,17 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <!-- old css styles
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+    -->
+    <link rel="stylesheet" href="fonts.css" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" href="assets/Fixerr-Favicon.png" />
+    <link rel="apple-touch-icon" href="assets/Fixerr-Favicon.png" />
     <title>Log In – Fixerr</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="mobile.css" />
@@ -240,6 +244,7 @@
       </div>
     </div>
     <div id="site-footer"></div>
+    <script src="countries-config.js"></script>
     <script src="nav.js"></script>
     <script>
       const _layoutReady = initSharedLayout();
@@ -261,23 +266,9 @@
         )
           clearFErr();
       }
-      function onCountryChange() {
-        const cc = document.getElementById("nav-country")?.value;
-        const sel = document.getElementById("nav-city-sel");
-        if (!sel) return;
-        sel.innerHTML = '<option value="">📍 Select city</option>';
-        if (!cc) {
-          sel.disabled = true;
-          return;
-        }
-        const cities = window._CITIES.filter((c) => c.c === cc).sort((a, b) => a.n.localeCompare(b.n));
-        cities.forEach((c) => {
-          const o = document.createElement("option");
-          o.value = JSON.stringify(c);
-          o.textContent = c.f + " " + c.n + (c.st ? ", " + c.st : "");
-          sel.appendChild(o);
-        });
-        sel.disabled = false;
+      async function onCountryChange() {
+        // Old: filtered window._CITIES (hardcoded JSON) for this country.
+        if (typeof fillNavCities === "function") await fillNavCities();
         clearLocationErr();
       }
       function onCityChange() {
@@ -407,9 +398,8 @@
           if (currVal && states.includes(currVal)) stSel.value = currVal;
         }
         if (c) {
-          FX.country = c;
-          FX.currency = c === "IN" ? "INR" : "USD";
-          FX.symbol = c === "IN" ? "₹" : "$";
+          if (typeof fxApplyCountryCfg === "function") fxApplyCountryCfg(c);
+          else FX.country = c;
           const countryEl = document.getElementById("nav-country");
           if (countryEl) {
             countryEl.value = c;
@@ -458,28 +448,28 @@
             expected_role,
           });
           API.save(d);
-          // Auto-populate Country & City/State from the user's saved profile in the database.
-          // The login API returns city, state, country — match against CITIES array and update FX session.
+          // Auto-populate Country & City from the user's saved profile.
+          // Match against GET /api/cities (not the old hardcoded CITIES array).
           if (d.country && d.city) {
+            if (typeof loadCitiesForCountry === "function") await loadCitiesForCountry(d.country);
             const matchCity =
-              CITIES.find(
-                (c) =>
-                  c.c === d.country &&
-                  c.n.toLowerCase() === (d.city || "").toLowerCase(),
-              ) || CITIES.find((c) => c.c === d.country);
+              (typeof fxMatchListedCity === "function" && fxMatchListedCity(d.country, d.city)) ||
+              (window._CITIES || []).find((c) => c.c === d.country);
             if (matchCity) {
               FX.city = matchCity;
-              FX.country = matchCity.c;
-              FX.currency = matchCity.cur;
-              FX.symbol = matchCity.sym;
-              FX.flag = matchCity.f;
+              if (typeof fxApplyCountryCfg === "function" && fxCountryCfg(matchCity.c)) fxApplyCountryCfg(matchCity.c);
+              else {
+                FX.country = matchCity.c;
+                FX.currency = matchCity.cur;
+                FX.symbol = matchCity.sym;
+                FX.flag = matchCity.f;
+              }
               sessionStorage.setItem("fx_c", JSON.stringify(matchCity));
               localStorage.setItem("fx_c", JSON.stringify(matchCity));
             }
           } else if (d.country) {
-            FX.country = d.country;
-            FX.currency = d.country === "IN" ? "INR" : "USD";
-            FX.symbol = d.country === "IN" ? "₹" : "$";
+            if (typeof fxApplyCountryCfg === "function") fxApplyCountryCfg(d.country);
+            else FX.country = d.country;
           }
           toast("Welcome back, " + (d.name || "User") + "!");
           // Keep a full-page loader on screen until the dashboard page takes over.

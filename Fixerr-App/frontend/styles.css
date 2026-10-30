@@ -40,10 +40,11 @@
    it belongs in this file, not mobile.css.
 
    HOW TO USE
+   <link rel="stylesheet" href="fonts.css">
    <link rel="stylesheet" href="styles.css">
    <link rel="stylesheet" href="mobile.css">
-   (styles.css first, so mobile.css's @media rules can override it at small
-   viewports — normal CSS cascade/specificity rules apply.)
+   (fonts.css first for global type; styles.css next; mobile.css last so its
+   @media rules can override at small viewports.)
    ============================================================================ */
 
 /* DESIGN TOKENS — every color/spacing/shadow value used across the shared
@@ -71,14 +72,19 @@
   --radius: 16px;
   --radius-sm: 10px;
   --radius-xs: 6px;
+  /* old css styles
   --font-display: 'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
   --font-body: 'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+  */
 }
 /* GLOBAL RESET — box-sizing + zeroed margin/padding so every component
    below can size itself predictably without fighting the browser defaults. */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;background:var(--bg2);color:var(--text);font-size:18px;line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+/* old css styles
+body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;}
+*/
+body{font-family:var(--font-body);background:var(--bg2);color:var(--text);font-size:18px;line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 h1,h2,h3,h4,h5{font-family:var(--font-display);font-weight:700;}
 a{color:inherit;}
 
@@ -88,7 +94,12 @@ a{color:inherit;}
    forcing the page wider than the viewport (the #1 cause of an accidental horizontal scrollbar),
    and keeps embedded media (images/video/iframes/etc.) from overflowing their container. */
 html,body{overflow-x:hidden;max-width:100vw;width:100%;}
-img,video,iframe,svg,canvas,embed,object{max-width:100%;height:auto;}
+img,video,iframe,canvas,embed,object{max-width:100%;height:auto;}
+/* old logic — svg in the global media reset
+   `height:auto` + `max-width:100%` inflates header icons (Log Out) to the button width.
+svg{max-width:100%;height:auto;}
+*/
+svg{max-width:100%;}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,0.06);gap:1rem;}
@@ -98,7 +109,95 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:ce
 .nav-links{display:flex;gap:2rem;list-style:none;}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:1.02rem;font-weight:600;transition:color 0.2s;padding:0.25rem 0;letter-spacing:0.01em;}
 .nav-links a:hover,.nav-links a.active{color:var(--accent);}
-.nav-right{display:flex;gap:0.75rem;align-items:center;}
+.nav-right{display:flex;gap:0.75rem;align-items:center;flex-shrink:0;margin-left:auto;}
+nav svg{max-width:none;width:15px;height:15px;flex-shrink:0;}
+#nav-right{flex-shrink:0;flex-wrap:nowrap;}
+#nav-right .nav-logout svg{width:14px;height:14px;}
+/* Header service search — placeholder only (no DB lookup yet). Matches country/city .fx-dd-btn:
+   36px tall, 1px border, 6px rounded rectangle (not a pill). */
+.nav-svc-search{
+  display:flex;
+  align-items:center;
+  gap:0.45rem;
+  height:36px;
+  /* Old width (placeholder clipped): min-width:0; flex:1 1 220px; max-width:280px; */
+  min-width:270px;
+  flex:1 1 280px;
+  max-width:320px;
+  padding:0 0.75rem;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:#fff;
+  transition:border-color 0.15s,box-shadow 0.15s;
+}
+.nav-svc-search:hover{border-color:#cfd5cf;}
+.nav-svc-search:focus-within{border-color:var(--accent-mid);box-shadow:0 0 0 3px rgba(109,191,98,0.15);}
+.nav-svc-search-icon{flex-shrink:0;color:var(--muted);}
+.nav-svc-search input{
+  flex:1 1 auto;
+  min-width:0;
+  height:100%;
+  border:none;
+  outline:none;
+  background:transparent;
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:0.82rem;
+  font-weight:500;
+  line-height:1;
+}
+.nav-svc-search input::placeholder{color:var(--muted2);font-weight:500;}
+.nav-svc-search input::-webkit-search-decoration,
+.nav-svc-search input::-webkit-search-cancel-button{display:none;}
+/* old logic — shrink public header gaps for every visitor under 1400px
+@media (max-width:1399px){
+  .nav-svc-search{min-width:0;flex:1 1 180px;max-width:220px;}
+  .nav-links{gap:1.15rem;}
+}
+*/
+/* Logged-in public pages only: tighten header gaps so Hi / Dashboard / Log Out fit.
+   Dashboards keep the logged-out public menu gap (2rem). nav.js toggles .fx-logged-in. */
+body.fx-logged-in .nav-links{gap:1.15rem;}
+body.fx-logged-in .nav-left{gap:1rem !important;}
+body.fx-logged-in .nav-right{gap:0.45rem;}
+@media (max-width:1399px){
+  body.fx-logged-in .nav-svc-search{min-width:0;flex:1 1 180px;max-width:220px;}
+  body.fx-logged-in .nav-links{gap:0.9rem;}
+}
+
+/* NAV COUNTRY / CITY DROPDOWNS — custom stand-ins for the hidden #nav-country / #nav-city-sel
+   (built and synced by nav.js's fxDDRender()). The City list shows 5 cities, then scrolls. */
+.fx-native-sel{display:none !important;}
+.fx-dd{position:relative;}
+.fx-dd-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:0.55rem;height:36px;min-width:112px;max-width:170px;padding:0 0.75rem;border:1px solid var(--border);border-radius:6px;background:#fff;color:var(--text);font-family:var(--font-body);font-size:0.82rem;font-weight:600;line-height:1;cursor:pointer;transition:border-color 0.15s,box-shadow 0.15s;}
+.fx-dd-btn:hover{border-color:#cfd5cf;}
+.fx-dd.open .fx-dd-btn{border-color:var(--accent-mid);box-shadow:0 0 0 3px rgba(109,191,98,0.15);}
+.fx-dd-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.fx-dd-caret{width:0;height:0;flex-shrink:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--accent-mid);transition:transform 0.15s;}
+.fx-dd.open .fx-dd-caret{transform:rotate(180deg);}
+.fx-dd.disabled .fx-dd-btn{opacity:0.55;cursor:default;}
+.fx-dd-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:100%;width:max-content;max-width:240px;padding:0.35rem 0;background:#fff;border:1px solid #E2E4E2;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:1100;}
+#fx-dd-city .fx-dd-menu{min-width:200px;}
+.fx-dd.open .fx-dd-menu{display:block;}
+.fx-dd-search{display:block;width:calc(100% - 0.9rem);height:32px;margin:0.05rem 0.45rem 0.35rem;padding:0 0.65rem;border:1px solid var(--border);border-radius:5px;font-family:var(--font-body);font-size:0.8rem;color:var(--text);outline:none;}
+.fx-dd-search:focus{border-color:var(--accent-mid);}
+.fx-dd-list{position:relative;max-height:170px;overflow-y:auto;}
+.fx-dd-item{height:34px;line-height:34px;padding:0 0.95rem;font-size:0.84rem;color:var(--text);white-space:nowrap;cursor:pointer;}
+.fx-dd-item:hover{background:var(--bg2);}
+.fx-dd-item.sel{background:var(--accent-light);color:var(--accent);font-weight:600;}
+.fx-dd-empty{padding:0.45rem 0.95rem;font-size:0.8rem;color:var(--muted);}
+@media (max-width:1024px){
+  .fx-dd-btn{min-width:0;max-width:120px;font-size:0.78rem;}
+  /* Old: flex-basis:160px;max-width:200px; — hamburger frees space, keep full placeholder. */
+  .nav-svc-search{min-width:250px;flex-basis:270px;max-width:300px;font-size:0.78rem;}
+  .nav-svc-search input{font-size:0.78rem;}
+}
+@media (max-width:767px){
+  .fx-dd-btn{max-width:92px;height:32px;padding:0 0.5rem;gap:0.35rem;font-size:0.72rem;}
+  #fx-dd-city .fx-dd-menu{left:auto;right:0;}
+  .nav-svc-search{height:32px;flex-basis:110px;max-width:150px;padding:0 0.5rem;gap:0.3rem;}
+  .nav-svc-search input{font-size:0.72rem;}
+}
 
 /* BUTTONS */
 .btn-primary{background:var(--accent);color:#fff;padding:0.7rem 1.5rem;border-radius:50px;font-weight:600;font-size:0.9rem;text-decoration:none;border:none;cursor:pointer;transition:all 0.2s;display:inline-block;text-align:center;}
@@ -108,6 +207,37 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:ce
 .btn-ghost{background:transparent;color:var(--muted);padding:0.65rem 1.2rem;border-radius:50px;font-weight:500;font-size:0.88rem;text-decoration:none;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;display:inline-block;}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 .btn-sm{padding:0.45rem 1rem;font-size:0.82rem;}
+/* Old twin filled pills (same green, same size, extra border + drop shadow):
+.nav-auth-btn{display:inline-flex;align-items:center;justify-content:center;min-width:84px;height:36px;border-radius:50px;border:1px solid var(--accent2);box-shadow:0 2px 4px rgba(0,0,0,0.15);}
+Old 8px-corner version: .nav-auth-btn{display:inline-flex;align-items:center;justify-content:center;min-width:84px;height:36px;border-radius:8px;}
+*/
+/* Option C: one 36px capsule — Log In (ghost) + Sign Up (fill). Height matches country/city chips. */
+.nav-auth-capsule{
+  display:inline-flex;
+  align-items:stretch;
+  height:36px;
+  border:1.5px solid var(--border);
+  border-radius:50px;
+  overflow:hidden;
+  background:#fff;
+  flex-shrink:0;
+}
+.nav-auth-login,
+.nav-auth-signup{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 1rem;
+  text-decoration:none;
+  font-weight:600;
+  font-size:0.82rem;
+  white-space:nowrap;
+  line-height:1;
+}
+.nav-auth-login{color:var(--text);background:transparent;}
+.nav-auth-login:hover{background:var(--bg2);color:var(--accent);}
+.nav-auth-signup{color:#fff;background:var(--accent);}
+.nav-auth-signup:hover{background:var(--accent2);}
 .btn-lg{padding:0.9rem 2.2rem;font-size:1rem;}
 
 /* SECTION */
@@ -263,20 +393,34 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:ce
 
 /* FOOTER */
 footer{
-  background:var(--text);
-  color:#fff;
+  /* Old footer colors: background:var(--text); color:#fff; */
+  position:relative;
+  /* Glossy black footer background (previous version):
+  background:linear-gradient(180deg,#2b2b2b 0%,#111111 45%,#000000 100%);
+  */
+  /* Old footer bg theme with gradient
+  background:radial-gradient(ellipse closest-side at 50% 50%,#024c19 0%,#024318 20%,#033713 39%,#022a0f 59%,#011c0b 78%,#001107 98%,#000904 140%);
+  background-color:#022a0f;
+  */
+  background:#1A1D1A;
+  /* old css styles color:#F5F5F7; */
+  /* milky white */
+  color:#F5F1EA;
   padding:4rem 3rem 2rem;
   font-family:var(--font-body);
 }
+/* Old footer bg theme with gradient
 footer::before{
   content:"";
   position:absolute;
   inset:0;
-  background:radial-gradient(ellipse 80% 60% at 20% 0%,rgba(255,255,255,0.10),transparent 60%);
+  background:radial-gradient(ellipse 50% 40% at 50% 0%,rgba(255,255,255,0.01),transparent 30%);
   pointer-events:none;
 }
+*/
 .footer-inner{max-width:1200px;margin:0 auto;}
-.footer-grid{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+/* Old columns: 2.5fr 1fr 1fr 1fr; old column gap: gap:3rem; */
+.footer-grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 1fr;gap:1.25rem;margin-bottom:3rem;}
 .footer-logo{
   font-family:var(--font-body);
   font-weight:800;
@@ -287,11 +431,14 @@ footer::before{
   margin-bottom:1rem;
   letter-spacing:-0.5px;
 }
-.footer-logo span{color:#fff;}
+.footer-logo span{/* old css styles color:#fff; */color:#F5F1EA;}
 .footer-desc{
   font-family:var(--font-body);
   font-size:0.85rem;
-  color:#bfcadb;
+  /* Old color: #bfcadb; */
+  /* old css styles color:#F5F5F7; */
+  /* milky white */
+  color:#F5F1EA;
   line-height:1.7;
   max-width:260px;
   font-weight:400;
@@ -300,15 +447,22 @@ footer::before{
   font-family:var(--font-body);
   font-size:0.82rem;
   font-weight:700;
-  margin-bottom:1rem;
-  color:#fff;
+  /* Old heading-to-list gap: margin-bottom:1rem; */
+  margin-bottom:0.5rem;
+  /* old footer style color:#F5F5F7; */
+  /* Old color: #fff; */
+  color:#3D8B37;
   letter-spacing:0.05em;
   text-transform:uppercase;
 }
-.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.5rem;}
+/* Old list item gap: gap:0.5rem; */
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.22rem;}
 .footer-col ul a{
   font-family:var(--font-body);
-  color:#b7bbc2;
+  /* Old color: #b7bbc2; */
+  /* old css styles color:#F5F5F7; */
+  /* milky white */
+  color:#F5F1EA;
   text-decoration:none;
   font-size:0.84rem;
   font-weight:500;
@@ -323,7 +477,10 @@ footer::before{
   align-items:center;
   font-family:var(--font-body);
   font-size:0.78rem;
-  color:#A1A1AA;
+  /* Old color: #A1A1AA; */
+  /* old css styles color:#F5F5F7; */
+  /* milky white */
+  color:#F5F1EA;
   letter-spacing:0.01em;
 }
 .footer-socials{display:flex;gap:0.75rem;}

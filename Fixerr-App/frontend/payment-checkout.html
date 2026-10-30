@@ -3,16 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="assets/Fixerr-Favicon.png">
+<link rel="apple-touch-icon" href="assets/Fixerr-Favicon.png">
+<link rel="stylesheet" href="fonts.css">
 <title>Make Payment – Fixerr</title>
 <script src="https://js.stripe.com/v3/"></script>
 <style>
 :root{
   --bg:#FFFFFF; --bg2:#F7F8F5; --accent:#3D8B37; --accent-light:#E8F5E2;
   --text:#1A1D1A; --muted:#6B7280; --border:#E5E7EB; --radius:16px; --radius-sm:10px;
-  --font-display:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+  /* old css styles --font-display:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif; */
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font-display);background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;padding:0.5rem 0.65rem 1rem;min-height:720px;}
+/* old css styles body{font-family:var(--font-display);} */
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;padding:0.5rem 0.65rem 1rem;min-height:720px;}
 body.embedded{padding:0.35rem 0.75rem 0.75rem;min-height:700px;background:#fff;width:100%;min-width:680px;}
 body.embedded .page{max-width:none;width:100%;margin:0;}
 body.standalone{background:var(--bg2);padding:1.25rem 1rem 2rem;min-height:100vh;}
@@ -69,6 +73,7 @@ body.embedded .card{border:none;border-radius:0;padding:0;box-shadow:none;}
   </div>
 </div>
 
+<script src="countries-config.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const bookingRef = params.get('ref');
@@ -100,8 +105,7 @@ function notifyParent(status, extra){
 }
 
 function fmtAmount(amount, currency){
-  const c = (currency || 'USD').toUpperCase();
-  return c === 'INR' ? '₹' + Number(amount).toFixed(0) : '$' + Number(amount).toFixed(2);
+  return fxFmtAmount(amount, (currency || 'USD').toUpperCase());
 }
 
 function finishSuccess(){
@@ -138,6 +142,7 @@ async function buildStripeBillingPayload(){
 }
 
 async function init(){
+  await loadCountriesConfig();
   if (params.get('redirect_status') === 'succeeded' && bookingRef) {
     finishSuccess();
     return;

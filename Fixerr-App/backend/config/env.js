@@ -46,6 +46,9 @@ module.exports = {
   ZOHO_PASSWORD: process.env.ZOHO_PASSWORD,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+  // Secret used to hash visitor IP addresses (raw IPs are never stored). Changing it makes
+  // new hashes stop matching older ones, so set it once per environment and keep it.
+  VISITOR_IP_SALT: process.env.VISITOR_IP_SALT,
   STRIPE_SECRET_KEY,
   STRIPE_PUBLISHABLE_KEY,
   STRIPE_WEBHOOK_SECRET,

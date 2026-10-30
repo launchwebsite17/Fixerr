@@ -17,22 +17,78 @@ const PRICES = {
   other:{inr:{base:399,hr:449},usd:{base:49,hr:55}},
 };
 
-exports.getCities = (req, res) => {
-  const { q = '' } = req.query;
-  const raw = require('../cities.json');
-  const CITIES = raw.map(c => ({
-    n: c.name || c.n, st: c.state || c.st || '',
-    c: c.country || c.c, f: c.flag || c.f || '',
-    cur: c.currency || c.cur, sym: c.symbol || c.sym
-  }));
-  const q2 = q.toLowerCase();
-  res.json(CITIES.filter(c =>
-    c.n.toLowerCase().includes(q2) ||
-    (c.st || '').toLowerCase().includes(q2)
-  ).slice(0, 12));
+function mapCityRow(r) {
+  const st = r.country_code === 'US'
+    ? (r.state_code || '')
+    : (r.state_name || r.state_code || '');
+  return {
+    n: r.city_name,
+    st,
+    c: r.country_code,
+    f: r.flag_emoji || '',
+    cur: r.currency_code,
+    sym: r.currency_symbol,
+    aliases: Array.isArray(r.aliases) ? r.aliases : []
+  };
+}
+
+// Old version read backend/cities.json and filtered in memory by ?q=.
+exports.getCities = async (req, res) => {
+  const country = String(req.query.country || '').trim().toUpperCase();
+  const q = String(req.query.q || '').trim();
+  try {
+    const params = [];
+    let where = 'ci.is_active = true AND cc.is_active = true';
+    if (country) {
+      params.push(country);
+      where += ` AND ci.country_code = $${params.length}`;
+    }
+    if (q) {
+      params.push('%' + q.toLowerCase() + '%');
+      const p = params.length;
+      where += ` AND (
+        lower(ci.city_name) LIKE $${p}
+        OR lower(COALESCE(ci.state_name,'')) LIKE $${p}
+        OR lower(COALESCE(ci.state_code,'')) LIKE $${p}
+        OR EXISTS (SELECT 1 FROM unnest(ci.aliases) a WHERE lower(a) LIKE $${p})
+      )`;
+    }
+    const limit = q && !country ? ' LIMIT 12' : '';
+    const r = await query(`
+      SELECT ci.city_name, ci.state_code, ci.state_name, ci.country_code, ci.aliases,
+             cc.flag_emoji, cc.currency_code, cc.currency_symbol
+      FROM cities ci
+      JOIN countries_config cc ON cc.country_code = ci.country_code
+      WHERE ${where}
+      ORDER BY ci.city_name
+      ${limit}
+    `, params);
+    res.json(r.rows.map(mapCityRow));
+  } catch (e) {
+    console.error('GET /api/cities:', e.message);
+    res.json([]);
+  }
 };
 
 exports.getPrices = (req, res) => res.json(PRICES);
+
+exports.getCountriesConfig = async (req, res) => {
+  try {
+    const r = await query(`
+      SELECT country_code, country_name, flag_emoji, currency_code, currency_symbol,
+             currency_decimals, number_locale, tax_label, postal_code_label,
+             postal_code_regex, postal_code_example, phone_dial_code, phone_regex,
+             phone_example, distance_unit, date_format, is_default, sort_order
+      FROM countries_config
+      WHERE is_active = true
+      ORDER BY sort_order, country_name
+    `);
+    res.json(r.rows);
+  } catch (e) {
+    console.error('GET /api/countries_config:', e.message);
+    res.json([]);
+  }
+};
 
 exports.getPublicStats = async (req, res) => {
   try {

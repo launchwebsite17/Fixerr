@@ -8,13 +8,17 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <!-- old css styles
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+    -->
+    <link rel="stylesheet" href="fonts.css" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" href="assets/Fixerr-Favicon.png" />
+    <link rel="apple-touch-icon" href="assets/Fixerr-Favicon.png" />
     <title>Admin Panel – Fixerr</title>
     <style>
       :root {
@@ -37,8 +41,10 @@
         --radius: 16px;
         --radius-sm: 10px;
         --radius-xs: 6px;
+        /* old css styles
         --font-display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
         --font-body: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+        */
       }
       *,
       *::before,
@@ -51,7 +57,8 @@
         scroll-behavior: smooth;
       }
       body {
-        font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+        /* old css styles font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif; */
+        font-family: var(--font-body);
         background: var(--bg);
         color: var(--text);
         font-size: 18px;
@@ -2265,6 +2272,9 @@
         <button class="asb-link" data-sec="reports" onclick="show('reports')">
           <span class="sb-icon">📈</span> <span>Executive Reports</span>
         </button>
+        <button class="asb-link" data-sec="traffic" onclick="show('traffic')">
+          <span class="sb-icon">🌐</span> <span>Traffic Report</span>
+        </button>
         <button class="asb-link" data-sec="ads" onclick="show('ads')">
           <span class="sb-icon">💼</span> <span>Ads &amp; Revenue</span>
         </button>
@@ -3446,11 +3456,13 @@
                 class="btn-primary"
                 style="padding: 0.7rem 1.5rem; font-weight: 700"
               >
-                📥 Download Executive Report
+                📥 Download Report
               </button>
             </div>
           </div>
         </div>
+        <!-- Traffic Report: content is rendered by traffic-report.js -->
+        <div class="admin-sec" id="sec-traffic"></div>
         <div class="admin-sec" id="sec-dbview">
           <div
             style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.35rem"
@@ -7395,6 +7407,7 @@
   else init();
 })();
 </script>
+<script src="traffic-report.js"></script>
 
 </body>
 </html>
